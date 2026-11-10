@@ -1,4 +1,4 @@
-# MediaMTX-Yuki-GUI
+# MediaMTX-Yuki-GUI （这版先让大肥鱼代笔下，仅测试，之后作者再重写）
 
 MediaMTX 的 Windows 桌面外壳：把一台机器上的推流转发、录制、鉴权、状态监控收进一个窗口里。
 
