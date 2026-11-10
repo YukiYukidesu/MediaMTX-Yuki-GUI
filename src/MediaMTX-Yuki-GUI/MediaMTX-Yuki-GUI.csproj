@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>MediaMTX_Yuki_GUI</RootNamespace>
+    <AssemblyName>MediaMTX-Yuki-GUI</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>0.0.1</Version>
+    <Product>MediaMTX-Yuki-GUI</Product>
+    <Description>轻量 RTMP 多路转发控制器</Description>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+
+    <!--
+      AVLN3001：两个编辑窗（InputEditorWindow / TargetEditorWindow）只有带参数的构造函数，
+      因为它们必须拿到被编辑的那一条数据才能建出来，永远由代码 new 出来、不走 XAML 运行时加载器。
+      这个警告说的正是「XAML 资源无法通过运行时加载器访问，因为没有 public 无参构造」——
+      对这两个窗口是预期行为，不是缺陷。为了保持 0 警告的构建基线，在这里显式静音。
+      以后若真要做成可被 XAML 加载的窗口，必须删掉这一行，让警告重新出现提醒你补无参构造。
+    -->
+    <NoWarn>$(NoWarn);AVLN3001</NoWarn>
+
+    <!--
+      运行时不焊进 exe，而是放在 exe 旁边的 runtime.dotnet\ 目录里。
+      这样两个发行版可以共用同一个 exe 文件：完整版在旁边放一份 runtime.dotnet\，
+      精简版什么都不放，让 apphost 回落到系统装的 .NET。
+      只看 AppRelative 会「找不到就报错」，必须再带上 Global 才会回落。
+      应用自己的代码全部焊进单文件 exe（PublishSingleFile），不留散落的 dll。
+      目录布局见 build-release.ps1。详见 docs\交接文档.md §6.9。
+    -->
+    <AppHostRelativeDotNet>runtime.dotnet</AppHostRelativeDotNet>
+    <AppHostDotNetSearch>AppRelative;Global</AppHostDotNetSearch>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\app.ico" />
+    <AvaloniaResource Include="Assets\app-icon.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Languages\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!--
+    发布产物里不要任何 pdb。
+    SkiaSharp / HarfBuzzSharp 的 NuGet 包会带 native 的 pdb（libSkiaSharp.pdb 一个就 82 MB），
+    DebugType 之类的属性管不到它们，只能在 publish 之后删。
+    本地 Debug / Release 构建不受影响，obj 与 bin 里的 pdb 照常在。
+  -->
+  <Target Name="StripPublishSymbols" AfterTargets="Publish">
+    <ItemGroup>
+      <LeftoverPdb Include="$(PublishDir)*.pdb" />
+      <LeftoverPdb Include="$(PublishDir)**\*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(LeftoverPdb)" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.5" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.5" />
+    <PackageReference Include="FluentAvaloniaUI" Version="3.1.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
+</Project>

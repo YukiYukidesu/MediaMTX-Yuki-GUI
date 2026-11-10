@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:MediaMTX_Yuki_GUI"
+             x:Class="MediaMTX_Yuki_GUI.Views.LogsPage">
+  <Grid RowDefinitions="Auto,*"
+        Margin="{StaticResource DsPagePadding}">
+
+    <Grid Grid.Row="0" Margin="{StaticResource DsCardGap}">
+      <StackPanel VerticalAlignment="Center">
+        <TextBlock Text="{loc:Loc c001-006}" Classes="page-title" />
+        <TextBlock Text="{loc:Loc l001-006}" Classes="page-subtitle" />
+      </StackPanel>
+
+      <!-- 三颗按钮都贴着标题右侧，跟总览页右上角那枚图标一个位置；
+           底下日志框的布局一点不动 -->
+      <StackPanel Orientation="Horizontal" Spacing="8"
+                  HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button Padding="12,4" FontSize="12"
+                Content="{loc:Loc c005-003}"
+                IsEnabled="{Binding HasLogs}"
+                ToolTip.Tip="{loc:Loc l005-001}"
+                Command="{Binding CopyLogsCommand}" />
+        <Button Padding="12,4" FontSize="12"
+                Content="{loc:Loc c005-004}"
+                IsEnabled="{Binding HasLogs}"
+                ToolTip.Tip="{loc:Loc l005-002}"
+                Command="{Binding ExportLogsCommand}" />
+        <Button Padding="12,4" FontSize="12"
+                Content="{loc:Loc c005-001}"
+                IsEnabled="{Binding HasLogs}"
+                Command="{Binding ClearLogsCommand}" />
+      </StackPanel>
+    </Grid>
+
+    <Border Grid.Row="1" Classes="card" Padding="12">
+      <ScrollViewer x:Name="LogScroller" VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding Logs}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <TextBlock FontFamily="Consolas, Cascadia Mono, monospace"
+                         FontSize="11.5"
+                         TextWrapping="Wrap"
+                         Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                         Text="{Binding}" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+  </Grid>
+</UserControl>

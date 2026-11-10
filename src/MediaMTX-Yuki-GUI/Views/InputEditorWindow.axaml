@@ -1,0 +1,185 @@
+<ui:FAAppWindow x:Class="MediaMTX_Yuki_GUI.Views.InputEditorWindow"
+                xmlns="https://github.com/avaloniaui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:ui="using:FluentAvalonia.UI.Windowing"
+                xmlns:loc="using:MediaMTX_Yuki_GUI"
+                Title="{Binding WindowTitle}"
+                Width="520"
+                MinHeight="440"
+                MaxHeight="1000"
+                SizeToContent="Height"
+                CanResize="False"
+                CanMaximize="False"
+                WindowStartupLocation="CenterOwner"
+                TextOptions.TextRenderingMode="Antialias">
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="24">
+
+    <TextBlock Grid.Row="0"
+               Margin="0,0,0,20"
+               Classes="page-subtitle"
+               Text="{loc:Loc l008-001}" />
+
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <StackPanel>
+
+        <TextBlock Classes="field-label" Text="{loc:Loc c008-003}" />
+        <TextBox Margin="0,4,0,4" Text="{Binding SourceName, Mode=TwoWay}" />
+
+        <!-- 重名只提醒不拦：两条备注一样也能存，只是提醒别搞混 -->
+        <TextBlock Margin="0,0,0,12"
+                   Classes="warning-hint"
+                   IsVisible="{Binding HasNameWarning}"
+                   Text="{Binding NameWarning}" />
+
+        <!-- 来源方式：接收推流 / 主动拉流。两者互斥，MediaMTX 的 source 一次只能填一个值。
+             摆成两张并排的小卡片而不是下拉：拢共就两种，摊开一眼能看清，少点一次多一层菜单。
+             简洁模式下只给「接收推流」一张，第二张整块收起来。 -->
+        <TextBlock Classes="field-label" Text="{loc:Loc c008-004}" />
+        <Grid Margin="0,4,0,4" ColumnDefinitions="*,10,*">
+          <Border Grid.Column="0"
+                  Grid.ColumnSpan="{Binding PushCardSpan}"
+                  Classes="kind-card"
+                  Classes.on="{Binding IsPushKind}"
+                  PointerPressed="OnPushKindPressed">
+            <StackPanel>
+              <TextBlock Classes="kind-title" Text="{loc:Loc c008-019}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l008-004}" />
+            </StackPanel>
+          </Border>
+
+          <Border Grid.Column="2"
+                  Classes="kind-card"
+                  Classes.on="{Binding IsPullKind}"
+                  IsVisible="{Binding ShowPullCard}"
+                  PointerPressed="OnPullKindPressed">
+            <StackPanel>
+              <TextBlock Classes="kind-title" Text="{loc:Loc c008-018}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l008-005}" />
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <!-- 协议与端口只对「接收推流」有意义：拉流模式下这条路径不再监听，藏起来免得误导 -->
+        <Grid Margin="0,0,0,16" ColumnDefinitions="*,16,140"
+              IsVisible="{Binding !IsPulling}">
+          <StackPanel Grid.Column="0">
+            <TextBlock Classes="field-label" Text="{loc:Loc c008-005}" />
+            <ComboBox Margin="0,4,0,0"
+                      HorizontalAlignment="Stretch"
+                      ItemsSource="{Binding ProtocolChoices}"
+                      SelectedItem="{Binding SelectedProtocolChoice, Mode=TwoWay}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </StackPanel>
+
+          <StackPanel Grid.Column="2">
+            <TextBlock Classes="field-label" Text="{loc:Loc c008-006}" />
+            <TextBox Margin="0,4,0,0"
+                     TextAlignment="Right"
+                     PlaceholderText="{Binding PortPlaceholder}"
+                     Text="{Binding Port, Mode=TwoWay}" />
+          </StackPanel>
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Classes="field-label" Text="{loc:Loc c008-008}" />
+          <TextBlock Text="*" Classes="required-mark" />
+        </StackPanel>
+        <TextBox Margin="0,4,0,4"
+                 Classes.invalid="{Binding PathInvalid}"
+                 LostFocus="OnPathNameLostFocus"
+                 Text="{Binding PathName, Mode=TwoWay}" />
+        <TextBlock Margin="0,0,0,4"
+                   Classes="danger-hint"
+                   IsVisible="{Binding PathInvalid}"
+                   Text="{Binding PathErrorText}" />
+        <TextBlock Classes="hint" Text="{loc:Loc l008-002}" />
+
+        <!-- 主动拉流时才显示；留空则是接收推流 -->
+        <StackPanel Margin="0,16,0,0" IsVisible="{Binding IsPulling}">
+          <StackPanel Orientation="Horizontal" Spacing="4">
+            <TextBlock Classes="field-label" Text="{loc:Loc c008-009}" />
+            <TextBlock Text="*" Classes="required-mark" />
+          </StackPanel>
+          <TextBox Margin="0,4,0,4"
+                   Classes.invalid="{Binding PullUrlInvalid}"
+                   LostFocus="OnPullUrlLostFocus"
+                   PlaceholderText="rtmp://host/app/stream"
+                   Text="{Binding PullUrl, Mode=TwoWay}" />
+          <TextBlock Margin="0,0,0,4"
+                     Classes="danger-hint"
+                     IsVisible="{Binding PullUrlInvalid}"
+                     Text="{loc:Loc c008-010}" />
+          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{loc:Loc l008-003}" />
+        </StackPanel>
+
+        <TextBlock Margin="0,4,0,0"
+                   Classes="danger-hint"
+                   IsVisible="{Binding HasPortWarning}"
+                   Text="{Binding PortWarning}" />
+
+        <!-- 允许推流的账号：一个都不勾 = 不限制，任何账号都能推这条 path。
+             账号表是空的时候整块不出现，没建账号摆一串空勾选框只会让人困惑 -->
+        <StackPanel Margin="0,18,0,0" IsVisible="{Binding ShowAccountPicker}">
+
+          <TextBlock Classes="field-label" Text="{loc:Loc c008-023}" />
+
+          <ItemsControl Margin="0,4,0,0" ItemsSource="{Binding AccountChecks}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <CheckBox Margin="0,0,16,0"
+                          Content="{Binding User}"
+                          IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <TextBlock Margin="0,2,0,0"
+                     Classes="hint"
+                     TextWrapping="Wrap"
+                     Text="{loc:Loc l008-011}" />
+        </StackPanel>
+
+        <!-- 两个开关并排在最后一行：先启用，才谈得上录制，所以录制的开关跟着前一个走 -->
+        <StackPanel Margin="0,20,0,0"
+                    Orientation="Horizontal"
+                    Spacing="10">
+          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c008-013}" />
+          <ToggleSwitch VerticalAlignment="Center" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+          <StackPanel Margin="24,0,0,0"
+                      Orientation="Horizontal"
+                      Spacing="10"
+                      IsVisible="{Binding IsAdvancedMode}">
+            <TextBlock VerticalAlignment="Center" Text="{loc:Loc c008-022}" />
+            <ToggleSwitch VerticalAlignment="Center"
+                          IsChecked="{Binding RecordShown, Mode=TwoWay}"
+                          IsEnabled="{Binding Enabled}" />
+          </StackPanel>
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- 缺什么直接标在对应的框下面了，这里只管放按钮 -->
+    <StackPanel Grid.Row="2"
+                Margin="0,20,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+      <Button MinWidth="88"
+              Content="{loc:Loc c008-014}"
+              Command="{Binding CancelCommand}"
+              IsCancel="True" />
+      <Button Margin="8,0,0,0" MinWidth="88" Classes="primary" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" />
+    </StackPanel>
+  </Grid>
+</ui:FAAppWindow>

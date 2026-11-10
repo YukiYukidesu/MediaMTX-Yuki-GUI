@@ -1,0 +1,39 @@
+# 行尾与编码的单一事实来源。
+# 2026-11-08 起整个项目统一 LF + UTF-8：不再按文件判断，编辑器新建与保存都照这里来。
+# 只有两类例外：refs/（第三方参照源码）与任意层级的 bin/ obj/（构建产物，每次编译由 MSBuild 重写）。
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# C# 与 PowerShell 用 4 空格
+[*.{cs,csx,ps1,psm1}]
+indent_size = 4
+
+# XAML / JSON / 项目文件按惯例 2 空格
+[*.{axaml,xaml,json,csproj,slnx,props,targets}]
+indent_size = 2
+
+# 老版 Windows PowerShell 5.1 读无 BOM 的 UTF-8 会按 ANSI 解，中文变乱码，脚本单独保留 BOM
+[*.{ps1,psm1}]
+charset = utf-8-bom
+
+# Markdown 靠行尾两个空格表示硬换行，不能剪
+[*.md]
+trim_trailing_whitespace = false
+
+# 第三方参照源码与构建产物一概不碰（这两类不参与统一，保持原样）
+[refs/**]
+end_of_line = unset
+charset = unset
+trim_trailing_whitespace = unset
+insert_final_newline = unset
+
+[**/{bin,obj}/**]
+end_of_line = unset
+charset = unset

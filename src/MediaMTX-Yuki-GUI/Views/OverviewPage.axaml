@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:MediaMTX_Yuki_GUI"
+             x:Class="MediaMTX_Yuki_GUI.Views.OverviewPage">
+  <!-- 三行：标题、运行状态、转发关系。底框占星号，行数再多也只在框内滚动 -->
+  <Grid Margin="{StaticResource DsPagePadding}" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+
+    <!-- 标题区：右端放程序图标，右上角那个方块不再空着 -->
+    <Grid Margin="{StaticResource DsCardGap}" ColumnDefinitions="*,Auto">
+      <StackPanel Grid.Column="0" VerticalAlignment="Center">
+        <TextBlock Text="{Binding PageTitle}" Classes="page-title" />
+        <TextBlock Text="{Binding PageSubtitle}" Classes="page-subtitle" />
+      </StackPanel>
+      <!-- 图标要比标题块那一坨（约 42 DIP）大，否则右上角就吊着一个小方块、下面空一大截。
+           但直接写 Width/Height 会把整行撑高、标题被顶着往下走，所以外面套一个定高的 Panel：
+           行高由 Panel 的 44 决定，图标 64 在 Panel 里居中，上下各溢出一小截——
+           溢出的那截正好把那块空填掉，右上角不再是一块孤零零的小色块 -->
+      <Panel Grid.Column="1" Height="44" VerticalAlignment="Center">
+        <Image Source="/Assets/app.ico"
+               Width="64" Height="64" Margin="0,0,8,0"
+               VerticalAlignment="Center"
+               RenderOptions.BitmapInterpolationMode="HighQuality" />
+      </Panel>
+    </Grid>
+
+    <!-- 运行状态 -->
+    <Border Grid.Row="1" Classes="card status-card" Classes.running="{Binding IsEngineRunning}">
+      <!-- 状态与按钮同处一行：左边说引擎怎么样，右边那颗按钮就是下一步动作 -->
+      <Grid ColumnDefinitions="Auto,*,Auto">
+
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <Ellipse Width="8" Height="8" VerticalAlignment="Center"
+                   Classes="status-dot" Classes.on="{Binding IsEngineRunning}" />
+          <TextBlock Text="{Binding EngineStatus}" FontSize="15" FontWeight="SemiBold"
+                     VerticalAlignment="Center" />
+          <TextBlock Text="{Binding StatusDetail}" Classes="hint"
+                     VerticalAlignment="Center" Margin="6,0,0,0" />
+        </StackPanel>
+
+        <!-- 提示语贴着按钮那一侧，免得它孤零零挂在中间 -->
+        <TextBlock Grid.Column="1" Text="{Binding IngestHint}" FontSize="11.5" Foreground="#E8A33D"
+                   HorizontalAlignment="Right" VerticalAlignment="Center" Margin="12,0"
+                   IsVisible="{Binding IngestHintVisible}" />
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <Button Classes="primary" Content="{loc:Loc c002-014}"
+                  Command="{Binding ToggleEngineCommand}"
+                  IsVisible="{Binding IsEngineStopped}" />
+          <Button Classes="danger-solid" Content="{loc:Loc c002-015}"
+                  Command="{Binding ToggleEngineCommand}"
+                  IsVisible="{Binding IsEngineRunning}" />
+        </StackPanel>
+
+      </Grid>
+    </Border>
+
+    <!-- 转发关系：标题与说明在框外，底框里只放关系图本身。
+         底框占第 2 行（星号），一个输入源都没有时它也照样占着那一块 -->
+    <Grid Grid.Row="2" RowDefinitions="Auto,*">
+      <StackPanel Grid.Row="0" Margin="{StaticResource DsCardGap}">
+        <TextBlock Text="{loc:Loc c002-016}" FontSize="15" FontWeight="SemiBold" />
+        <TextBlock Text="{loc:Loc l002-012}" Classes="hint" TextWrapping="Wrap" />
+      </StackPanel>
+
+      <Border Grid.Row="1" Classes="well" Padding="16">
+        <!-- 关系图行数多时在框内纵向滚动；未绑定提示钉在框底，不跟着滚 -->
+        <Grid RowDefinitions="*,Auto">
+          <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding Inputs}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="200,36,*" Margin="0,0,0,8">
+                    <!-- 状态灯看的是引擎侧有没有在推，不是配置里的启用开关 -->
+                    <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Ellipse Width="8" Height="8" VerticalAlignment="Center"
+                                 Classes="status-dot" Classes.on="{Binding IsOnline}" />
+                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"
+                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                      </StackPanel>
+                      <TextBlock Text="{Binding RuntimeText}" Classes="hint" FontSize="11.5"
+                                 TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding RuntimeText}"
+                                 IsVisible="{Binding HasRuntimeText}" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1" Text="&#xE72A;" VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+
+                    <ItemsControl Grid.Column="2" ItemsSource="{Binding Outputs}"
+                                  VerticalAlignment="Center">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                          <WrapPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                          <Border Margin="0,0,6,4" Padding="9,4"
+                                  Background="#1A3DDC84" CornerRadius="10">
+                            <TextBlock FontSize="11.5" Text="{Binding DisplayName}" />
+                          </Border>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+
+          <!-- 空状态浮在关系图那块的正中：底框照样占着那一块，只有这坨字挪到中间 -->
+          <StackPanel Grid.Row="0" IsVisible="{Binding IsInputsEmpty}"
+                      HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="6"
+                      IsHitTestVisible="False">
+            <TextBlock Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+            <TextBlock Text="{loc:Loc c002-022}" Classes="empty-title" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc l002-014}" Classes="hint" HorizontalAlignment="Center" />
+          </StackPanel>
+
+          <TextBlock Grid.Row="1" Text="{loc:Loc l002-013}" FontSize="11.5" Foreground="#D9822B"
+                     Margin="0,8,0,0" TextWrapping="Wrap"
+                     IsVisible="{Binding HasUnboundTargets}" />
+        </Grid>
+      </Border>
+    </Grid>
+
+  </Grid>
+</UserControl>

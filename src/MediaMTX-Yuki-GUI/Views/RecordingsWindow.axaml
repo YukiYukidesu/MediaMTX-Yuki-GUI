@@ -1,0 +1,103 @@
+<ui:FAAppWindow x:Class="MediaMTX_Yuki_GUI.Views.RecordingsWindow"
+                 xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="using:FluentAvalonia.UI.Windowing"
+                 xmlns:loc="using:MediaMTX_Yuki_GUI"
+                 xmlns:c="using:MediaMTX_Yuki_GUI.Controls"
+                 Title="{Binding WindowTitle}"
+                 Width="620"
+                 Height="520"
+                 MinWidth="520"
+                 MinHeight="380"
+                 CanMaximize="False"
+                 WindowStartupLocation="CenterOwner"
+                 TextOptions.TextRenderingMode="Antialias">
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="18,14,18,14">
+
+    <!-- 备注 / 完整 Id / 完整地址三行，用小一号字与紧凑行高，免得占掉上半屏 -->
+    <TextBlock Grid.Row="0" Margin="0,0,0,10"
+               FontSize="11" LineHeight="17"
+               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+               Text="{Binding Subtitle}" TextWrapping="Wrap" />
+
+    <Grid Grid.Row="1" RowDefinitions="Auto,*">
+
+      <!-- 表头，和下面的行用同一套列宽。一段录像都没有时不画，只留中间那坨空状态 -->
+      <Grid Grid.Row="0" ColumnDefinitions="*,110,64" Margin="16,0,16,6"
+            IsVisible="{Binding HasRows}">
+        <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c010-002}" />
+        <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c010-003}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c010-001}" HorizontalAlignment="Center" />
+      </Grid>
+
+      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+
+          <ItemsControl ItemsSource="{Binding Rows}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Margin="0,0,0,8" Padding="16,10" CornerRadius="{StaticResource DsRadiusMd}"
+                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1">
+                  <Grid ColumnDefinitions="*,110,64">
+
+                    <c:PillBadge Grid.Column="0" Variant="Plain" MaxWidth="330"
+                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                Text="{Binding StartText}"
+                                ToolTip.Tip="{Binding StartText}" />
+
+                    <c:PillBadge Grid.Column="1" Variant="Plain"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                 Text="{Binding DurationText}" />
+
+                    <Button Grid.Column="2" Classes="icon-square danger" HorizontalAlignment="Center"
+                            ToolTip.Tip="{loc:Loc c010-007}"
+                            Click="OnDeleteSegmentClick">
+                      <TextBlock Classes="glyph" Text="&#xE74D;" />
+                    </Button>
+
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+        </StackPanel>
+      </ScrollViewer>
+
+      <!-- 三种空状态各自说清缘由：没录过、读不到、正在读。
+           叠在列表那一格的正中，与其它页的空状态同一个位置；别塞进 ScrollViewer 里边，
+           那样一滚就跟着跑了，而且底部留白一多它永远不在正中间 -->
+      <StackPanel Grid.Row="1" IsVisible="{Binding IsEmpty}"
+                  HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="6"
+                  IsHitTestVisible="False">
+        <TextBlock Text="&#xE7C8;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
+                   HorizontalAlignment="Center"
+                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+        <TextBlock Text="{Binding EmptyTitle}" Classes="empty-title" HorizontalAlignment="Center" />
+
+        <TextBlock Text="{Binding EmptyText}" Classes="hint" HorizontalAlignment="Center" TextWrapping="Wrap"
+                   MaxWidth="380" TextAlignment="Center" />
+      </StackPanel>
+
+      <TextBlock Grid.Row="1" IsVisible="{Binding IsLoading}" Classes="hint"
+                 Text="{loc:Loc l010-002}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                 IsHitTestVisible="False" />
+
+    </Grid>
+
+    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,16,0,0">
+      <TextBlock Grid.Column="0" VerticalAlignment="Center" Classes="hint" Text="{Binding StatusText}" />
+
+      <!-- 两颗并排就得一样宽：字数是「刷新」两字对「关闭」两字，本身一样，
+           但「关闭」设了 MinWidth 而「刷新」没有，实际宽度就差一截。同排同义的按钮一律写同一个 MinWidth -->
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <Button MinWidth="88" Content="{loc:Loc c010-008}" Command="{Binding RefreshCommand}" />
+        <Button Margin="8,0,0,0" MinWidth="88" Content="{loc:Loc c010-009}" Command="{Binding CloseCommand}" IsCancel="True" />
+      </StackPanel>
+    </Grid>
+
+  </Grid>
+</ui:FAAppWindow>

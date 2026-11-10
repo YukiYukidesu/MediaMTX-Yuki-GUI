@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:MediaMTX_Yuki_GUI"
+             x:Class="MediaMTX_Yuki_GUI.Views.StatsPage">
+  <!-- 三行：标题、两块合计、各路明细。底框占星号，目标再多也只在框内滚动 -->
+  <Grid Margin="{StaticResource DsPagePadding}" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+
+    <StackPanel Margin="{StaticResource DsCardGap}">
+      <TextBlock Text="{loc:Loc c001-005}" Classes="page-title" />
+      <TextBlock Text="{loc:Loc l001-005}" Classes="page-subtitle" />
+    </StackPanel>
+
+    <!-- 两块大数字：入流合计 / 出网合计 -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="12">
+
+      <Border Grid.Column="0" Classes="card" Padding="18,16">
+        <StackPanel Spacing="6">
+          <TextBlock Text="{loc:Loc c006-001}" Classes="hint" />
+          <TextBlock Text="{Binding TotalInboundText}"
+                     FontSize="30"
+                     FontWeight="SemiBold" />
+          <TextBlock Text="{Binding TargetSummaryText}" Classes="hint" />
+        </StackPanel>
+      </Border>
+
+      <Border Grid.Column="1" Classes="card" Padding="18,16">
+        <StackPanel Spacing="6">
+          <TextBlock Text="{loc:Loc c006-002}" Classes="hint" />
+          <TextBlock Text="{Binding TotalOutboundText}"
+                     FontSize="30"
+                     FontWeight="SemiBold" />
+          <TextBlock Text="{loc:Loc c006-004}" Classes="hint" />
+        </StackPanel>
+      </Border>
+
+    </Grid>
+
+    <!-- 各路明细：标题与说明在框外，底框里只放表头与行。底框占第 2 行（星号） -->
+    <Grid Grid.Row="2" RowDefinitions="Auto,*">
+      <StackPanel Grid.Row="0" Margin="{StaticResource DsCardGap}">
+        <TextBlock Text="{loc:Loc c006-003}" FontSize="15" FontWeight="SemiBold" />
+        <TextBlock Text="{loc:Loc l006-001}" Classes="hint" TextWrapping="Wrap" />
+      </StackPanel>
+
+      <Border Grid.Row="1" Classes="well" Padding="16">
+        <Grid RowDefinitions="Auto,*">
+
+          <!-- 一个目标都没有时列头一起收起来，只留中间那坨空状态 -->
+          <Grid Grid.Row="0" ColumnDefinitions="*,110,110,Auto" ColumnSpacing="8"
+                IsVisible="{Binding IsTargetsVisible}">
+            <TextBlock Grid.Column="0" Text="{loc:Loc c006-005}" Classes="hint" />
+            <TextBlock Grid.Column="1" Text="{loc:Loc c006-006}" Classes="hint" HorizontalAlignment="Right" />
+            <TextBlock Grid.Column="2" Text="{loc:Loc c006-007}" Classes="hint" HorizontalAlignment="Right" />
+          </Grid>
+
+          <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding Targets}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="*,110,110,Auto"
+                        ColumnSpacing="8"
+                        Margin="0,3">
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding Name}"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding SpeedText}"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding SentText}"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+
+          <!-- 空状态浮在框内正中：底框照样占着那一块，只有这坨字挪到中间 -->
+          <StackPanel Grid.Row="1" IsVisible="{Binding IsTargetsEmpty}"
+                      HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="6"
+                      IsHitTestVisible="False">
+            <TextBlock Text="&#xE8FD;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+            <TextBlock Text="{loc:Loc c006-008}" Classes="empty-title" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc l006-002}" Classes="hint" HorizontalAlignment="Center" />
+          </StackPanel>
+
+        </Grid>
+      </Border>
+    </Grid>
+
+  </Grid>
+</UserControl>

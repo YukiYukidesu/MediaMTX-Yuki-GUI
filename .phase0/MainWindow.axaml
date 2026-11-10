@@ -1,0 +1,190 @@
+<ui:FAAppWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="using:FluentAvalonia.UI.Windowing"
+        x:Class="Phase0.MainWindow"
+        Title="Phase 0 · 多栏手风琴 · 文字清晰度验证（浅色）"
+        Width="1000" Height="780"
+        Background="#F5F5F5"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen">
+
+  <Window.Styles>
+    <Style Selector="Border.panel">
+      <Setter Property="Background" Value="#FFFFFF" />
+      <Setter Property="CornerRadius" Value="6" />
+    </Style>
+    <Style Selector="Border.header">
+      <Setter Property="Height" Value="42" />
+      <Setter Property="Padding" Value="14,0" />
+    </Style>
+    <Style Selector="TextBlock.headerText">
+      <Setter Property="Foreground" Value="#1B1B1B" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style Selector="TextBlock.body">
+      <Setter Property="Foreground" Value="#3A3A3A" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBlock.hint">
+      <Setter Property="Foreground" Value="#6A6A6A" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+  </Window.Styles>
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="18">
+
+    <TextBlock Grid.Row="0"
+               x:Name="StatusText"
+               Text="准备中…"
+               Foreground="#0B6BCB"
+               FontSize="13"
+               Margin="0,0,0,14" />
+
+    <Grid Grid.Row="1" ColumnDefinitions="*,24,*">
+
+      <!-- ============ 左：第一栏循环展开/收起，下面四栏被推着移动 ============ -->
+      <StackPanel Grid.Column="0" Spacing="8">
+        <TextBlock Text="① 动画（第 1 栏高度 0 ↔ 280 循环，下面四栏被推动）"
+                   Foreground="#0B6BCB" FontSize="12" FontWeight="SemiBold"
+                   Margin="0,0,0,4" />
+
+        <!-- 第 1 栏：可折叠 -->
+        <Border Classes="panel">
+          <StackPanel>
+            <Border Classes="header">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Classes="headerText" Text="界面外观" />
+                <TextBlock Grid.Column="1" Text="−" Foreground="#0B6BCB" FontSize="15" VerticalAlignment="Center" />
+              </Grid>
+            </Border>
+
+            <Border x:Name="AnimHost" Height="0" ClipToBounds="True" Background="#F0F0F0">
+              <Border.Transitions>
+                <Transitions>
+                  <DoubleTransition Property="Height" Duration="0:0:0.9" Easing="CubicEaseOut" />
+                </Transitions>
+              </Border.Transitions>
+
+              <StackPanel Margin="14,8" Spacing="8">
+                <TextBlock Classes="body" Text="主题模式：跟随系统 / 浅色 / 深色" />
+                <TextBlock Classes="body" Text="切换主题后需要重启引擎才能让新配色覆盖到日志窗口，请留意右下角提示。" />
+                <TextBlock Classes="body" Text="界面缩放比例影响所有页面的字号与控件尺寸，默认 100%，支持 80% 到 150%。" />
+                <TextBlock Classes="hint" Text="提示：缩小比例后部分表格列宽会被自动压缩，可能出现横向滚动条。" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Border>
+
+        <!-- 第 2 栏：被推着走，观察它的标题有没有发糊 -->
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="引擎行为" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="容错与调参" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="运维接口" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="推流鉴权" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+      </StackPanel>
+
+      <!-- ============ 右：同样的五栏，第一栏固定展开，永不移动 ============ -->
+      <StackPanel Grid.Column="2" Spacing="8">
+        <TextBlock Text="② 静止对照（同样五栏，第 1 栏固定展开）"
+                   Foreground="#107C10" FontSize="12" FontWeight="SemiBold"
+                   Margin="0,0,0,4" />
+
+        <Border Classes="panel">
+          <StackPanel>
+            <Border Classes="header">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Classes="headerText" Text="界面外观" />
+                <TextBlock Grid.Column="1" Text="−" Foreground="#107C10" FontSize="15" VerticalAlignment="Center" />
+              </Grid>
+            </Border>
+
+            <Border Height="280" ClipToBounds="True" Background="#F0F0F0">
+              <StackPanel Margin="14,8" Spacing="8">
+                <TextBlock Classes="body" Text="主题模式：跟随系统 / 浅色 / 深色" />
+                <TextBlock Classes="body" Text="切换主题后需要重启引擎才能让新配色覆盖到日志窗口，请留意右下角提示。" />
+                <TextBlock Classes="body" Text="界面缩放比例影响所有页面的字号与控件尺寸，默认 100%，支持 80% 到 150%。" />
+                <TextBlock Classes="hint" Text="提示：缩小比例后部分表格列宽会被自动压缩，可能出现横向滚动条。" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Border>
+
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="引擎行为" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="容错与调参" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="运维接口" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+
+        <Border Classes="panel">
+          <Border Classes="header">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Classes="headerText" Text="推流鉴权" />
+              <TextBlock Grid.Column="1" Text="+" Foreground="#8A8A8A" FontSize="15" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+        </Border>
+      </StackPanel>
+    </Grid>
+
+    <TextBlock Grid.Row="2"
+               Text="窗口置顶并自动循环。动画进行中时，盯住左栏第 2～5 个标题，看汉字笔画边缘是否比右栏发虚。"
+               Foreground="#757575"
+               FontSize="12"
+               Margin="0,14,0,0" />
+  </Grid>
+</ui:FAAppWindow>

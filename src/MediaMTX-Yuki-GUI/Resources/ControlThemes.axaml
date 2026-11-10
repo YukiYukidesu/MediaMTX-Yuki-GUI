@@ -1,0 +1,196 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="using:MediaMTX_Yuki_GUI.Controls">
+
+  <!-- 自定义控件的主题；页面里用 ControlTheme 里的默认键，不需要显式引用。 -->
+
+  <ControlTheme x:Key="{x:Type c:SettingRow}" TargetType="c:SettingRow">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,10,0,10">
+
+          <TextBlock Grid.Column="0"
+                     Text="{TemplateBinding Glyph}"
+                     FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                     FontSize="16"
+                     VerticalAlignment="Top"
+                     Margin="0,2,14,0"
+                     Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <TextBlock Text="{TemplateBinding Title}" FontSize="13" VerticalAlignment="Center" />
+              <TextBlock Text="*"
+                         Classes="required-mark"
+                         IsVisible="{TemplateBinding Required}" />
+            </StackPanel>
+            <TextBlock Text="{TemplateBinding Description}"
+                       Classes="hint"
+                       Margin="0,2,0,0"
+                       IsVisible="{TemplateBinding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+            <TextBlock Text="{TemplateBinding Caution}"
+                       Classes="warning-hint"
+                       Margin="0,4,0,0"
+                       IsVisible="{TemplateBinding Caution, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+            <TextBlock Text="{TemplateBinding Warning}"
+                       Classes="danger-hint"
+                       Margin="0,4,0,0"
+                       IsVisible="{TemplateBinding Warning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          </StackPanel>
+
+          <ContentPresenter Grid.Column="2"
+                            Content="{TemplateBinding Content}"
+                            VerticalAlignment="Center"
+                            Margin="16,0,0,0" />
+
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <ControlTheme x:Key="{x:Type c:SmoothExpander}" TargetType="c:SmoothExpander">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{DynamicResource DsRadiusMd}">
+          <Grid RowDefinitions="Auto,*">
+
+            <!-- 上下 10 而不是 14：折叠状态下这一行就是整栏的全部高度，
+                 每栏省 8 DIP，一屏能多露出将近一栏 -->
+            <Button Grid.Row="0"
+                    Classes="groupHeader"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="16,10"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Cursor="Hand"
+                    Command="{TemplateBinding ToggleCommand}">
+              <Grid ColumnDefinitions="*,Auto">
+
+                <TextBlock Text="{TemplateBinding Title}"
+                           Classes="card-title"
+                           VerticalAlignment="Center" />
+
+                <TextBlock Grid.Column="1"
+                           Classes="chevron"
+                           Text="&#xE70D;"
+                           FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                           FontSize="11"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           VerticalAlignment="Center" />
+
+              </Grid>
+            </Button>
+
+            <Border Grid.Row="1"
+                    Name="PART_ContentHost"
+                    ClipToBounds="True"
+                    Height="0">
+              <!-- 底部 10 跟标题行的上内边距对齐：一块展开的内容下面是下一栏的标题，
+                   这段留白两头都是「间距」，不该一边 10 一边 16 -->
+              <ContentPresenter Content="{TemplateBinding Content}"
+                                Margin="16,0,16,10" />
+            </Border>
+
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+
+  <!-- 胶囊标签：一行短文字 + 语义底色，颜色由控件自己按变体与主题取（见 PillPalette.axaml） -->
+  <ControlTheme x:Key="{x:Type c:PillBadge}" TargetType="c:PillBadge">
+    <Setter Property="HorizontalAlignment" Value="Left" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding VariantBackground}"
+                CornerRadius="10"
+                Padding="8,3">
+          <Grid ColumnDefinitions="Auto,*">
+            <Ellipse Grid.Column="0"
+                     Width="6" Height="6"
+                     Margin="0,0,5,0"
+                     VerticalAlignment="Center"
+                     Fill="{TemplateBinding VariantForeground}"
+                     IsVisible="{TemplateBinding ShowDot}" />
+            <TextBlock Grid.Column="1"
+                       Text="{TemplateBinding Text}"
+                       FontSize="11"
+                       VerticalAlignment="Center"
+                       TextTrimming="CharacterEllipsis"
+                       Foreground="{TemplateBinding VariantForeground}" />
+          </Grid>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+  <!-- ============ 扁平横向拖动条 ============
+       Fluent 自带的 ScrollBar 两端各带一颗箭头按钮，摆在列表底下很吵。
+       这里另开一个主题：只有轨道与滑块，滑块细、圆角、半透明；
+       两端那两颗透明的 RepeatButton 不是装饰，是 Track 的「点一下翻一页」，
+       少了它就只能拖滑块、点轨道没反应。 -->
+  <ControlTheme x:Key="DsFlatScrollBar" TargetType="ScrollBar">
+    <Setter Property="Height" Value="6" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Track x:Name="PART_Track"
+               Orientation="{TemplateBinding Orientation}"
+               Minimum="{TemplateBinding Minimum}"
+               Maximum="{TemplateBinding Maximum}"
+               Value="{TemplateBinding Value, Mode=TwoWay}"
+               ViewportSize="{TemplateBinding ViewportSize}">
+
+          <Track.DecreaseButton>
+            <!-- 宽度必须摁成 0：Track 会把两端按钮的宽度让出来，
+                 留着一两个像素的宽度，滑块就永远走不到头，两端各空一小截。 -->
+            <RepeatButton x:Name="PART_PageUpButton" Focusable="False" Background="Transparent"
+                          Width="0" MinWidth="0" Padding="0">
+              <RepeatButton.Template>
+                <ControlTemplate>
+                  <Border Background="Transparent" />
+                </ControlTemplate>
+              </RepeatButton.Template>
+            </RepeatButton>
+          </Track.DecreaseButton>
+
+          <Track.IncreaseButton>
+            <RepeatButton x:Name="PART_PageDownButton" Focusable="False" Background="Transparent"
+                          Width="0" MinWidth="0" Padding="0">
+              <RepeatButton.Template>
+                <ControlTemplate>
+                  <Border Background="Transparent" />
+                </ControlTemplate>
+              </RepeatButton.Template>
+            </RepeatButton>
+          </Track.IncreaseButton>
+
+          <Track.Thumb>
+            <Thumb x:Name="Thumb" MinWidth="36" Background="{DynamicResource DsScrollThumbBrush}">
+              <Thumb.Template>
+                <ControlTemplate>
+                  <!-- 滑块只占 3 像素、在轨道里居中：细到跟右侧的纵向滚动条一个分量，
+                       但轨道本身留高一点，点击与拖动还不至于难按 -->
+                  <Border Background="{TemplateBinding Background}"
+                          Height="3"
+                          CornerRadius="1.5"
+                          VerticalAlignment="Center" />
+                </ControlTemplate>
+              </Thumb.Template>
+            </Thumb>
+          </Track.Thumb>
+
+        </Track>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+</ResourceDictionary>

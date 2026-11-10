@@ -1,0 +1,71 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!--
+    浮层的底色与描边：底部提示气泡之类浮在页面之上的薄片。
+
+    单独成一个文件，是因为它必须跟着明暗主题换：浅色下要浅底深字，深色下要深底浅字；
+    写死一个颜色，两个主题里必有一边糊成一片。
+
+    底色带一点透明度（末两位 F7 ≈ 97%），气泡压住底下内容时还能透出一点层次。
+    文字不用单独给色，跟着主题的前景色走就够。
+  -->
+
+  <ResourceDictionary.ThemeDictionaries>
+
+    <ResourceDictionary x:Key="Light">
+      <SolidColorBrush x:Key="DsSurfaceOverlayBrush" Color="#F7FFFFFF" />
+      <SolidColorBrush x:Key="DsBorderBrush" Color="#1F000000" />
+      <!-- 开窗口材质时左侧导航栏的底色：压一层薄纱，云母仍能透出来，
+           同时保证导航项在壁纸色上也读得清。 -->
+      <SolidColorBrush x:Key="DsSidebarVeilBrush" Color="#A6FFFFFF" />
+      <!-- 底窗：垫在列表、关系图下面的一层白纱。半透明，开云母时底下那层材质照样透得出来；
+           卡片是实心白，压在这层白纱上正好高出一档。再淡一点就只剩一条边框，所以只到 24%。 -->
+      <SolidColorBrush x:Key="DsWellBrush" Color="#3DFFFFFF" />
+      <!-- 固定段与滚动段之间的竖线：列表横向拖动时只有中段会动，
+           不给一道线就分不清哪一截是会走的、哪一截钉死在两侧。
+           **写成不透明色，不要拿半透明黑去叠阴影**：半透明线在任何东西上叠都会跟着下面的颜色走，
+           左右两条一个压在渐变的 offset 0、一个压在镜像的 offset 0，插值采样点差半像素，
+           取色器量出来就是 #979798 对 #979799 ——差 1 个 B 通道，肉眼看不见但确实不相等。
+           用实色之后两侧必然同值。深浅两个主题各给一个，对着各自卡面亮度取：
+           线比卡面暗约 80（浅色 252→171，深色 43→125）。再深一档就是 151 / 145，
+           老大看过一版说「稍微有点深」，所以又淡了 20。 -->
+      <SolidColorBrush x:Key="DsDividerBrush" Color="#ABABAB" />
+      <!-- 分界外侧的那道薄阴影：左边那条往右展、右边那条往左展，
+           意思都是「越靠近边界越浓，再往外就是被裁掉的部分」。
+           用渐变而不是实心，是因为它压在中段内容上，实心会像一块脏斑。
+           起点浓度 11%（原来 15%，老大说阴影也稍深，一起减淡了）。 -->
+      <LinearGradientBrush x:Key="DsEdgeFadeRightBrush" StartPoint="0%,50%" EndPoint="100%,50%">
+        <GradientStop Offset="0" Color="#1C000000" />
+        <GradientStop Offset="1" Color="#00000000" />
+      </LinearGradientBrush>
+      <LinearGradientBrush x:Key="DsEdgeFadeLeftBrush" StartPoint="100%,50%" EndPoint="0%,50%">
+        <GradientStop Offset="0" Color="#1C000000" />
+        <GradientStop Offset="1" Color="#00000000" />
+      </LinearGradientBrush>
+      <!-- 横向拖动条的滑块：不显眼但要摸得到 -->
+      <SolidColorBrush x:Key="DsScrollThumbBrush" Color="#3D000000" />
+      <SolidColorBrush x:Key="DsScrollThumbHoverBrush" Color="#66000000" />
+    </ResourceDictionary>
+
+    <ResourceDictionary x:Key="Dark">
+      <SolidColorBrush x:Key="DsSurfaceOverlayBrush" Color="#F72B2B2B" />
+      <SolidColorBrush x:Key="DsBorderBrush" Color="#26FFFFFF" />
+      <SolidColorBrush x:Key="DsSidebarVeilBrush" Color="#A62B2B2B" />
+      <SolidColorBrush x:Key="DsWellBrush" Color="#0FFFFFFF" />
+      <SolidColorBrush x:Key="DsDividerBrush" Color="#7D7D7D" />
+      <LinearGradientBrush x:Key="DsEdgeFadeRightBrush" StartPoint="0%,50%" EndPoint="100%,50%">
+        <GradientStop Offset="0" Color="#22FFFFFF" />
+        <GradientStop Offset="1" Color="#00FFFFFF" />
+      </LinearGradientBrush>
+      <LinearGradientBrush x:Key="DsEdgeFadeLeftBrush" StartPoint="100%,50%" EndPoint="0%,50%">
+        <GradientStop Offset="0" Color="#22FFFFFF" />
+        <GradientStop Offset="1" Color="#00FFFFFF" />
+      </LinearGradientBrush>
+      <SolidColorBrush x:Key="DsScrollThumbBrush" Color="#3DFFFFFF" />
+      <SolidColorBrush x:Key="DsScrollThumbHoverBrush" Color="#66FFFFFF" />
+    </ResourceDictionary>
+
+  </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>

@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:MediaMTX_Yuki_GUI"
+             xmlns:c="using:MediaMTX_Yuki_GUI.Controls"
+             xmlns:models="using:MediaMTX_Yuki_GUI.Models"
+             x:Class="MediaMTX_Yuki_GUI.Views.ModePage">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="{StaticResource DsPagePadding}" Spacing="12">
+
+      <StackPanel Margin="{StaticResource DsCardGap}">
+        <TextBlock Text="{Binding PageTitle}" Classes="page-title" />
+        <TextBlock Text="{Binding PageSubtitle}" Classes="page-subtitle" />
+      </StackPanel>
+
+      <!-- 两张卡上下排：先简洁后高级，卡里列清楚「给了什么」，底部按钮才允许切 -->
+      <Grid RowDefinitions="Auto,12,Auto">
+
+        <!-- 简洁模式 -->
+        <Border Grid.Row="0" Classes="card" Padding="20,18">
+          <StackPanel Spacing="12">
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <TextBlock Text="&#xE8A9;"
+                         FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                         FontSize="20"
+                         VerticalAlignment="Center"
+                         Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+              <TextBlock Text="{loc:Loc c007-001}"
+                         FontSize="17"
+                         FontWeight="SemiBold"
+                         VerticalAlignment="Center" />
+              <c:PillBadge Variant="On"
+                           Text="{loc:Loc c007-003}"
+                           VerticalAlignment="Center"
+                           Margin="4,0,0,0"
+                           IsVisible="{Binding IsSimpleMode}" />
+            </StackPanel>
+
+            <TextBlock Text="{loc:Loc l007-001}" Classes="hint" TextWrapping="Wrap" />
+
+            <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
+            <TextBlock Text="{loc:Loc l007-002}" TextWrapping="Wrap" LineHeight="22" />
+
+            <Button Content="{loc:Loc c007-004}"
+                    Margin="0,6,0,0"
+                    IsVisible="{Binding IsAdvancedMode}"
+                    Command="{Binding SwitchModeCommand}"
+                    CommandParameter="{x:Static models:UiOptions.SimpleMode}" />
+            <Button Content="{loc:Loc c007-003}"
+                    Margin="0,6,0,0"
+                    IsVisible="{Binding IsSimpleMode}"
+                    IsEnabled="False" />
+
+          </StackPanel>
+        </Border>
+
+        <!-- 高级模式 -->
+        <Border Grid.Row="2" Classes="card" Padding="20,18">
+          <StackPanel Spacing="12">
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <TextBlock Text="&#xE9E9;"
+                         FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                         FontSize="20"
+                         VerticalAlignment="Center"
+                         Foreground="{DynamicResource AccentFillColorDefaultBrush}" />
+              <TextBlock Text="{loc:Loc c007-002}"
+                         FontSize="17"
+                         FontWeight="SemiBold"
+                         VerticalAlignment="Center" />
+              <c:PillBadge Variant="On"
+                           Text="{loc:Loc c007-003}"
+                           VerticalAlignment="Center"
+                           Margin="4,0,0,0"
+                           IsVisible="{Binding IsAdvancedMode}" />
+            </StackPanel>
+
+            <TextBlock Text="{loc:Loc l007-003}" Classes="hint" TextWrapping="Wrap" />
+
+            <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
+            <TextBlock Text="{loc:Loc l007-004}" TextWrapping="Wrap" LineHeight="22" />
+
+            <Button Classes="primary"
+                    Content="{loc:Loc c007-004}"
+                    Margin="0,6,0,0"
+                    IsVisible="{Binding IsSimpleMode}"
+                    Command="{Binding SwitchModeCommand}"
+                    CommandParameter="{x:Static models:UiOptions.AdvancedMode}" />
+            <Button Content="{loc:Loc c007-003}"
+                    Margin="0,6,0,0"
+                    IsVisible="{Binding IsAdvancedMode}"
+                    IsEnabled="False" />
+
+          </StackPanel>
+        </Border>
+
+      </Grid>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

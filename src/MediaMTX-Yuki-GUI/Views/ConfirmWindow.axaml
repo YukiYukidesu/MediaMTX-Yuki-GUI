@@ -1,0 +1,49 @@
+<ui:FAAppWindow x:Class="MediaMTX_Yuki_GUI.Views.ConfirmWindow"
+                xmlns="https://github.com/avaloniaui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:ui="using:FluentAvalonia.UI.Windowing"
+                xmlns:loc="using:MediaMTX_Yuki_GUI"
+                Title="{Binding WindowTitle}"
+                Width="460"
+                SizeToContent="Height"
+                CanResize="False"
+                CanMaximize="False"
+                WindowStartupLocation="CenterOwner"
+                TextOptions.TextRenderingMode="Antialias">
+
+  <Grid RowDefinitions="Auto,Auto" Margin="24">
+
+    <TextBlock Grid.Row="0"
+               Margin="0,0,0,20"
+               FontSize="13"
+               LineHeight="20"
+               TextWrapping="Wrap"
+               Text="{Binding Message}" />
+
+    <StackPanel Grid.Row="1"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+      <!-- 取消永远在执行按钮左边：右边那颗才是「这一步要做的事」 -->
+      <Button MinWidth="88"
+              Content="{loc:Loc c010-010}"
+              Command="{Binding CancelCommand}"
+              IsCancel="True" />
+
+      <!-- 会造成破坏的那一侧用红底，让人看清楚点下去的代价 -->
+      <Button Margin="8,0,0,0"
+              MinWidth="88"
+              Classes="danger-solid"
+              IsVisible="{Binding Destructive}"
+              Content="{Binding OkText}"
+              Command="{Binding ConfirmCommand}"
+              IsDefault="True" />
+      <Button Margin="8,0,0,0"
+              MinWidth="88"
+              Classes="primary"
+              IsVisible="{Binding !Destructive}"
+              Content="{Binding OkText}"
+              Command="{Binding ConfirmCommand}"
+              IsDefault="True" />
+    </StackPanel>
+  </Grid>
+</ui:FAAppWindow>

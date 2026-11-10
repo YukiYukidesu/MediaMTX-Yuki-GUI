@@ -1,0 +1,64 @@
+<ui:FAAppWindow x:Class="MediaMTX_Yuki_GUI.Views.AccountEditorWindow"
+                 xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="using:FluentAvalonia.UI.Windowing"
+                 xmlns:loc="using:MediaMTX_Yuki_GUI"
+                 Title="{Binding WindowTitle}"
+                 Width="460"
+                 MinHeight="330"
+                 MaxHeight="800"
+                 SizeToContent="Height"
+                 CanResize="False"
+                 CanMaximize="False"
+                 WindowStartupLocation="CenterOwner"
+                 TextOptions.TextRenderingMode="Antialias">
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="24">
+
+    <TextBlock Grid.Row="0"
+               Margin="0,0,0,20"
+               Classes="page-subtitle"
+               Text="{loc:Loc l027-001}" />
+
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <StackPanel>
+
+        <TextBlock Classes="field-label" Text="{loc:Loc c027-001}" />
+        <TextBox Margin="0,4,0,4" Text="{Binding User, Mode=TwoWay}" />
+
+        <!-- 重名只提醒不拦：两个账号叫一个名字引擎也会当成两条，只是不好认 -->
+        <TextBlock Margin="0,0,0,12"
+                   Classes="warning-hint"
+                   IsVisible="{Binding HasNameWarning}"
+                   Text="{Binding NameWarning}" />
+
+        <TextBlock Classes="field-label" Text="{loc:Loc c027-002}" />
+        <TextBox Margin="0,4,0,12" PasswordChar="&#x25CF;" Text="{Binding Password, Mode=TwoWay}" />
+
+        <!-- 只看不推的账号把这一项勾上；推流的范围由每个输入源那边勾 -->
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c027-003}" />
+          <ToggleSwitch VerticalAlignment="Center" IsChecked="{Binding CanView, Mode=TwoWay}" />
+        </StackPanel>
+
+        <TextBlock Margin="0,6,0,0"
+                   Classes="hint"
+                   TextWrapping="Wrap"
+                   Text="{loc:Loc l027-003}" />
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- 缺什么直接标在对应的框下面了，这里只管放按钮 -->
+    <StackPanel Grid.Row="2"
+                Margin="0,20,0,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+      <Button MinWidth="88"
+              Content="{loc:Loc c008-014}"
+              Command="{Binding CancelCommand}"
+              IsCancel="True" />
+      <Button Margin="8,0,0,0" MinWidth="88" Classes="primary" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" />
+    </StackPanel>
+  </Grid>
+</ui:FAAppWindow>

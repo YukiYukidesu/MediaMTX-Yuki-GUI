@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MediaMTX-Yuki-GUI/MediaMTX-Yuki-GUI.csproj" />
+  </Folder>
+</Solution>

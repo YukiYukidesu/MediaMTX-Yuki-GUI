@@ -1,0 +1,33 @@
+# 构建产物：每次编译都由 MSBuild 重写，不进版本库
+bin/
+obj/
+
+# 打包产物：由 build-release.ps1 生成，发布走 GitHub Release 而不是仓库
+dist/
+
+# 临时实验与调试截图：随时可以整个删掉
+.scratch/
+
+# 第三方参考源码（44.8 MB，别人的 MIT / BSD 代码）与内部文档：都不进公开仓库。
+# 设计文档与交接文档属于开发过程材料，留在本机；要公开时再单独挑出来。
+refs/
+docs/
+
+# 编辑器与本机环境
+.vs/
+.vscode/
+*.user
+*.suo
+*.DotSettings.user
+
+# 运行期产物（一般落在 bin/ 下，双保险）
+logs/
+recordings/
+*.log
+
+# 系统垃圾
+Thumbs.db
+desktop.ini
+.DS_Store
+# 本项目的内部工作说明（文档分工、语言包约定、按钮语义），不随仓库分发
+AGENTS.md

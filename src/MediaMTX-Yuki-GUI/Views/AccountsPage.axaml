@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:MediaMTX_Yuki_GUI"
+             x:Class="MediaMTX_Yuki_GUI.Views.AccountsPage">
+  <!-- 三行：标题、工具栏、底框。底框占星号，窗口怎么缩放它都自己长满 -->
+  <Grid Margin="{StaticResource DsPagePadding}" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+
+    <StackPanel Margin="{StaticResource DsCardGap}">
+      <TextBlock Text="{Binding PageTitle}" Classes="page-title" />
+      <TextBlock Text="{Binding PageSubtitle}" Classes="page-subtitle" />
+    </StackPanel>
+
+    <!-- 工具栏：左边一句统计，右边只有一颗添加 -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+      <TextBlock Grid.Column="0"
+                 Classes="hint"
+                 VerticalAlignment="Center"
+                 Text="{Binding AccountsSummary}" />
+
+      <Button Grid.Column="1"
+              Classes="primary"
+              Padding="12,4"
+              FontSize="12"
+              Content="{loc:Loc c027-005}"
+              Command="{Binding AddAccountCommand}" />
+    </Grid>
+
+    <!-- 表格垫在一块极浅的底窗上，跟两个列表页同一套观感 -->
+    <Border Grid.Row="2" Classes="well" Padding="8,8,8,8">
+      <Grid RowDefinitions="Auto,*">
+
+        <!-- 一个账号都没有时列头一起收起来，空状态浮在框内正中 -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,*,*,140"
+              ColumnSpacing="8"
+              Margin="16,0,16,6"
+              IsVisible="{Binding HasAccounts}">
+          <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c027-001}" HorizontalAlignment="Left" />
+          <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c027-002}" HorizontalAlignment="Left" />
+          <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c027-003}" HorizontalAlignment="Center" />
+          <TextBlock Grid.Column="3" Classes="column-header" Text="{loc:Loc c003-015}" HorizontalAlignment="Left" Margin="8,0,0,0" />
+        </Grid>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+          <ItemsControl ItemsSource="{Binding Accounts}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Classes="card" Padding="16,10" Margin="0,0,0,8">
+                  <Grid ColumnDefinitions="*,*,*,140" ColumnSpacing="8">
+
+                    <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               Text="{Binding User}" />
+
+                    <TextBlock Grid.Column="1"
+                               Classes="hint"
+                               VerticalAlignment="Center"
+                               Text="{Binding PasswordMask}" />
+
+                    <TextBlock Grid.Column="2"
+                               Classes="hint"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{Binding CanViewText}" />
+
+                    <!-- 右段固定：只有编辑与删除两颗，靠左摆，与表头对齐 -->
+                    <StackPanel Grid.Column="3"
+                                Orientation="Horizontal"
+                                Spacing="2"
+                                HorizontalAlignment="Left"
+                                Margin="8,0,0,0">
+                      <Button Classes="icon-square"
+                              ToolTip.Tip="{loc:Loc c003-019}"
+                              Command="{Binding $parent[Window].DataContext.EditAccountCommand}"
+                              CommandParameter="{Binding}">
+                        <TextBlock Classes="glyph" Text="&#xE70F;" />
+                      </Button>
+                      <Button Classes="icon-square danger"
+                              ToolTip.Tip="{loc:Loc c003-020}"
+                              Click="OnRemoveAccountClick">
+                        <TextBlock Classes="glyph" Text="&#xE74D;" />
+                      </Button>
+                    </StackPanel>
+
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1"
+                    IsVisible="{Binding IsAccountsEmpty}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="6"
+                    IsHitTestVisible="False">
+          <TextBlock Text="&#xE716;"
+                     FontFamily="Segoe Fluent Icons"
+                     FontSize="34"
+                     HorizontalAlignment="Center"
+                     Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+          <TextBlock Classes="empty-title" Text="{loc:Loc c027-006}" />
+          <TextBlock Classes="hint" Text="{loc:Loc l027-004}" />
+        </StackPanel>
+
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

@@ -1,0 +1,336 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:MediaMTX_Yuki_GUI"
+             xmlns:c="using:MediaMTX_Yuki_GUI.Controls"
+             x:Class="MediaMTX_Yuki_GUI.Views.InputsPage">
+  <!-- 三行：标题、工具栏、底框。底框那一行占星号，窗口怎么缩放它都自己长满；
+       行数再多也只是底框内部滚动，底框本身不跟着内容伸缩 -->
+  <Grid Margin="{StaticResource DsPagePadding}" RowDefinitions="Auto,Auto,*" RowSpacing="12">
+
+    <StackPanel Margin="{StaticResource DsCardGap}">
+      <TextBlock Text="{Binding PageTitle}" Classes="page-title" />
+      <TextBlock Text="{Binding PageSubtitle}" Classes="page-subtitle" />
+    </StackPanel>
+
+    <!-- 工具栏 -->
+    <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
+      <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+        <Button Padding="10,4" FontSize="12" Content="{Binding SelectAllInputsText}"
+                ToolTip.Tip="{loc:Loc c003-002}"
+                Command="{Binding ToggleSelectAllInputsCommand}" />
+        <TextBlock Text="{Binding InputSelectionText}" Classes="hint" VerticalAlignment="Center" />
+      </StackPanel>
+
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6"
+                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="12,0">
+        <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
+                  ItemsSource="{Binding InputSortChoices}"
+                  SelectedIndex="{Binding InputSortIndex}"
+                  ToolTip.Tip="{loc:Loc c003-017}" />
+        <TextBlock Text="{loc:Loc c003-018}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+        <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
+                      OffContent="" OnContent=""
+                      IsChecked="{Binding InputEnabledFirst}"
+                      ToolTip.Tip="{loc:Loc l003-001}" />
+      </StackPanel>
+
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
+                  HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button Classes="batch-green" Content="{loc:Loc c003-031}" Command="{Binding StartSelectedInputsCommand}" />
+        <Button Classes="batch-red" Content="{loc:Loc c003-032}" Command="{Binding StopSelectedInputsCommand}" />
+        <Button Classes="danger-solid" Padding="10,4" FontSize="12"
+                Content="{loc:Loc c003-033}" Command="{Binding RemoveSelectedInputsCommand}" />
+        <Button Classes="primary" Padding="12,4" FontSize="12"
+                Content="{loc:Loc c003-034}" Command="{Binding AddInputCommand}" />
+      </StackPanel>
+    </Grid>
+
+    <!-- 列表：左段勾选与启停、右段操作与拖拽都固定在两侧，中间字段横向滚动。
+         三段宽度在表头与行里必须一致，否则列头会错位。 -->
+    <!-- 整个列表（表头、行、横向拖动条）垫在一块极浅的底窗上：
+         行是白卡片，底窗比页面底色再暗一档，一眼就能看出这一堆是一件事。
+         这块底窗占第 2 行（星号），窗口多高它就多高；没有输入源时它同样占着那一块，
+         空状态浮在框内正中，不再让整页随行数伸缩 -->
+    <Border Grid.Row="2" Classes="well" Padding="8,8,8,4">
+      <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- 一条源都没有时，列头与横向拖动条都没有可表的对象，一起收起来；
+             底框本身留着（占住那块高度），空状态才有可能落在正中 -->
+        <Grid Grid.Row="0" ColumnDefinitions="104,*,192" Margin="16,0,16,6"
+              IsVisible="{Binding IsInputsVisible}">
+          <!-- 左对齐、跟行里那颗勾选框的左缘齐：居中会让四个字落在胶囊右边一截，
+               看着比下面那行还靠右 -->
+          <TextBlock Grid.Column="0" Classes="column-header"
+                     Text="{loc:Loc c003-008}" HorizontalAlignment="Left" />
+
+          <!-- 表头的中段也挂同一个同步组，横向滚动时跟行一起走。
+               列宽写成「最小宽度*」：窗口宽时按权重把多出来的宽度分掉，窄时保持最小宽度横向滚动。 -->
+          <ScrollViewer Grid.Column="1"
+                        HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Disabled"
+                        c:ColumnScroll.SyncGroup="inputs"
+                        c:ColumnScroll.FillViewport="True"
+                        c:ColumnScroll.AdvancedColumns="7,8"
+                        c:ColumnScroll.Advanced="{Binding $parent[Window].DataContext.IsAdvancedMode}"
+                        Margin="0,0,6,0">
+            <!-- 左右各留 14：分界线的阴影自己就宽 6，只留 8 的话那点空隙全被阴影吃掉，
+                 内容看着还是贴着线。14 = 6 的阴影 + 8 的白。这两个数会自动从 SyncFillWidth 里减掉 -->
+            <Grid ColumnSpacing="6" Margin="14,0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="156*" MinWidth="156" />
+                <ColumnDefinition Width="60*" MinWidth="60" />
+                <ColumnDefinition Width="76*" MinWidth="76" />
+                <ColumnDefinition Width="66*" MinWidth="66" />
+                <ColumnDefinition Width="214*" MinWidth="214" />
+                <ColumnDefinition Width="80*" MinWidth="80" />
+                <ColumnDefinition Width="88*" MinWidth="88" />
+                <ColumnDefinition Width="88*" MinWidth="88" />
+                <ColumnDefinition Width="92*" MinWidth="92" />
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c003-009}" />
+              <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c003-010}"
+                         HorizontalAlignment="Center" />
+              <TextBlock Grid.Column="2" Classes="column-header"
+                         Text="{loc:Loc c003-013}" HorizontalAlignment="Center" />
+              <TextBlock Grid.Column="3" Classes="column-header"
+                         Text="{loc:Loc c003-011}" HorizontalAlignment="Center" />
+              <TextBlock Grid.Column="4" Classes="column-header" Text="{loc:Loc c003-012}" />
+              <TextBlock Grid.Column="5" Classes="column-header"
+                         Text="{loc:Loc c003-014}" HorizontalAlignment="Center" />
+              <TextBlock Grid.Column="6" Classes="column-header"
+                         Text="{loc:Loc c003-038}" HorizontalAlignment="Center" />
+              <TextBlock Grid.Column="7" Classes="column-header"
+                         Text="{loc:Loc c003-039}" HorizontalAlignment="Center"
+                         IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
+              <TextBlock Grid.Column="8" Classes="column-header"
+                         Text="{loc:Loc c003-040}" HorizontalAlignment="Center"
+                         IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
+            </Grid>
+          </ScrollViewer>
+
+          <!-- 操作列的文字与行内按钮都靠左：按钮数量会随模式变（简洁模式少两颗），
+               靠右对齐的话第一个按钮的位置会跟着跳，跟分界线的间距就不固定了 -->
+          <TextBlock Grid.Column="2" Classes="column-header" Margin="4,0,0,0"
+                     Text="{loc:Loc c003-015}" HorizontalAlignment="Left" />
+        </Grid>
+
+        <!-- 行数超出底框就在框内纵向滚动：底框高度固定，行多也不会把整页撑长 -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+          <ItemsControl ItemsSource="{Binding Inputs}"
+                        c:ReorderHandle.IsEnabled="True"
+                        c:ReorderHandle.MoveCommand="{Binding MoveInputRowCommand}"
+                        c:ReorderHandle.CommitCommand="{Binding CommitInputOrderCommand}"
+                        c:ReorderHandle.Boundary="{Binding InputEnabledBoundary}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Classes="card row" Padding="16,10" Margin="0,0,0,8">
+                  <!-- 这一层不写 VerticalAlignment：要让它吃满卡片的 Padding 区，
+                       分界线和阴影才能靠上下各探 10（即 Padding 的上下值）盖住整张卡的高度。
+                       内容各自居中，不受影响。 -->
+                  <Grid ColumnDefinitions="104,*,192">
+
+                    <!-- 左段：勾选与启停状态，固定不动。
+                         被程序锁住的行（简洁模式下的拉流源）连勾选框都不给：那一行只剩删除这一个动作，
+                         留着勾选框会让人以为还能批量启用。状态胶囊照旧显示，说明它为什么动不了。 -->
+                    <!-- 勾选框贴左、状态胶囊在余下那截里居中。
+                         勾选框要显式写 Padding="0" MinWidth="0"：Fluent 模板自带左边 8 的内边距，
+                         不抹掉它自己就占掉半列，胶囊没地方居中。 -->
+                    <Grid Grid.Column="0" ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                      <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" VerticalAlignment="Center"
+                                Padding="0" MinWidth="0"
+                                IsVisible="{Binding !RuntimeDisabled}" />
+                      <c:PillBadge Grid.Column="1" HorizontalAlignment="Center"
+                                   Text="{Binding StatusText}" Variant="{Binding StatusVariant}"
+                                   ShowDot="True" />
+                    </Grid>
+
+                    <!-- 中段：按列摆，列宽固定，长字符串靠左、其余居中；多行共享同一条偏移 -->
+                    <ScrollViewer Grid.Column="1"
+                                  HorizontalScrollBarVisibility="Hidden"
+                                  VerticalScrollBarVisibility="Disabled"
+                                  c:ColumnScroll.SyncGroup="inputs"
+                                  c:ColumnScroll.FillViewport="True"
+                                  c:ColumnScroll.AdvancedColumns="7,8"
+                                  c:ColumnScroll.Advanced="{Binding $parent[Window].DataContext.IsAdvancedMode}"
+                                  Margin="0,0,6,0">
+                      <!-- 左右各留 14，与上面表头那两处一致：滚到两端时不贴分界线 -->
+                      <Grid ColumnSpacing="6" Margin="14,0" VerticalAlignment="Center"
+                            Classes="row-fields" Classes.disabled="{Binding !EffectiveEnabled}">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="156*" MinWidth="156" />
+                          <ColumnDefinition Width="60*" MinWidth="60" />
+                          <ColumnDefinition Width="76*" MinWidth="76" />
+                          <ColumnDefinition Width="66*" MinWidth="66" />
+                          <ColumnDefinition Width="214*" MinWidth="214" />
+                          <ColumnDefinition Width="80*" MinWidth="80" />
+                          <ColumnDefinition Width="88*" MinWidth="88" />
+                          <ColumnDefinition Width="88*" MinWidth="88" />
+                          <ColumnDefinition Width="92*" MinWidth="92" />
+                        </Grid.ColumnDefinitions>
+
+                        <c:PillBadge Grid.Column="0" Variant="Plain" MaxWidth="152"
+                                     HorizontalAlignment="Left"
+                                     Text="{Binding DisplayName}"
+                                     ToolTip.Tip="{Binding DisplayName}"
+                                     Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
+                                     CommandParameter="{Binding DisplayName}" />
+                        <c:PillBadge Grid.Column="1" Variant="Plain" MaxWidth="62"
+                                     HorizontalAlignment="Center"
+                                     Text="{Binding ShortId}"
+                                     ToolTip.Tip="{Binding Id}"
+                                     Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
+                                     CommandParameter="{Binding Id}" />
+                        <c:PillBadge Grid.Column="2" Text="{Binding SourceText}" Variant="{Binding SourceVariant}"
+                                     HorizontalAlignment="Center" />
+                        <c:PillBadge Grid.Column="3" Text="{Binding ProtocolText}" Variant="{Binding ProtocolVariant}"
+                                     HorizontalAlignment="Center" />
+                        <c:PillBadge Grid.Column="4" Variant="Plain" MaxWidth="210"
+                                     HorizontalAlignment="Left"
+                                     Text="{Binding PushOrPullUrl}"
+                                     ToolTip.Tip="{Binding PushOrPullUrl}"
+                                     Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
+                                     CommandParameter="{Binding PushOrPullUrl}" />
+                        <c:PillBadge Grid.Column="5" Text="{Binding LiveText}" Variant="{Binding LiveVariant}"
+                                     ShowDot="True" HorizontalAlignment="Center"
+                                     IsVisible="{Binding EffectiveEnabled}" />
+                        <c:PillBadge Grid.Column="6" Variant="Plain"
+                                     Text="{Binding InboundSpeedText}" HorizontalAlignment="Center" />
+                        <c:PillBadge Grid.Column="7" Text="{Binding RecordStateText}" Variant="{Binding RecordStateVariant}"
+                                     HorizontalAlignment="Center"
+                                     IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
+                        <c:PillBadge Grid.Column="8" Variant="Plain"
+                                     Text="{Binding RecordSizeText}" HorizontalAlignment="Center"
+                                     IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
+                      </Grid>
+                    </ScrollViewer>
+
+                    <!-- 分界线与阴影：**都画在这张白卡上**，卡在哪它们就在哪。
+                         高度要盖满整张卡，所以上下各探 10（把 Border 的 Padding 上下值抵消掉）。
+                         线在内容被裁断的位置：左线贴住冻结段的右缘，右线在 12 的右边距处；
+                         阴影朝被裁掉的那一侧铺：左边往右淡、右边往左淡。
+                         四条都在 Column 1 里：线贴边界，**阴影再往内让开线的宽度**（左阴影 Margin 左边 0.8、
+                         右阴影 Margin 右边 +0.8），让线独占那一列、完全不跟渐变重叠。
+                         **线宽写 0.8、不写 1**：1 DIP 在 125% 缩放下是 1.25 物理像素，抗锯齿会把
+                         多余的那 0.25 铺到隔壁一列，线看上去就是 2 像素宽；0.8 × 1.25 = 1 像素正好。
+                         （试过 RenderOptions.EdgeMode="Aliased"，对 Border 的底色填充不起作用，别白费劲。）
+                         线必须写成不透明实色：半透明线叠到什么上就是什么颜色，左右两条各压渐变的一端，
+                         镜像插值采样点差半像素，取色器量出来就是 #979798 对 #979799 ——差 1 个通道，
+                         顶级屏上一眼就能看出两条线不是一个色。
+                         左边原来放在 Column 0 的右缘，跟阴影相邻、线又比阴影浅，所以只有右边看得见线。
+                         卡片之间那 8px 缝里什么都没有——线也不跟过去，
+                         因为缝那儿本来就没有内容被裁断。 -->
+                    <Border Grid.Column="1" Width="6" HorizontalAlignment="Left"
+                            Margin="0.8,-10,0,-10"
+                            Background="{DynamicResource DsEdgeFadeRightBrush}"
+                            IsHitTestVisible="False" />
+                    <Border Grid.Column="1" Width="6" HorizontalAlignment="Right"
+                            Margin="0,-10,6.8,-10"
+                            Background="{DynamicResource DsEdgeFadeLeftBrush}"
+                            IsHitTestVisible="False" />
+                    <Border Grid.Column="1" Width="0.8" HorizontalAlignment="Left"
+                            Margin="0,-10,0,-10"
+                            Background="{DynamicResource DsDividerBrush}"
+                            IsHitTestVisible="False" />
+                    <Border Grid.Column="1" Width="0.8" HorizontalAlignment="Right"
+                            Margin="0,-10,6,-10"
+                            Background="{DynamicResource DsDividerBrush}"
+                            IsHitTestVisible="False" />
+
+                    <!-- 右段：操作与拖拽，固定不动，停用时也不压灰 -->
+                    <!-- 靠左而不是靠右：按钮数量随模式变（简洁模式没有录制与录像两颗），
+                         靠右会让第一个按钮随数量左右横跳，跟分界线之间就时宽时窄 -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" Margin="4,0,0,0"
+                                HorizontalAlignment="Left" VerticalAlignment="Center">
+
+                      <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
+                              IsVisible="{Binding !RuntimeDisabled}"
+                              ToolTip.Tip="{loc:Loc c003-021}"
+                              Command="{Binding $parent[Window].DataContext.ToggleInputEnabledCommand}"
+                              CommandParameter="{Binding}">
+                        <Panel>
+                          <!-- 按钮画的是「点了会做什么」：跑着时点了会停，所以是方块；停着时点了会跑，所以是三角 -->
+                          <TextBlock Classes="glyph" Text="&#xE71A;" IsVisible="{Binding Enabled}" />
+                          <TextBlock Classes="glyph" Text="&#xE768;" IsVisible="{Binding !Enabled}" />
+                        </Panel>
+                      </Button>
+
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc c003-019}"
+                              IsVisible="{Binding !RuntimeDisabled}"
+                              Command="{Binding $parent[Window].DataContext.OpenInputCommand}"
+                              CommandParameter="{Binding}">
+                        <TextBlock Classes="glyph" Text="&#xE70F;" />
+                      </Button>
+
+                      <!-- 录制：只在高级模式出现，正在录时亮黄底 -->
+                      <Button Classes="icon-square record"
+                              Classes.on="{Binding IsRecording}"
+                              IsVisible="{Binding !RuntimeDisabled}"
+                              IsEnabled="{Binding EffectiveEnabled}"
+                              ToolTip.Tip="{loc:Loc c003-022}"
+                              Command="{Binding $parent[Window].DataContext.ToggleInputRecordCommand}"
+                              CommandParameter="{Binding}">
+                        <TextBlock Classes="glyph" Text="&#xE7C8;" />
+                      </Button>
+
+                      <!-- 录像：只在高级模式出现。关掉录制之后历史片段还在，所以不跟录制开关联动 -->
+                      <Button Classes="icon-square"
+                              IsVisible="{Binding !RuntimeDisabled}"
+                              ToolTip.Tip="{loc:Loc c003-023}"
+                              Command="{Binding $parent[Window].DataContext.ShowRecordingsCommand}"
+                              CommandParameter="{Binding}">
+                        <TextBlock Classes="glyph" Text="&#xE81C;" />
+                      </Button>
+
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c003-020}"
+                              Click="OnRemoveInputClick">
+                        <TextBlock Classes="glyph" Text="&#xE74D;" />
+                      </Button>
+
+                      <Border Classes="drag-handle" Width="24" Height="26"
+                              Background="Transparent" Cursor="SizeAll"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Margin="4,0,0,0"
+                              IsVisible="{Binding !RuntimeDisabled}"
+                              ToolTip.Tip="{loc:Loc l003-002}">
+                        <TextBlock Text="&#xE700;" FontSize="11"
+                                   FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+                      </Border>
+
+                    </StackPanel>
+
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+
+        <!-- 空状态浮在滚动区正中：底框照样占着那一块，只有这坨字挪到中间 -->
+        <StackPanel Grid.Row="1" IsVisible="{Binding IsInputsEmpty}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="6"
+                    IsHitTestVisible="False">
+          <TextBlock Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
+                     HorizontalAlignment="Center"
+                     Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+          <TextBlock Text="{loc:Loc c003-035}" Classes="empty-title" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc l003-003}" Classes="hint" HorizontalAlignment="Center" />
+        </StackPanel>
+
+        <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。
+             列表本身不画滚动条，免得每行各来一根。
+             横向铺满整个底框、不跟着中段缩进：缩进的话两端各空一截，
+             滑块永远走不到头，看着就不知道到底还能往哪边拖。 -->
+        <ScrollBar Grid.Row="2" Orientation="Horizontal" Margin="0,4,0,0" Height="8"
+                   AllowAutoHide="False"
+                   IsVisible="{Binding IsInputsVisible}"
+                   Theme="{StaticResource DsFlatScrollBar}"
+                   c:ColumnScroll.BarGroup="inputs" />
+
+      </Grid>
+    </Border>
+
+  </Grid>
+</UserControl>

@@ -1,0 +1,441 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="using:MediaMTX_Yuki_GUI.Controls"
+>
+
+  <!--
+      设计规范（Design System）— Avalonia 版
+
+      和 WPF 版是同一套取值，只是引用方式换成了 Avalonia 的写法：
+        · 数值 / 颜色 / 尺寸：同名同值，页面里用 {StaticResource}
+        · 文本样式：Avalonia 用 class 选择器，页面里写 Classes="page-title" 这类
+
+      规则不变：
+        · 间距一律取 4 的倍数，只用下面这几档
+        · 一屏一个页面标题（22），卡片标题 15，正文 12，辅助说明 11
+        · 语义色只允许 成功 / 警告 / 危险 三组
+        · 圆角只允许 4 / 8 / 12 三档，容器比内部元素大一级
+  -->
+
+  <Styles.Resources>
+
+    <!-- ====== 间距阶梯 ====== -->
+    <x:Double x:Key="DsSpace1">4</x:Double>
+    <x:Double x:Key="DsSpace2">8</x:Double>
+    <x:Double x:Key="DsSpace3">12</x:Double>
+    <x:Double x:Key="DsSpace4">16</x:Double>
+    <x:Double x:Key="DsSpace5">20</x:Double>
+    <x:Double x:Key="DsSpace6">24</x:Double>
+    <x:Double x:Key="DsSpace8">32</x:Double>
+
+    <Thickness x:Key="DsPagePadding">24</Thickness>
+    <Thickness x:Key="DsCardPadding">16</Thickness>
+    <Thickness x:Key="DsCardGap">0,0,0,12</Thickness>
+    <Thickness x:Key="DsFieldGap">0,4,0,0</Thickness>
+
+    <!-- ====== 字号阶梯 ====== -->
+    <x:Double x:Key="DsFontCaption">11</x:Double>
+    <x:Double x:Key="DsFontBody">12</x:Double>
+    <x:Double x:Key="DsFontBodyStrong">13</x:Double>
+    <!-- 14 而不是 15：这一档只有设置页的栏标题在用，栏是十四五个竖排的，
+         标题缩一号整页看着更利落，字重又是 SemiBold，缩了也不显单薄 -->
+    <x:Double x:Key="DsFontCardTitle">14</x:Double>
+    <x:Double x:Key="DsFontPageTitle">22</x:Double>
+
+    <!-- ====== 圆角阶梯 ====== -->
+    <CornerRadius x:Key="DsRadiusSm">4</CornerRadius>
+    <CornerRadius x:Key="DsRadiusMd">8</CornerRadius>
+    <CornerRadius x:Key="DsRadiusLg">12</CornerRadius>
+
+    <!-- ====== 语义色 ====== -->
+    <!-- 成功：在线、推流中、启用 -->
+    <SolidColorBrush x:Key="DsSuccess" Color="#3DDC84" />
+    <SolidColorBrush x:Key="DsSuccessStrong" Color="#2E9E5B" />
+    <SolidColorBrush x:Key="DsSuccessSoft" Color="#333DDC84" />
+
+    <!-- 警告：待确认、配置未生效 -->
+    <SolidColorBrush x:Key="DsWarning" Color="#F0A020" />
+    <SolidColorBrush x:Key="DsWarningSoft" Color="#33F0A020" />
+
+    <!-- 危险：错误、删除、停止 -->
+    <SolidColorBrush x:Key="DsDanger" Color="#FF6B6B" />
+    <SolidColorBrush x:Key="DsDangerStrong" Color="#C43B36" />
+
+    <!-- 中性：状态灯熄灭态 -->
+    <SolidColorBrush x:Key="DsNeutral" Color="#6E6E6E" />
+
+    <!-- ====== 常用尺寸 ====== -->
+    <x:Double x:Key="DsStatusDot">8</x:Double>
+    <x:Double x:Key="DsIconButton">30</x:Double>
+    <x:Double x:Key="DsControlWidth">88</x:Double>
+
+  </Styles.Resources>
+
+  <!-- 自绘标题栏的字是 FA 模板里写死的 SemiBold，中文只有假粗体，标题看着发糊；统一压回常规字重 -->
+  <Style Selector="TextBlock#PART_TitleText">
+    <Setter Property="FontWeight" Value="Normal" />
+  </Style>
+
+  <!-- ====== 文本样式 ====== -->
+
+  <!-- 卡片内的一级标签：左侧、13 号 -->
+  <Style Selector="TextBlock.field-label">
+    <Setter Property="FontSize" Value="{StaticResource DsFontBodyStrong}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- 卡片内的辅助说明：11 号、三级灰 -->
+  <Style Selector="TextBlock.hint">
+    <Setter Property="FontSize" Value="{StaticResource DsFontCaption}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+  </Style>
+
+  <!-- 卡片标题 -->
+  <Style Selector="TextBlock.card-title">
+    <Setter Property="FontSize" Value="{StaticResource DsFontCardTitle}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Margin" Value="0,0,0,2" />
+  </Style>
+
+  <!-- 卡片副标题 -->
+  <Style Selector="TextBlock.card-subtitle">
+    <Setter Property="FontSize" Value="{StaticResource DsFontCaption}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Margin" Value="0,0,0,12" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+  </Style>
+
+  <!-- 页面标题 -->
+  <Style Selector="TextBlock.page-title">
+    <Setter Property="FontSize" Value="{StaticResource DsFontPageTitle}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- 页面副标题 -->
+  <Style Selector="TextBlock.page-subtitle">
+    <Setter Property="FontSize" Value="{StaticResource DsFontBody}" />
+    <Setter Property="Margin" Value="0,4,0,0" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+  </Style>
+
+  <!-- 列表空状态的标题 -->
+  <Style Selector="TextBlock.empty-title">
+    <Setter Property="Margin" Value="0,12,0,0" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{StaticResource DsFontBodyStrong}" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+  </Style>
+
+  <!-- 危险提示文字：端口冲突、缺少前置条件等 -->
+  <Style Selector="TextBlock.danger-hint">
+    <Setter Property="FontSize" Value="{StaticResource DsFontCaption}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Foreground" Value="{StaticResource DsDanger}" />
+  </Style>
+
+  <!-- 警告提示文字：说明性质、不拦操作，例如「只对 RTMP / RTMPS 生效」。
+       和 danger-hint 一起用时，先黄后红：黄字讲规则，红字讲这次哪里没填。 -->
+  <Style Selector="TextBlock.warning-hint">
+    <Setter Property="FontSize" Value="{StaticResource DsFontCaption}" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Foreground" Value="{StaticResource DsWarning}" />
+  </Style>
+
+  <!-- 必填项的红色星号，紧跟在标签文字后面 -->
+  <Style Selector="TextBlock.required-mark">
+    <Setter Property="FontSize" Value="{StaticResource DsFontBodyStrong}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{StaticResource DsDanger}" />
+  </Style>
+
+  <!-- 输入框的出错态：必填项为空时用红框圈出来，红字紧贴框下方另行显示。
+       Fluent 主题在指针悬停与获得焦点时会把 PART_BorderElement 的边框改回主题色，
+       所以这两个伪类必须一起覆盖，否则鼠标一碰红框就没了。 -->
+  <Style Selector="TextBox.invalid">
+    <Setter Property="BorderBrush" Value="{StaticResource DsDanger}" />
+  </Style>
+
+  <Style Selector="TextBox.invalid:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{StaticResource DsDanger}" />
+  </Style>
+
+  <Style Selector="TextBox.invalid:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{StaticResource DsDanger}" />
+  </Style>
+
+  <!-- 开关不带 On/Off 文字，状态只由滑块本身表达 -->
+  <Style Selector="ToggleSwitch">
+    <Setter Property="OnContent" Value="" />
+    <Setter Property="OffContent" Value="" />
+  </Style>
+
+  <!-- 折叠组箭头：展开时平滑转 180 度 -->
+  <Style Selector="c|SmoothExpander TextBlock.chevron">
+    <Setter Property="RenderTransform" Value="rotate(0deg)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="c|SmoothExpander:expanded TextBlock.chevron">
+    <Setter Property="RenderTransform" Value="rotate(180deg)" />
+  </Style>
+
+  <!-- 表格行：被停用的条目只让中间的字段区稍微变淡，
+       左右两段（勾选与启停胶囊、操作按钮与拖拽手柄）保持原样可点可读。
+       整行 Opacity 会把按钮一起压灰，那是旧做法。 -->
+  <Style Selector="StackPanel.row-fields.disabled">
+    <Setter Property="Opacity" Value="0.66" />
+  </Style>
+
+  <!-- 状态圆点：默认灰，开启后变绿 -->
+  <Style Selector="Ellipse.status-dot">
+    <Setter Property="Fill" Value="{StaticResource DsNeutral}" />
+  </Style>
+
+  <Style Selector="Ellipse.status-dot.on">
+    <Setter Property="Fill" Value="{StaticResource DsSuccess}" />
+  </Style>
+
+  <Style Selector="Ellipse.status-dot.streaming">
+    <Setter Property="Fill" Value="{StaticResource DsSuccess}" />
+  </Style>
+
+  <Style Selector="Ellipse.status-dot.errored">
+    <Setter Property="Fill" Value="#FF5C5C" />
+  </Style>
+
+  <!-- 运行状态卡片：引擎在跑时描边变绿加粗 -->
+  <Style Selector="Border.status-card.running">
+    <Setter Property="BorderBrush" Value="#553DDC84" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+
+  <!-- 主色实心按钮 -->
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="#0B6BCB" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+    <Setter Property="Padding" Value="18,6" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+
+  <!-- 悬停与按下都自己把字色钉成白色：Button 的 Foreground 设在按钮上，
+       而模板改的是 ContentPresenter 的 Foreground（指针悬停走 ButtonForegroundPointerOver），
+       不在这里钉住就会变成近黑，白字实心按钮瞬间像被禁用。 -->
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#0C7CD5" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+  </Style>
+
+  <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#094A8C" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+  </Style>
+
+  <!-- 危险操作：红色实心按钮 -->
+  <Style Selector="Button.danger-solid">
+    <Setter Property="Background" Value="{StaticResource DsDangerStrong}" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+    <Setter Property="Padding" Value="18,6" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+
+  <Style Selector="Button.danger-solid:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#D0453F" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+  </Style>
+
+  <Style Selector="Button.danger-solid:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#9C2E29" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+  </Style>
+
+  <!-- 方块图标按钮（表格行内操作） -->
+  <Style Selector="Button.icon-square">
+    <Setter Property="Width" Value="26" />
+    <Setter Property="Height" Value="26" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="4" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+
+  <Style Selector="Button.icon-square:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#14000000" />
+  </Style>
+
+  <!-- 图标字形（E81C 时钟回退、E7C8 实心圆等）的墨迹本来就会超出 em 框一点点，
+       TextBlock 单行时按字形 advance 量宽、绘制时又按这个宽度裁，左边那一撇就被切平了。
+       给左右各留 2px 内边距把绘制宽度撑开，字形才完整。 -->
+  <Style Selector="Button.icon-square TextBlock.glyph">
+    <Setter Property="FontFamily" Value="Segoe Fluent Icons, Segoe MDL2 Assets" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="Padding" Value="2,0" />
+    <Setter Property="HorizontalAlignment" Value="Center" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+  </Style>
+
+  <!-- 启停按钮画的是「点了会做什么」（2026-11-09 老大定的，早先是画当前状态、被一眼看反）：
+       跑着时点了会停，所以是红底白方块；停着时点了会跑，所以是没底色的绿三角。 -->
+  <Style Selector="Button.icon-square.toggle.on">
+    <Setter Property="Background" Value="{StaticResource DsDangerStrong}" />
+  </Style>
+
+  <Style Selector="Button.icon-square.toggle.on TextBlock.glyph">
+    <Setter Property="Foreground" Value="#FFFFFF" />
+  </Style>
+
+  <Style Selector="Button.icon-square.toggle:not(.on)">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <Style Selector="Button.icon-square.toggle:not(.on) TextBlock.glyph">
+    <Setter Property="Foreground" Value="{StaticResource DsSuccessStrong}" />
+  </Style>
+
+  <!-- 悬停时各自守着自己的底色：通用 hover 那层淡灰会把红底冲掉，白色方块就看不见了 -->
+  <Style Selector="Button.icon-square.toggle.on:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#B0332F" />
+  </Style>
+
+  <Style Selector="Button.icon-square.toggle:not(.on):pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#142E9E5B" />
+  </Style>
+
+  <!-- 录制按钮：平时跟编辑按钮一样没底色，正在录时亮黄底 -->
+  <Style Selector="Button.icon-square.record.on">
+    <Setter Property="Background" Value="{StaticResource DsWarning}" />
+  </Style>
+
+  <Style Selector="Button.icon-square.record.on:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#D18A1A" />
+  </Style>
+
+  <Style Selector="Button.icon-square.record.on TextBlock.glyph">
+    <Setter Property="Foreground" Value="#FFFFFF" />
+  </Style>
+
+  <!-- 删除按钮：不铺底色，只把图标染红 -->
+  <Style Selector="Button.icon-square.danger">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <Style Selector="Button.icon-square.danger:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#1AC43B36" />
+  </Style>
+
+  <Style Selector="Button.icon-square.danger TextBlock.glyph">
+    <Setter Property="Foreground" Value="{StaticResource DsDangerStrong}" />
+  </Style>
+
+  <!-- 单选小卡片（输入源编辑窗的「来源方式」）：两张并排，选中一张就是一块淡蓝底 + 蓝边。
+       不用 RadioButton 自带的圆点，那个在这套设计里太吵；卡片本身就够说明「二选一」 -->
+  <Style Selector="Border.kind-card">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="6" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+
+  <Style Selector="Border.kind-card:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+  </Style>
+
+  <Style Selector="Border.kind-card.on">
+    <Setter Property="Background" Value="#140B6BCB" />
+    <Setter Property="BorderBrush" Value="#0B6BCB" />
+  </Style>
+
+  <Style Selector="Border.kind-card.on TextBlock.kind-title">
+    <Setter Property="Foreground" Value="#0B6BCB" />
+  </Style>
+
+  <Style Selector="TextBlock.kind-title">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.kind-note">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Margin" Value="0,3,0,0" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+  </Style>
+
+  <!-- 批量操作：只有文字与边框着色，底色透明 -->
+  <Style Selector="Button.batch-green">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="#0F7A5A" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="#0F7A5A" />
+    <Setter Property="Padding" Value="10,3" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+
+  <Style Selector="Button.batch-green:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#140F7A5A" />
+    <Setter Property="BorderBrush" Value="#0F7A5A" />
+    <Setter Property="Foreground" Value="#0F7A5A" />
+  </Style>
+
+  <Style Selector="Button.batch-green:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#240F7A5A" />
+    <Setter Property="BorderBrush" Value="#0F7A5A" />
+    <Setter Property="Foreground" Value="#0F7A5A" />
+  </Style>
+
+  <Style Selector="Button.batch-red">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{StaticResource DsDangerStrong}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="{StaticResource DsDangerStrong}" />
+    <Setter Property="Padding" Value="10,3" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+
+  <Style Selector="Button.batch-red:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#1AC43B36" />
+    <Setter Property="BorderBrush" Value="{StaticResource DsDangerStrong}" />
+    <Setter Property="Foreground" Value="{StaticResource DsDangerStrong}" />
+  </Style>
+
+  <Style Selector="Button.batch-red:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#2AC43B36" />
+    <Setter Property="BorderBrush" Value="{StaticResource DsDangerStrong}" />
+    <Setter Property="Foreground" Value="{StaticResource DsDangerStrong}" />
+  </Style>
+
+  <!-- 气泡确认：Flyout 自带的宿主容器本身就有底色、边框和 12 号内边距，
+       里面再套一层我们自己画的圆角框，看着就是「框外面还有一个框」。
+       把宿主整个抹平，外观全交给内容里那一层。 -->
+  <Style Selector="FlyoutPresenter.bare">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+
+  <!-- 表格列表头 -->
+  <Style Selector="TextBlock.column-header">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+  </Style>
+
+  <!-- 折叠组标题行：鼠标悬停时不要变色，看起来像纯标题 -->
+  <Style Selector="c|SmoothExpander Button.groupHeader:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <Style Selector="c|SmoothExpander Button.groupHeader:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,16 @@
+# 行尾的单一事实来源（配合 .editorconfig）。
+# 整个项目统一 LF：仓库里存 LF，检出到工作区也保持 LF，谁都不许在中间改成 CRLF。
+# 少了这一条，Windows 上 core.autocrlf 默认是 true，git add 时会一路警告
+# 「LF will be replaced by CRLF」，检出回来文件就成了 CRLF——编译没问题，但 diff 全是噪音。
+* text=auto eol=lf
+
+# 这些是二进制，别做行尾转换
+*.ico binary
+*.png binary
+*.jpg binary
+*.zip binary
+*.exe binary
+*.dll binary
+
+# 第三方参考源码按它们各自的规矩来，我们不改
+refs/** -text

@@ -1,0 +1,71 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!--
+    胶囊标签的配色。每个变体一对笔刷：底色是语义色的浅色版，文字是同色系的实色。
+
+    取值不是拍脑袋定的：浅色按「卡片底色 #FFFFFF、底色再掺 14%」、深色按「卡片底色 #2B2B2B、掺 18%」
+    反算，全部达到 WCAG AA 的 4.5:1（实测 4.65 ~ 7.85）。算过的表与依据见 docs\UI参考-设计规范.md §四。
+
+    Off（已停用）用暗红而不是灰：停用是「这条现在不干活」，在列表里属于要一眼看出的状态；
+    与 Error 的亮红 #B3261E 拉开层次（暗红更沉、更偏砖色），两颗粒子并排也不会看混。
+
+    变体名与 Controls\PillBadge.cs 的 PillVariant 一一对应，键名拼接规则是 Pill{变体}Foreground / Pill{变体}Background，
+    改名字要两边一起改。
+  -->
+
+  <ResourceDictionary.ThemeDictionaries>
+
+    <ResourceDictionary x:Key="Light">
+      <SolidColorBrush x:Key="PillPlainForeground" Color="#4A4A4A" />
+      <SolidColorBrush x:Key="PillPlainBackground" Color="#F1F1F1" />
+      <SolidColorBrush x:Key="PillOnForeground" Color="#1E7B4F" />
+      <SolidColorBrush x:Key="PillOnBackground" Color="#E4FAEE" />
+      <SolidColorBrush x:Key="PillOffForeground" Color="#8C3A36" />
+      <SolidColorBrush x:Key="PillOffBackground" Color="#F7E4E1" />
+      <SolidColorBrush x:Key="PillWarnForeground" Color="#8A5A00" />
+      <SolidColorBrush x:Key="PillWarnBackground" Color="#FDF2E0" />
+      <SolidColorBrush x:Key="PillErrorForeground" Color="#B3261E" />
+      <SolidColorBrush x:Key="PillErrorBackground" Color="#FFEAEA" />
+      <SolidColorBrush x:Key="PillRtmpForeground" Color="#1B5FA8" />
+      <SolidColorBrush x:Key="PillRtmpBackground" Color="#E6F1FC" />
+      <SolidColorBrush x:Key="PillRtmpsForeground" Color="#3A3FA8" />
+      <SolidColorBrush x:Key="PillRtmpsBackground" Color="#EDEEFC" />
+      <SolidColorBrush x:Key="PillRtspForeground" Color="#0B6A6E" />
+      <SolidColorBrush x:Key="PillRtspBackground" Color="#E4F7F8" />
+      <SolidColorBrush x:Key="PillSrtForeground" Color="#6A2FA0" />
+      <SolidColorBrush x:Key="PillSrtBackground" Color="#F5EDFC" />
+      <SolidColorBrush x:Key="PillFollowForeground" Color="#0B6BCB" />
+      <SolidColorBrush x:Key="PillFollowBackground" Color="#E6F2FE" />
+      <SolidColorBrush x:Key="PillCustomForeground" Color="#8A2F63" />
+      <SolidColorBrush x:Key="PillCustomBackground" Color="#FCEDF4" />
+    </ResourceDictionary>
+
+    <ResourceDictionary x:Key="Dark">
+      <SolidColorBrush x:Key="PillPlainForeground" Color="#C8C8C8" />
+      <SolidColorBrush x:Key="PillPlainBackground" Color="#3F3F3F" />
+      <SolidColorBrush x:Key="PillOnForeground" Color="#7BE3A9" />
+      <SolidColorBrush x:Key="PillOnBackground" Color="#2E4B3B" />
+      <SolidColorBrush x:Key="PillOffForeground" Color="#E8A9A2" />
+      <SolidColorBrush x:Key="PillOffBackground" Color="#4A3230" />
+      <SolidColorBrush x:Key="PillWarnForeground" Color="#F5C46B" />
+      <SolidColorBrush x:Key="PillWarnBackground" Color="#4E4029" />
+      <SolidColorBrush x:Key="PillErrorForeground" Color="#FF9E9E" />
+      <SolidColorBrush x:Key="PillErrorBackground" Color="#513737" />
+      <SolidColorBrush x:Key="PillRtmpForeground" Color="#8FC4F5" />
+      <SolidColorBrush x:Key="PillRtmpBackground" Color="#31404D" />
+      <SolidColorBrush x:Key="PillRtmpsForeground" Color="#B7BCF7" />
+      <SolidColorBrush x:Key="PillRtmpsBackground" Color="#393B4E" />
+      <SolidColorBrush x:Key="PillRtspForeground" Color="#86DDDF" />
+      <SolidColorBrush x:Key="PillRtspBackground" Color="#2E4748" />
+      <SolidColorBrush x:Key="PillSrtForeground" Color="#CFA6F5" />
+      <SolidColorBrush x:Key="PillSrtBackground" Color="#44394D" />
+      <SolidColorBrush x:Key="PillFollowForeground" Color="#8CC5FF" />
+      <SolidColorBrush x:Key="PillFollowBackground" Color="#314150" />
+      <SolidColorBrush x:Key="PillCustomForeground" Color="#F5A6CF" />
+      <SolidColorBrush x:Key="PillCustomBackground" Color="#4D3944" />
+    </ResourceDictionary>
+
+  </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>

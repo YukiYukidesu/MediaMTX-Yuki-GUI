@@ -1,0 +1,360 @@
+<ui:FAAppWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="using:FluentAvalonia.UI.Windowing"
+                 xmlns:loc="using:MediaMTX_Yuki_GUI"
+                 xmlns:c="using:MediaMTX_Yuki_GUI.Controls"
+                 xmlns:views="using:MediaMTX_Yuki_GUI.Views"
+                 x:Class="MediaMTX_Yuki_GUI.MainWindow"
+                 Title="MediaMTX-Yuki-GUI"
+                 Width="1160" Height="860"
+                 MinWidth="900" MinHeight="560"
+                 Background="Transparent"
+                 WindowStartupLocation="CenterScreen"
+                 Icon="/Assets/app.ico"
+                 TextOptions.TextRenderingMode="Antialias">
+
+
+  <ui:FAAppWindow.Styles>
+
+    <!-- ============ 左侧导航项 ============
+         56×52 的方块，图标在上、文字在下。悬停时只有图标往上跳 3px，行背景与文字不动——
+         这套手感抄自 Filee 的侧栏（那边是 translateX(3px) 往右推，0.25s BackEaseOut），
+         我们竖排，所以改成 translateY。关键两点：① 位移只给图标，别给整行；
+         ② 基础值必须写成 translateY(0px) 而不是 none，否则离开时没有起点、会硬跳回去。 -->
+    <Style Selector="RadioButton.nav">
+      <Setter Property="Width" Value="56" />
+      <Setter Property="Height" Value="52" />
+      <Setter Property="HorizontalAlignment" Value="Center" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border x:Name="Bd" Background="Transparent" CornerRadius="4">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+              <!-- 只有图标会跳，文字老老实实待着 -->
+              <TextBlock x:Name="Icon"
+                         Height="20"
+                         Margin="0,3,0,0"
+                         Padding="3,0"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         TextAlignment="Center"
+                         IsHitTestVisible="False"
+                         FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                         FontSize="16"
+                         Text="{TemplateBinding Tag}"
+                         RenderTransform="translateY(0px)">
+                <TextBlock.Transitions>
+                  <Transitions>
+                    <TransformOperationsTransition Property="RenderTransform"
+                                                   Duration="0:0:0.25"
+                                                   Easing="BackEaseOut" />
+                  </Transitions>
+                </TextBlock.Transitions>
+              </TextBlock>
+
+              <ContentPresenter Margin="0,4,0,0"
+                                HorizontalAlignment="Center"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                FontSize="11" />
+            </StackPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+
+      <Style Selector="^:pointerover /template/ TextBlock#Icon">
+        <Setter Property="RenderTransform" Value="translateY(-3px)" />
+      </Style>
+      <Style Selector="^:pointerover /template/ Border#Bd">
+        <Setter Property="Background" Value="#08000000" />
+      </Style>
+      <Style Selector="^:checked /template/ Border#Bd">
+        <Setter Property="Background" Value="#1C000000" />
+      </Style>
+      <!-- 选中态：强调色 + 背景块 + 半粗。灰阶抗锯齿之后 11 号中文的假粗体不再糊，留着更有层级 -->
+      <Style Selector="^:checked">
+        <Setter Property="Foreground" Value="{DynamicResource AccentTextFillColorPrimaryBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+      </Style>
+    </Style>
+
+    <!-- ============ 卡片 ============ -->
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="{StaticResource DsRadiusMd}" />
+      <Setter Property="Padding" Value="{StaticResource DsCardPadding}" />
+    </Style>
+
+    <!-- ============ 底窗 ============
+         托住「一整件事」的垫子：列表、关系图、明细。
+         底色是半透明白，别写死成实心灰——实心会把云母挡掉，材质就白开了。
+         细边框只勾一道轮廓，勾出这块区域的范围，不至于看着散。 -->
+    <Style Selector="Border.well">
+      <Setter Property="Background" Value="{DynamicResource DsWellBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="{StaticResource DsRadiusLg}" />
+      <Setter Property="Padding" Value="16" />
+    </Style>
+
+  </ui:FAAppWindow.Styles>
+
+  <!-- 根 Grid 兼作底板：窗口自己是透明的，背景色铺在这层上。
+       开窗口材质时把这层也放透明，云母/亚克力才透得出来；见 MainWindow.ApplyBackdrop。 -->
+  <Grid x:Name="BackdropLayer"
+        ColumnDefinitions="72,*"
+        Background="{DynamicResource SolidBackgroundFillColorBaseBrush}">
+
+    <!-- ================= 左侧导航栏 ================= -->
+    <!-- 右上角圆一下：那块白底是直接怼到标题栏底下的，直角很扎眼。
+         左上角不用管，窗口自己那个圆角已经把它裁掉了。 -->
+    <Border x:Name="Sidebar"
+            Grid.Column="0"
+            Width="72"
+            Background="{DynamicResource LayerFillColorAltBrush}"
+            BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+            BorderThickness="0,1,1,0"
+            CornerRadius="0,8,0,0">
+
+      <Grid x:Name="SidebarRoot" RowDefinitions="Auto,Auto,*,Auto,Auto">
+
+        <!-- 主栏目 -->
+        <StackPanel x:Name="NavItems"
+                    Grid.Row="0"
+                    Margin="0,12,0,0"
+                    Spacing="2">
+
+          <RadioButton x:Name="NavOverview"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="&#xE80F;"
+                       Content="{loc:Loc c001-001}"
+                       IsChecked="{Binding IsOverviewSelected, Mode=TwoWay}" />
+
+          <RadioButton x:Name="NavInputs"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="&#xE896;"
+                       Content="{loc:Loc c001-002}"
+                       IsChecked="{Binding IsInputsSelected, Mode=TwoWay}" />
+
+          <RadioButton x:Name="NavTargets"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="&#xE724;"
+                       Content="{loc:Loc c001-003}"
+                       IsChecked="{Binding IsTargetsSelected, Mode=TwoWay}" />
+
+
+
+          <!-- 账号：只有高级模式才有。简洁模式整页不出现，切回高级也不丢已配的账号 -->
+          <RadioButton x:Name="NavAccounts"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="&#xE716;"
+                       Content="{loc:Loc c001-004}"
+                       IsVisible="{Binding IsAdvancedMode}"
+                       IsChecked="{Binding IsAccountsSelected, Mode=TwoWay}" />
+
+          <RadioButton x:Name="NavStats"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="&#xE9D2;"
+                       Content="{loc:Loc c001-005}"
+                       IsChecked="{Binding IsStatsSelected, Mode=TwoWay}" />
+
+          <RadioButton x:Name="NavLogs"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="&#xE81C;"
+                       Content="{loc:Loc c001-006}"
+                       IsChecked="{Binding IsLogsSelected, Mode=TwoWay}" />
+        </StackPanel>
+
+        <!-- 底部：工作模式 + 设置 -->
+        <StackPanel Grid.Row="2"
+                    VerticalAlignment="Bottom"
+                    Spacing="2"
+                    Margin="0,0,0,12">
+
+          <!-- 工作模式：图标与文字都随当前模式变，点进去再切，避免误触 -->
+          <RadioButton x:Name="NavMode"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="{Binding ModeIcon}"
+                       Content="{Binding ModeNavText}"
+                       IsChecked="{Binding IsModeSelected, Mode=TwoWay}" />
+
+          <RadioButton x:Name="NavSettings"
+                       Classes="nav"
+                       GroupName="MainNav"
+                       Tag="&#xE713;"
+                       Content="{loc:Loc c001-010}"
+                       IsChecked="{Binding IsSettingsSelected, Mode=TwoWay}" />
+
+        </StackPanel>
+
+        <!-- 选中项左侧的蓝色短滑块，位置由 code-behind 按当前选中项算出来 -->
+        <Border x:Name="NavIndicator"
+                Grid.RowSpan="5"
+                Width="3"
+                Height="18"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                CornerRadius="1.5"
+                IsHitTestVisible="False"
+                Background="{DynamicResource AccentFillColorDefaultBrush}"
+                RenderTransform="translateY(0px)">
+          <Border.Transitions>
+            <Transitions>
+              <TransformOperationsTransition Property="RenderTransform"
+                                             Duration="0:0:0.22"
+                                             Easing="CubicEaseOut" />
+            </Transitions>
+          </Border.Transitions>
+        </Border>
+      </Grid>
+    </Border>
+
+    <!-- ================= 右侧内容区 ================= -->
+    <Grid Grid.Column="1" RowDefinitions="Auto,*">
+
+      <!-- 顶上这条只在「改动要重启才生效」时出现。
+           和右下角那张提示卡分工不同：这张说的是你自己刚改的东西，卡片说的是外面的事。 -->
+      <Border Grid.Row="0"
+              Margin="24,16,24,0"
+              Padding="14,10"
+              CornerRadius="{StaticResource DsRadiusMd}"
+              Background="{StaticResource DsWarningSoft}"
+              BorderBrush="{StaticResource DsWarning}"
+              BorderThickness="1"
+              IsVisible="{Binding RestartBarVisible}">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+
+          <TextBlock Text="&#xE7BA;"
+                     FontFamily="Segoe Fluent Icons"
+                     FontSize="16"
+                     Foreground="{StaticResource DsWarning}"
+                     VerticalAlignment="Center" />
+
+          <TextBlock Grid.Column="1"
+                     Margin="10,0,16,0"
+                     Text="{Binding RestartBarText}"
+                     FontSize="12"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Center" />
+
+          <Button Grid.Column="2"
+                  Classes="primary"
+                  Content="{Binding RestartBarActionText}"
+                  Command="{Binding RestartCommand}"
+                  FontSize="12"
+                  Padding="14,5"
+                  VerticalAlignment="Center" />
+        </Grid>
+      </Border>
+
+      <Grid Grid.Row="1">
+
+      <!-- 八个页面各自独立成 UserControl，可见性由 ViewModel 的 Is*Visible 驱动 -->
+      <views:OverviewPage IsVisible="{Binding IsOverviewVisible}" />
+      <views:InputsPage IsVisible="{Binding IsInputsPageVisible}" />
+      <views:TargetsPage IsVisible="{Binding IsTargetsPageVisible}" />
+      <views:LogsPage IsVisible="{Binding IsLogsPageVisible}" />
+      <views:StatsPage IsVisible="{Binding IsStatsPageVisible}" />
+      <views:AccountsPage IsVisible="{Binding IsAccountsPageVisible}" />
+      <views:SettingsPage IsVisible="{Binding IsSettingsPageVisible}" />
+      <views:ModePage IsVisible="{Binding IsModePageVisible}" />
+
+      <!-- 底部气泡：一句话的短提示，不挡鼠标。底色与图标由 ToastBar 按 Kind 现查，
+           四类语气各一套，换主题自己跟着换。
+
+           **不要去绑 IsVisible**：元素从不可见变可见那一帧，动画没有「上一帧的位置」
+           可以插值，会直接跳到终点——表现就是「先整个跳出来、再往上挪」。让它一直待在
+           可视树里，由 IsShown 开关动画、ShowToken 强制重播。反正尺寸固定、
+           又是 IsHitTestVisible=False，常驻不会挡住任何东西。 -->
+      <c:ToastBar HorizontalAlignment="Center"
+                  VerticalAlignment="Bottom"
+                  Margin="0,0,0,24"
+                  Padding="14,8"
+                  CornerRadius="8"
+                  BorderThickness="1.5"
+                  IsHitTestVisible="False"
+                  IsShown="{Binding ToastShown}"
+                  ShowToken="{Binding ToastSerial}"
+                  Kind="{Binding ToastTone}"
+                  Text="{Binding ToastText}" />
+
+      <!--
+        右下角的提示卡：缺引擎、引擎有新版、本程序有新版共用这一张，说什么由 Tip 决定。
+        不用 IsVisible 收放——它一隐藏就没人给它补间了；改成常驻、用透明度和位移装出来，
+        什么时候露由 MainWindow 那边听 IsTipShown 推一把。
+      -->
+      <Border x:Name="TipCard"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Width="340"
+              Margin="0,0,24,24"
+              Padding="16,14"
+              CornerRadius="{StaticResource DsRadiusMd}"
+              Background="{DynamicResource DsSurfaceOverlayBrush}"
+              BorderBrush="{DynamicResource DsBorderBrush}"
+              BorderThickness="1"
+              Opacity="0"
+              RenderTransform="translateY(12px)"
+              IsHitTestVisible="{Binding IsTipShown}">
+        <Border.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="CubicEaseOut" />
+            <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="CubicEaseOut" />
+          </Transitions>
+        </Border.Transitions>
+        <StackPanel Spacing="10">
+
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <TextBlock Text="{Binding TipGlyph}"
+                       FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                       FontSize="16"
+                       Foreground="#E8A33D"
+                       VerticalAlignment="Center" />
+            <TextBlock Text="{Binding TipTitle}"
+                       FontSize="14"
+                       VerticalAlignment="Center" />
+          </StackPanel>
+
+          <TextBlock Text="{Binding TipMessage}"
+                     FontSize="12"
+                     LineHeight="19"
+                     TextWrapping="Wrap"
+                     Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+          <StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Right"
+                      Spacing="8"
+                      Margin="0,4,0,0">
+            <Button Content="{loc:Loc c011-005}"
+                    FontSize="12"
+                    Padding="12,5"
+                    MinWidth="88"
+                    Command="{Binding DismissTipCommand}" />
+            <Button Classes="primary"
+                    Content="{Binding TipActionText}"
+                    FontSize="12"
+                    Padding="12,5"
+                    MinWidth="88"
+                    Command="{Binding TipActionCommand}" />
+          </StackPanel>
+
+        </StackPanel>
+      </Border>
+
+      </Grid>
+
+    </Grid>
+  </Grid>
+</ui:FAAppWindow>

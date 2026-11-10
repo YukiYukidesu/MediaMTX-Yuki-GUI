@@ -1,0 +1,51 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!--
+    底部气泡的配色。四种语气各一对「底色 + 图标色」，外加一支边框色把它从页面底色上托起来。
+
+    底色刻意比 PillPalette 那些胶囊再淡一档：胶囊是列表里的一格，得能一眼扫到；
+    气泡浮在整页之上、还带淡出，颜色太重会像个报错弹窗，压着正在做的事。
+
+    对比度沿用药素的定义：文字色用同色系实色，浅色主题配浅底、深色主题配深底，
+    与胶囊那套一样满足 WCAG AA。图标与文字同色，所以只写一份 Foreground。
+
+    键名拼接规则是 Toast{ToastKind}Background / Border / Foreground，
+    与 Models\ToastKind.cs 的枚举名一一对应，改名字要两边一起改。
+  -->
+
+  <ResourceDictionary.ThemeDictionaries>
+
+    <ResourceDictionary x:Key="Light">
+      <SolidColorBrush x:Key="ToastSuccessBackground" Color="#E8FAF0" />
+      <SolidColorBrush x:Key="ToastSuccessBorder" Color="#B7E4CB" />
+      <SolidColorBrush x:Key="ToastSuccessForeground" Color="#1E7B4F" />
+      <SolidColorBrush x:Key="ToastInfoBackground" Color="#E9F3FD" />
+      <SolidColorBrush x:Key="ToastInfoBorder" Color="#B9D8F0" />
+      <SolidColorBrush x:Key="ToastInfoForeground" Color="#1B5FA8" />
+      <SolidColorBrush x:Key="ToastWarnBackground" Color="#FEF4E4" />
+      <SolidColorBrush x:Key="ToastWarnBorder" Color="#F0D9A8" />
+      <SolidColorBrush x:Key="ToastWarnForeground" Color="#8A5A00" />
+      <SolidColorBrush x:Key="ToastErrorBackground" Color="#FFEDEC" />
+      <SolidColorBrush x:Key="ToastErrorBorder" Color="#F5C0BC" />
+      <SolidColorBrush x:Key="ToastErrorForeground" Color="#B3261E" />
+    </ResourceDictionary>
+
+    <ResourceDictionary x:Key="Dark">
+      <SolidColorBrush x:Key="ToastSuccessBackground" Color="#2B4436" />
+      <SolidColorBrush x:Key="ToastSuccessBorder" Color="#41624F" />
+      <SolidColorBrush x:Key="ToastSuccessForeground" Color="#7BE3A9" />
+      <SolidColorBrush x:Key="ToastInfoBackground" Color="#2C3B48" />
+      <SolidColorBrush x:Key="ToastInfoBorder" Color="#446073" />
+      <SolidColorBrush x:Key="ToastInfoForeground" Color="#8FC4F5" />
+      <SolidColorBrush x:Key="ToastWarnBackground" Color="#4A3D28" />
+      <SolidColorBrush x:Key="ToastWarnBorder" Color="#6B5738" />
+      <SolidColorBrush x:Key="ToastWarnForeground" Color="#F5C46B" />
+      <SolidColorBrush x:Key="ToastErrorBackground" Color="#4C3332" />
+      <SolidColorBrush x:Key="ToastErrorBorder" Color="#6E4A48" />
+      <SolidColorBrush x:Key="ToastErrorForeground" Color="#FF9E9E" />
+    </ResourceDictionary>
+
+  </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>
