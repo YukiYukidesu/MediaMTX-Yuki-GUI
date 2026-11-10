@@ -190,14 +190,41 @@ $tfm        = $probeJson.runtimeOptions.tfm
 Remove-Item -LiteralPath $rtProbe -Recurse -Force
 
 $dotnetRoot = if ($env:ProgramFiles) { Join-Path $env:ProgramFiles 'dotnet' } else { 'C:\Program Files\dotnet' }
-$fxrSrc     = Join-Path $dotnetRoot ('host\fxr\' + $runtimeVer)
-$sharedSrc  = Join-Path $dotnetRoot ('shared\Microsoft.NETCore.App\' + $runtimeVer)
 
-if (-not (Test-Path -LiteralPath $fxrSrc)) {
-    throw ('打包机没有 hostfxr ' + $runtimeVer + '：' + $fxrSrc)
-}
-if (-not (Test-Path -LiteralPath $sharedSrc)) {
-    throw ('打包机没有运行时 ' + $runtimeVer + '：' + $sharedSrc)
+# 探针报出来的那个补丁号，本机不一定正好装着一份。
+# 典型场景：装了 SDK 11 的预览版，它把 10.0.15 的 hostfxr 带来、却顺手删了 10.0.14 的，
+# 而 shared 下两个补丁号都还在——于是 fxr 缺、shared 有。
+# 这时往上找一个「host\fxr 与 shared 都有、且主版本相同」的最高补丁号顶上去：
+# 目标机上的 framework-dependent 应用默认允许补丁级前滚（rollForward=latestPatch），
+# 拷进去的运行时比 exe 期望的新一点没关系，反过来（拷旧的给新的用）才不行。
+$fxrSrc    = Join-Path $dotnetRoot ('host\fxr\' + $runtimeVer)
+$sharedSrc = Join-Path $dotnetRoot ('shared\Microsoft.NETCore.App\' + $runtimeVer)
+
+if (-not (Test-Path -LiteralPath $fxrSrc) -or -not (Test-Path -LiteralPath $sharedSrc)) {
+    $wantPrefix = ($runtimeVer -split '\.')[0] + '.'
+    $candidates = @()
+
+    $fxrRoot    = Join-Path $dotnetRoot 'host\fxr'
+    $sharedRoot = Join-Path $dotnetRoot 'shared\Microsoft.NETCore.App'
+
+    if ((Test-Path -LiteralPath $fxrRoot) -and (Test-Path -LiteralPath $sharedRoot)) {
+        $candidates = @(
+            Get-ChildItem -LiteralPath $fxrRoot -Directory |
+                Where-Object { $_.Name.StartsWith($wantPrefix) -and (Test-Path -LiteralPath (Join-Path $sharedRoot $_.Name)) } |
+                ForEach-Object { $_.Name } |
+                Sort-Object { [version]$_ } -Descending
+        )
+    }
+
+    if ($candidates.Count -eq 0) {
+        throw ('打包机没有可用运行时 ' + $runtimeVer + '，也没有可替代的 ' + $wantPrefix + 'x 版本：' + $dotnetRoot)
+    }
+
+    $fallback = $candidates[0]
+    Write-Host ('  本机没有 ' + $runtimeVer + ' 的 hostfxr，改用 ' + $fallback + '（同为 ' + $wantPrefix + 'x）') -ForegroundColor Yellow
+    $runtimeVer = $fallback
+    $fxrSrc     = Join-Path $dotnetRoot ('host\fxr\' + $runtimeVer)
+    $sharedSrc  = Join-Path $dotnetRoot ('shared\Microsoft.NETCore.App\' + $runtimeVer)
 }
 
 $rtRoot    = Join-Path $fullDir 'runtime.dotnet'
