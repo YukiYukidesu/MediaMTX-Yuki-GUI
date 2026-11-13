@@ -4,7 +4,7 @@ MediaMTX 的 Windows 桌面外壳：把一台机器上的推流转发、录制�
 
 MediaMTX 本身是命令行程序，配置文件是一大坨 YAML。日常要干的活其实就那么几件——加一路推流入口、把它转发到几个平台、看现在有没有在跑、谁推得进来——但每件都得改配置、重启、翻日志。这个程序把这些包了一层，改完点保存就行，引擎那边由它自己重启。
 
-> 版本 v0.0.1，还很早期。功能是齐的，界面与交互仍在按实际使用习惯调整。
+> 版本 v0.0.2，还很早期。功能是齐的，界面与交互仍在按实际使用习惯调整。
 
 ## 它长什么样
 
@@ -44,16 +44,23 @@ dotnet run --project 'src\MediaMTX-Yuki-GUI\MediaMTX-Yuki-GUI.csproj'
 .\build-release.ps1 -NoRestore   # 依赖没变时跳过 restore
 ```
 
-产出两种包，都在 `dist\`：
+产出两个包，都在 `dist\`，名字带版本号（版本号取自 csproj 的 `<Version>`）：
 
-- `-full.zip`：自带 .NET 运行时，目标机什么都不用装
-- `-light.zip`：外挂运行时，目标机要先装 [.NET 10 运行时](https://dotnet.microsoft.com/download/dotnet/10.0)（Runtime，不是 Desktop Runtime）
+- `MediaMTX-Yuki-GUI_<版本>_x64.zip`：只有程序本体，目标机什么都不用装
+- `MediaMTX-Yuki-GUI_<版本>_x64_With_MediaMTX.zip`：多一个 `MediaMTX\` 目录，里面是推荐适配版本的引擎
 
-程序本身的代码全部焊进单文件 exe，不留散落的 dll。
+程序是自包含 + 裁剪 + 单文件：代码与 .NET 运行时全部焊进一个 exe，不留散落的 dll，目标机不需要装 .NET。
+
+```powershell
+.\build-release.ps1 -SkipEngine   # 断网时出两个都不带引擎的包
+.\build-release.ps1 -Label test    # 包名多一段 _test，便于并存
+```
 
 ### 关于引擎
 
-**仓库里不带 MediaMTX 引擎**（它有自己的发布节奏与许可证）。第一次启动时如果没有检测到引擎，界面右下角会提示，点「前往下载」到设置页取一份即可，装完自动接上。
+**仓库里不带 MediaMTX 引擎**（它有自己的发布节奏与许可证）。打包时会去下载 csproj 里 `<RecommendedEngineVersion>` 指定的那一版，塞进 `_x64_With_MediaMTX` 那个包。
+
+用的是不带引擎的包、或者第一次启动时没检测到引擎，界面右下角会提示，点「前往下载」到设置页取一份即可，装完自动接上。
 
 引擎装在程序目录下的 `MediaMTX\`，录制文件落在 `recordings\`，日志在 `logs\`。
 
@@ -92,4 +99,4 @@ src/MediaMTX-Yuki-GUI/
 
 [MIT](LICENSE)。随便用，改动、闭源、商用都行，只要保留那份版权声明。
 
-（MediaMTX 引擎不随本仓库分发，它有自己的许可证。）
+（MediaMTX 引擎不随本仓库的源码分发，它有自己的许可证；`_x64_With_MediaMTX` 那个**发布包**里含一份，同样按 MIT 授权。）

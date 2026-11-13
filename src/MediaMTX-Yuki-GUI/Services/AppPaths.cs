@@ -73,6 +73,17 @@ public static class AppPaths
     public static string EngineLogFor(DateTime date)
         => Path.Combine(LogsDir, "mediamtx-" + date.ToString("yyyyMMdd", CultureInfo.InvariantCulture) + ".log");
 
+    // ====== 自更新 ======
+
+    /// <summary>
+    /// 本程序更新时下载的安装包与解出来的新 exe 放这儿。放在 config 下面而不是
+    /// %TEMP%，是因为替换脚本要跨进程读它——临时目录可能被清理，也可能被沙箱拦。
+    /// </summary>
+    public static string UpdateDir => Path.Combine(ConfigDir, "update");
+
+    /// <summary>界面上列的那四种目录之外的第五种：本程序自己的 exe 所在处。</summary>
+    public static string AppExe => Path.Combine(Root, "MediaMTX-Yuki-GUI.exe");
+
     // ====== 初始化 ======
 
     /// <summary>确保运行期需要的目录都存在。</summary>

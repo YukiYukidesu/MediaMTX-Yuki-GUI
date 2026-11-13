@@ -1,27 +1,35 @@
-﻿<#
+<#
     MediaMTX-Yuki-GUI 打包脚本
 
-    产出两个 zip，解压即用：
-      full   —— 自带 .NET 运行时，目标机什么都不用装
-      light  —— 外挂 .NET 运行时，目标机要先装 .NET 10 运行时（Runtime，不是 Desktop Runtime）
+    产出两个 zip，解压即用（软件名 / 版本号 / 架构 / 引擎标记之间一律用下划线分隔）：
+      MediaMTX-Yuki-GUI_<版本号>_x64.zip                 不带引擎，体积小；引擎由程序自己去 GitHub 下载
+      MediaMTX-Yuki-GUI_<版本号>_x64_With_MediaMTX.zip   多带一份推荐适配版本的 MediaMTX 引擎，装完就能转流
 
-    两个包里的应用文件完全相同（exe / dll / deps.json 逐个比对哈希），
-    差别只有目录里带不带 runtime.dotnet\。
+    版本号从 csproj 的 <Version> 读，别在这里手写。
+
+    两个包里的程序完全一样（同一个 exe，逐字节相同），差别只有旁边那份 MediaMTX\。
+    程序本身是自包含 + 裁剪 + 单文件：不依赖系统装的 .NET，也没有 runtime.dotnet\ 这类外挂目录。
+
+    为什么没有 arm64：MediaMTX 官方只发 windows_amd64（v1.21.3 的 8 个资产里，
+    darwin 与 linux 都有 arm64，Windows 只有 amd64），没有引擎就做不成带引擎的包，
+    所以暂时只出 x64。等官方发了 Windows arm64 再说。
 
     用法：
       .\build-release.ps1                     正式包，完整跑一遍（含 restore）
       .\build-release.ps1 -NoRestore          正式包，依赖包没变化时跳过 restore
       .\build-release.ps1 -NoRestore -Label test
                                                临时测试包，文件名带 -test
+      .\build-release.ps1 -SkipEngine         出包但不带引擎（断网时的应急口子）
 
     -Label 是给「自己临时验一下」用的：包名变成
-    MediaMTX-Yuki-GUI-v0.1.0-test-full.zip，并且**只清自己那一份旧产物**，
-    不会顺手把 dist\ 里的正式包删掉。不带 -Label 时行为与以前完全一样
+    MediaMTX-Yuki-GUI_<版本号>_<Label>_x64.zip，并且**只清自己那一份旧产物**，
+    不会顺手把 dist\ 里的正式包删掉。不带 -Label 时行为与以前一样
     （整目录清空后重出两个正式包）。
 #>
 
 param(
     [switch]$NoRestore,
+    [switch]$SkipEngine,
     [string]$Label = ''
 )
 
@@ -61,7 +69,7 @@ if (-not $versionNode) { throw 'csproj 里没有 <Version>，无法确定版本�
 
 $version     = $versionNode.Node.InnerText.Trim()
 $versionText = 'v' + $version
-$packageName = 'MediaMTX-Yuki-GUI-' + $versionText
+$packageName = 'MediaMTX-Yuki-GUI_' + $versionText
 
 # -Label 只影响文件名与清理范围，不动 exe 内容：临时包和正式包是同一份程序，
 # 区别仅在于「你知道它是临时打的」。这样临时验完之后，dist\ 里的正式包
@@ -70,18 +78,24 @@ if ($Label) {
     if ($Label -notmatch '^[A-Za-z0-9._-]+$') {
         throw ('-Label 只能是字母、数字、点、下划线、连字符：' + $Label)
     }
-    $packageName = $packageName + '-' + $Label
+    $packageName = $packageName + '_' + $Label
     Write-Host ('版本号 ' + $versionText + '（临时测试包 -' + $Label + '）') -ForegroundColor Cyan
 }
 else {
     Write-Host ('版本号 ' + $versionText) -ForegroundColor Cyan
 }
 
+# 目前只有 x64：引擎官方不发 Windows arm64，带引擎那个包就无从谈起。
+$archName = 'x64'
+
 
 # ====== 收掉旧进程与旧产物 ======
 
 # 程序在跑的时候 exe 是锁着的，publish 会报 MSB3027
-Get-Process -Name 'MediaMTX-Yuki-GUI' -ErrorAction SilentlyContinue | Stop-Process -Force
+# -ErrorAction SilentlyContinue 要写在 Stop-Process 上：杀不掉的残留进程（句柄已失效、
+# 权限也拿不到的那种）会让 $ErrorActionPreference='Stop' 直接把整脚本掀翻。
+Get-Process -Name 'MediaMTX-Yuki-GUI' -ErrorAction SilentlyContinue |
+    Stop-Process -Force -ErrorAction SilentlyContinue
 Start-Sleep -Milliseconds 300
 
 if ($Label) {
@@ -101,31 +115,42 @@ New-Item -ItemType Directory -Path $stageRoot -Force | Out-Null
 
 # ====== restore ======
 
-# 必须带 RID：publish -r win-x64 需要 net10.0/win-x64 那一份还原结果
+# 必须带 RID：publish -r win-x64 需要 net10.0/win-x64 那一份还原结果。
+#
+# 裁剪相关的两个属性也必须出现在 restore 里，不能只写在 publish 上：
+# 裁剪要靠 ILLink 与那一套 reference assemblies，restore 阶段不带这些属性就不会把它们拉进来，
+# 于是 publish 会**静默地不裁剪**（实测过：exe 47.8 MB 而不是 22.6 MB，一句报错都没有）。
+# 下面「校验」那段专门断言了体积，就是为了兜住这种静默失败。
 if (-not $NoRestore) {
-    Write-Host 'restore (win-x64)' -ForegroundColor Cyan
-    & $dotnetExe restore $csprojPath -r win-x64 -v minimal
+    Write-Host 'restore (win-x64, trimmed)' -ForegroundColor Cyan
+    & $dotnetExe restore $csprojPath -r win-x64 -p:PublishTrimmed=true -p:TrimMode=partial -v minimal
     if ($LASTEXITCODE -ne 0) { throw 'restore 失败' }
 }
 
 
 # ====== publish ======
 #
-# 发的是单文件版本：托管 dll 与 native 库全部焊进 MediaMTX-Yuki-GUI.exe，
-# 根目录只剩一个 exe，加上 Languages\。
+# 自包含 + 裁剪 + 单文件：托管 dll、被裁剩的运行时、native 库全部焊进一个 exe，
+# 根目录只剩一个 exe，加上 Languages\。目标机不需要装 .NET，也没有 runtime.dotnet\。
 #
-# 曾经发过多文件版（33 个 dll 摊在根目录，或收进 runtime.core\ 再改写
-# deps.json 的 localPath），最后换成单文件，理由是文件树干净——多文件省不下内存：
-# 空窗关闭后实测单文件 3.5 MB、多文件 4.3 MB，空闲回收（MemoryTrimmer）一跑
-# 两者没有区别，之前「单文件更吃内存」的结论是没有回收时的现象。
+# 为什么从「外挂运行时」改成这条路：那套布局必须按 hostfxr 的硬槽位摆
+# （runtime.dotnet\host\fxr\<版本>\ 与 runtime.dotnet\shared\Microsoft.NETCore.App\<版本>\），
+# 少一层就起不来、摊平也起不来，想「文件夹里干干净净」只能走自包含。
+#
+# 裁剪（PublishTrimmed + TrimMode=partial）省下约 25 MB：exe 从 47.8 MB 降到 22.6 MB，
+# 比改造前那个框架依赖的 32.2 MB 还小。代价有两个，都必须在 csproj 里兜住：
+#   1. System.Text.Json 的反射序列化被关掉 —— csproj 的
+#      JsonSerializerIsReflectionEnabledByDefault=true 就是为它写的，删了配置就读不出来；
+#   2. 运行时会按需砍掉「没被静态引用到」的代码，Avalonia 这种靠反射加载 XAML 的框架
+#      属于高危区。所以出包之后必须逐页点一遍（验收清单见 docs\交接文档.md §6.9）。
 #
 # 单文件的代价：首次启动要把 native 库解压到 %TEMP%\.net\<应用名>\<哈希>\，
-# 每次 exe 变化都会多留一份 18 MB 的缓存，首启比二启慢一秒左右。
+# 每次 exe 变化都会多留一份约 18 MB 的缓存，首启比二启慢一秒左右。
 # -p:IncludeNativeLibrariesForSelfExtract=true 是必须的，否则 libSkiaSharp.dll
-# 这类 native 库会散落在 exe 旁边，文件树又乱回去了。
+# 这类 native 库会散落在 exe 旁边，文件树又乱回去了；EnableCompressionInSingleFile
+# 再把这堆东西压一遍，exe 47.8 → 42 MB 级别。
 #
-# 一次 publish 就够——两个包共用同一份 exe，差别只在
-# 「旁边的 runtime.dotnet\ 在不在」。
+# 一次 publish 就够——两个包共用同一份 exe，差别只在「旁边的 MediaMTX\ 在不在」。
 
 $publishBase = @(
     'publish', $csprojPath,
@@ -136,16 +161,19 @@ $publishBase = @(
 )
 
 $publishArgs = $publishBase + @(
-    '--self-contained', 'false',
+    '--self-contained', 'true',
     '-p:PublishSingleFile=true',
-    '-p:IncludeNativeLibrariesForSelfExtract=true'
+    '-p:IncludeNativeLibrariesForSelfExtract=true',
+    '-p:PublishTrimmed=true',
+    '-p:TrimMode=partial',
+    '-p:EnableCompressionInSingleFile=true'
 )
 
-$appDir   = Join-Path $stageRoot '_app'
-$fullDir  = Join-Path $stageRoot ($packageName + '-full')
-$lightDir = Join-Path $stageRoot ($packageName + '-light')
+$appDir        = Join-Path $stageRoot '_app'
+$plainDir      = Join-Path $stageRoot ($packageName + '_' + $archName)
+$withEngineDir = Join-Path $stageRoot ($packageName + '_' + $archName + '_With_MediaMTX')
 
-Write-Host 'publish app（单文件，依赖运行时）' -ForegroundColor Cyan
+Write-Host 'publish app（自包含 + 裁剪 + 单文件）' -ForegroundColor Cyan
 & $dotnetExe @($publishArgs + @('-o', $appDir))
 if ($LASTEXITCODE -ne 0) { throw 'publish 失败' }
 
@@ -153,99 +181,16 @@ if ($LASTEXITCODE -ne 0) { throw 'publish 失败' }
 # ====== 组装两个包 ======
 #
 # _app 里只有 MediaMTX-Yuki-GUI.exe 与 Languages\ 两项，直接复制两遍。
-# MediaMTX\ 不在包里：引擎由程序自己去 GitHub 下载，目录也在那时才建。
-# full 版之后会多一个 runtime.dotnet\（下一段），light 版没有。
+# MediaMTX\ 一开始都不放：带引擎那个包会在下面单独补进去。
 
 Write-Host '组装两个包' -ForegroundColor Cyan
-New-Item -ItemType Directory -Path $fullDir  -Force | Out-Null
-New-Item -ItemType Directory -Path $lightDir -Force | Out-Null
-Copy-Item -Path (Join-Path $appDir '*') -Destination $lightDir -Recurse -Force
-Copy-Item -Path (Join-Path $appDir '*') -Destination $fullDir  -Recurse -Force
+New-Item -ItemType Directory -Path $plainDir      -Force | Out-Null
+New-Item -ItemType Directory -Path $withEngineDir -Force | Out-Null
+Copy-Item -Path (Join-Path $appDir '*') -Destination $plainDir      -Recurse -Force
+Copy-Item -Path (Join-Path $appDir '*') -Destination $withEngineDir -Recurse -Force
 
 $appItems = @(Get-ChildItem -LiteralPath $appDir -Force | ForEach-Object { $_.Name })
 Write-Host ('  publish 输出 ' + $appItems.Count + ' 项：' + ($appItems -join ' / ')) -ForegroundColor Green
-
-
-# ====== 把 .NET 运行时收进 runtime.dotnet\（只给 full 版）======
-#
-# apphost 在 exe 旁边找 runtime.dotnet\（csproj 的 AppHostRelativeDotNet），
-# 认的是标准 .NET 安装布局：runtime.dotnet\host\fxr\<版本>\hostfxr.dll 与
-# runtime.dotnet\shared\Microsoft.NETCore.App\<版本>\*。
-# 找不到就按 AppHostDotNetSearch 回落到系统装的 .NET——light 版正是靠这一点。
-#
-# 运行时文件从「本机真实安装的 .NET」整目录拷。原因：hostfxr 判断一个目录
-# 是不是「有效框架版本」要看三个元数据文件——.version、
-# Microsoft.NETCore.App.deps.json、Microsoft.NETCore.App.runtimeconfig.json，
-# 而这三个东西既不在 NuGet 包里，也不在 self-contained 的 publish 输出里。
-# 少了它们 apphost 会报 No frameworks were found.，然后弹
-# 「You must install or update .NET」——装了 .NET 也起不来，还看不出来为什么。
-
-$rtProbe = Join-Path $stageRoot '_probe'
-& $dotnetExe @($publishBase + @('--self-contained', 'true', '-o', $rtProbe))
-if ($LASTEXITCODE -ne 0) { throw 'publish（探针）失败' }
-
-$probeJson  = Get-Content -LiteralPath (Join-Path $rtProbe 'MediaMTX-Yuki-GUI.runtimeconfig.json') -Raw | ConvertFrom-Json
-$runtimeVer = $probeJson.runtimeOptions.includedFrameworks[0].version
-$tfm        = $probeJson.runtimeOptions.tfm
-Remove-Item -LiteralPath $rtProbe -Recurse -Force
-
-$dotnetRoot = if ($env:ProgramFiles) { Join-Path $env:ProgramFiles 'dotnet' } else { 'C:\Program Files\dotnet' }
-
-# 探针报出来的那个补丁号，本机不一定正好装着一份。
-# 典型场景：装了 SDK 11 的预览版，它把 10.0.15 的 hostfxr 带来、却顺手删了 10.0.14 的，
-# 而 shared 下两个补丁号都还在——于是 fxr 缺、shared 有。
-# 这时往上找一个「host\fxr 与 shared 都有、且主版本相同」的最高补丁号顶上去：
-# 目标机上的 framework-dependent 应用默认允许补丁级前滚（rollForward=latestPatch），
-# 拷进去的运行时比 exe 期望的新一点没关系，反过来（拷旧的给新的用）才不行。
-$fxrSrc    = Join-Path $dotnetRoot ('host\fxr\' + $runtimeVer)
-$sharedSrc = Join-Path $dotnetRoot ('shared\Microsoft.NETCore.App\' + $runtimeVer)
-
-if (-not (Test-Path -LiteralPath $fxrSrc) -or -not (Test-Path -LiteralPath $sharedSrc)) {
-    $wantPrefix = ($runtimeVer -split '\.')[0] + '.'
-    $candidates = @()
-
-    $fxrRoot    = Join-Path $dotnetRoot 'host\fxr'
-    $sharedRoot = Join-Path $dotnetRoot 'shared\Microsoft.NETCore.App'
-
-    if ((Test-Path -LiteralPath $fxrRoot) -and (Test-Path -LiteralPath $sharedRoot)) {
-        $candidates = @(
-            Get-ChildItem -LiteralPath $fxrRoot -Directory |
-                Where-Object { $_.Name.StartsWith($wantPrefix) -and (Test-Path -LiteralPath (Join-Path $sharedRoot $_.Name)) } |
-                ForEach-Object { $_.Name } |
-                Sort-Object { [version]$_ } -Descending
-        )
-    }
-
-    if ($candidates.Count -eq 0) {
-        throw ('打包机没有可用运行时 ' + $runtimeVer + '，也没有可替代的 ' + $wantPrefix + 'x 版本：' + $dotnetRoot)
-    }
-
-    $fallback = $candidates[0]
-    Write-Host ('  本机没有 ' + $runtimeVer + ' 的 hostfxr，改用 ' + $fallback + '（同为 ' + $wantPrefix + 'x）') -ForegroundColor Yellow
-    $runtimeVer = $fallback
-    $fxrSrc     = Join-Path $dotnetRoot ('host\fxr\' + $runtimeVer)
-    $sharedSrc  = Join-Path $dotnetRoot ('shared\Microsoft.NETCore.App\' + $runtimeVer)
-}
-
-$rtRoot    = Join-Path $fullDir 'runtime.dotnet'
-$sharedDir = Join-Path $rtRoot ('shared\Microsoft.NETCore.App\' + $runtimeVer)
-$fxrDir    = Join-Path $rtRoot ('host\fxr\' + $runtimeVer)
-New-Item -ItemType Directory -Path $sharedDir -Force | Out-Null
-New-Item -ItemType Directory -Path $fxrDir    -Force | Out-Null
-
-# -Force 也要给：.version 是隐藏属性的点文件，不加会被跳过
-Copy-Item -Path (Join-Path $sharedSrc '*') -Destination $sharedDir -Recurse -Force
-Copy-Item -Path (Join-Path $fxrSrc '*')    -Destination $fxrDir    -Recurse -Force
-
-$sharedCount = (Get-ChildItem -LiteralPath $sharedDir -File -Force).Count
-
-foreach ($meta in @('.version', 'Microsoft.NETCore.App.deps.json', 'Microsoft.NETCore.App.runtimeconfig.json')) {
-    if (-not (Test-Path -LiteralPath (Join-Path $sharedDir $meta))) {
-        throw ('runtime.dotnet\shared 里缺框架元数据：' + $meta)
-    }
-}
-
-Write-Host ('  运行时 ' + $runtimeVer + '（' + $tfm + '）：' + $sharedCount + ' 个文件进 runtime.dotnet\shared，hostfxr 进 runtime.dotnet\host\fxr') -ForegroundColor Green
 
 
 # ====== 关于 ANGLE 库（现在必须一起带上）======
@@ -260,7 +205,94 @@ Write-Host ('  运行时 ' + $runtimeVer + '（' + $tfm + '）：' + $sharedCoun
 # 每次启动都先失败一次、日志里天天躺一条假异常。
 
 
-# ====== 补 MediaMTX 目录与说明 ======
+# ====== 带引擎的那个包补一份推荐版本的引擎 ======
+#
+# 为什么要自带：本程序是对着某一个引擎版本把界面与行为都验过的，用户第一次装完
+# 还要自己联网下载引擎，很容易下到比界面更新的版本，出问题也说不清是谁的问题。
+# 推荐版本号只维护在 csproj 的 <RecommendedEngineVersion>，与程序里那个常量同源。
+#
+# 缓存放 obj\engine-cache\ 而不是 dist\：dist\ 每次打包都会被清掉，
+# 缓存放那里等于每次都重新下一遍。
+#
+# 断网时用 -SkipEngine 出包：两个包都出，只是带引擎那个里面没有 MediaMTX\，
+# 回到「引擎要用户自己装」的样子。
+
+$bundledEngineTag = ''
+
+if ($SkipEngine) {
+    Write-Host '按 -SkipEngine 出包：两个包都不带引擎' -ForegroundColor Yellow
+}
+else {
+    $engineNode = Select-Xml -LiteralPath $csprojPath -XPath '//RecommendedEngineVersion'
+    if (-not $engineNode) {
+        throw 'csproj 里没有 <RecommendedEngineVersion>，无法确定要内置哪个版本的引擎'
+    }
+
+    $engineVer = $engineNode.Node.InnerText.Trim()
+    $bundledEngineTag = 'v' + $engineVer
+
+    $engineAsset = 'mediamtx_' + $bundledEngineTag + '_windows_amd64.zip'
+    $engineUrl   = 'https://github.com/bluenviron/mediamtx/releases/download/' + $bundledEngineTag + '/' + $engineAsset
+
+    $engineCacheDir = Join-Path $projectDir 'obj\engine-cache'
+    $engineZip      = Join-Path $engineCacheDir $engineAsset
+
+    New-Item -ItemType Directory -Path $engineCacheDir -Force | Out-Null
+
+    # 三兆是这份 zip 的大致量级；小得离谱说明上次下到一半就断了，删掉重下
+    $engineZipOk = (Test-Path -LiteralPath $engineZip) -and ((Get-Item -LiteralPath $engineZip).Length -gt 3MB)
+
+    if ($engineZipOk) {
+        Write-Host ('  引擎 ' + $bundledEngineTag + '：用缓存 ' + $engineZip) -ForegroundColor Green
+    }
+    else {
+        Write-Host ('  引擎 ' + $bundledEngineTag + '：下载 ' + $engineAsset) -ForegroundColor Cyan
+
+        # PowerShell 5.1 的 Invoke-WebRequest 默认走 TLS 1.0，GitHub 早就不认了；
+        # 进度条在 5.1 上还会把下载拖成十分钟，这里一律关掉
+        [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+        $progressBackup = $ProgressPreference
+        $ProgressPreference = 'SilentlyContinue'
+
+        try {
+            Invoke-WebRequest -Uri $engineUrl -OutFile $engineZip -UseBasicParsing
+        }
+        catch {
+            throw ('引擎下载失败（' + $engineUrl + '）：' + $_.Exception.Message + '。断网时可以用 -SkipEngine 出不带引擎的包。')
+        }
+        finally {
+            $ProgressPreference = $progressBackup
+        }
+    }
+
+    $engineStage = Join-Path $projectDir 'obj\engine-extract'
+    if (Test-Path -LiteralPath $engineStage) { Remove-Item -LiteralPath $engineStage -Recurse -Force }
+    New-Item -ItemType Directory -Path $engineStage -Force | Out-Null
+
+    Expand-Archive -LiteralPath $engineZip -DestinationPath $engineStage -Force
+
+    $stagedExe = Join-Path $engineStage 'mediamtx.exe'
+    if (-not (Test-Path -LiteralPath $stagedExe)) {
+        throw ('引擎包里没有 mediamtx.exe，解压目录：' + $engineStage)
+    }
+
+    $engineDir = Join-Path $withEngineDir 'MediaMTX'
+    New-Item -ItemType Directory -Path $engineDir -Force | Out-Null
+    Copy-Item -LiteralPath $stagedExe -Destination (Join-Path $engineDir 'mediamtx.exe') -Force
+
+    # version.json 只是给人看的记录，程序读的是 mediamtx.exe --version；
+    # 结构要与 EngineUpdater.WriteVersionFile 写出来的那份保持一致
+    $engineRecord = '{"Version":"' + $bundledEngineTag + '","InstalledAt":"' + (Get-Date).ToString('o') + '"}'
+    [System.IO.File]::WriteAllText((Join-Path $engineDir 'version.json'), $engineRecord)
+
+    Remove-Item -LiteralPath $engineStage -Recurse -Force
+
+    $engineMb = [math]::Round((Get-Item -LiteralPath (Join-Path $engineDir 'mediamtx.exe')).Length / 1MB, 1)
+    Write-Host ('  引擎 ' + $bundledEngineTag + ' 已放进带引擎那个包（mediamtx.exe，' + $engineMb + ' MB）') -ForegroundColor Green
+}
+
+
+# ====== 说明文件 ======
 
 $utf8Bom = [System.Text.UTF8Encoding]::new($true)
 
@@ -279,38 +311,38 @@ function Write-TextFile {
 function Write-Package {
     param(
         [Parameter(Mandatory)][string]$Dir,
-        [Parameter(Mandatory)][string]$Kind
+        [Parameter(Mandatory)][string]$Kind,
+        [string]$EngineVersion = ''
     )
 
-    $runtimeNote  = '这个是 full 版：自带 .NET 运行时，解压后直接双击就能用，电脑上不需要装 .NET。'
-    $runtimeExtra = ''
+    # 两个包的程序本体一样，差别只有带不带引擎，所以说明里只分这两段
+    $engineRow  = '  第一次启动还会生成 config\ 与 logs\；引擎装好后会多一个 MediaMTX\'
+    $engineHelp = @'
+引擎还没装
+  这个包不带引擎。第一次启动后到设置页的「引擎更新」那一行点「检查」，
+  状态行会提示未检测到引擎，此时右边的「安装」就能直接把引擎装好，
+  MediaMTX\ 目录也是在那时候自动建出来的。
+'@
 
-    if ($Kind -eq 'light') {
-        $runtimeNote  = '这个是 light 版：不带 .NET 运行时，体积小很多，但电脑上要先装 .NET 10 运行时（Runtime）。'
-        $runtimeExtra = @'
-
-装运行时
-  到 https://dotnet.microsoft.com/download/dotnet/10.0 下载
-  「.NET Runtime 10.x — Windows x64」，装完再双击 MediaMTX-Yuki-GUI.exe。
-  注意是 .NET Runtime，不是 .NET Desktop Runtime —— 这个程序是 Avalonia 画的界面，
-  不用 WPF/WinForms，所以不需要 Desktop Runtime。装 Desktop 版也能跑（它包含 Runtime），
-  只是多下 50 MB 用不上的东西。
-  没装的话，Windows 会直接提示缺少 .NET 运行时，程序不会启动。
+    if ($EngineVersion) {
+        $engineRow  = '  MediaMTX\                自带的 MediaMTX 引擎 ' + $EngineVersion + '（界面适配过的版本，别随便换）'
+        $engineHelp = @'
+引擎已经装好了
+  包里自带 MediaMTX 引擎，解压后直接能用，不需要再下载。
+  这是本程序界面适配过的版本；想换成别的版本，到设置页的「引擎更新」里操作。
 '@
     }
 
     $readme = @"
-MediaMTX-Yuki-GUI $versionText（$Kind 版）
+MediaMTX-Yuki-GUI $versionText（$Kind）
 ============================================
 
-$runtimeNote
-$runtimeExtra
+解压后直接双击 MediaMTX-Yuki-GUI.exe 就能用，电脑上不需要装 .NET。
 
 目录结构
   MediaMTX-Yuki-GUI.exe   双击这个（程序全在里面，就一个文件）
-  runtime.dotnet\         只有 full 版才有：自带的 .NET 运行时，别删
   Languages\              界面语言包
-  第一次启动还会生成 config\ 与 logs\；装好引擎后再多一个 MediaMTX\
+$engineRow
 
 第一次运行
   程序会在自己所在的目录下建两个文件夹：
@@ -318,10 +350,7 @@ $runtimeExtra
     logs     mediamtx-yyyyMMdd.log（引擎日志，按天分文件，日志页看到的内容就在这里）
   程序目录放在哪里都行，但路径里带空格或中文时记得用引号。
 
-引擎还没装
-  包里不带引擎。第一次启动后到设置页点「立即检查」，状态行会提示
-  未检测到引擎，此时右边的「下载并安装」就能直接把引擎装好，
-  MediaMTX\ 目录也是在那时候自动建出来的。
+$engineHelp
 
 关窗不等于退出
   点右上角的 × 只是收进托盘，引擎继续转流；图标在任务栏右下角的
@@ -340,28 +369,40 @@ $runtimeExtra
     Write-TextFile -Path (Join-Path $Dir 'README.txt') -Text $readme
 }
 
-Write-Package -Dir $fullDir  -Kind 'full'
-Write-Package -Dir $lightDir -Kind 'light'
+Write-Package -Dir $withEngineDir -Kind ($archName + ' + 自带引擎') -EngineVersion $bundledEngineTag
+Write-Package -Dir $plainDir      -Kind $archName
 
 
-# ====== 校验：两个包的 exe 必须一模一样 ======
+# ====== 校验：包的形状对不对 ======
 #
-# 单文件发布之后所有代码都在 exe 里，比这一个文件就等于比了整个程序。
-# 两个包唯一的区别是旁边的 runtime.dotnet\ 在不在，exe 必须逐字节相同——
-# 这是让用户下载哪个包都拿到同一份程序的前提。
+# 单文件发布之后所有代码都在 exe 里，所以只需要确认两件事：
+# 1. exe 真的在（裁剪/单文件任何一步挂掉都可能产出一个空壳目录）；
+# 2. 带引擎那个包里确实有 mediamtx.exe —— 这是它与另一个包唯一的区别，
+#    上一段被 -SkipEngine 跳过或者复制失败时，这里会当场拦住。
 
-$fullExePath  = Join-Path $fullDir  'MediaMTX-Yuki-GUI.exe'
-$lightExePath = Join-Path $lightDir 'MediaMTX-Yuki-GUI.exe'
+$plainExePath = Join-Path $plainDir 'MediaMTX-Yuki-GUI.exe'
 
-$fullHash  = (Get-FileHash -LiteralPath $fullExePath  -Algorithm SHA256).Hash
-$lightHash = (Get-FileHash -LiteralPath $lightExePath -Algorithm SHA256).Hash
-
-if ($fullHash -ne $lightHash) {
-    throw ('两个包的 exe 不一致（full ' + $fullHash + ' / light ' + $lightHash + '），不能发包')
+if (-not (Test-Path -LiteralPath $plainExePath)) {
+    throw ('publish 没有产出 exe：' + $plainExePath)
 }
 
-$exeMb = [math]::Round((Get-Item -LiteralPath $fullExePath).Length / 1MB, 1)
-Write-Host ('  两版一致：MediaMTX-Yuki-GUI.exe  ' + $fullHash + '（' + $exeMb + ' MB）') -ForegroundColor Green
+if ($bundledEngineTag) {
+    $engineExePath = Join-Path $withEngineDir 'MediaMTX\mediamtx.exe'
+    if (-not (Test-Path -LiteralPath $engineExePath)) {
+        throw ('带引擎的包里没有 MediaMTX\mediamtx.exe：' + $engineExePath)
+    }
+}
+
+$exeHash = (Get-FileHash -LiteralPath $plainExePath -Algorithm SHA256).Hash
+$exeMb   = [math]::Round((Get-Item -LiteralPath $plainExePath).Length / 1MB, 1)
+Write-Host ('  MediaMTX-Yuki-GUI.exe  ' + $exeHash + '（' + $exeMb + ' MB）') -ForegroundColor Green
+
+# 体积红线：裁好的 exe 约 22.6 MB，没裁的是 47.8 MB。
+# 超了就是上面那条「restore 没带裁剪属性 → publish 静默不裁」，别把胖包发出去。
+$exeLimitMb = 32
+if ($exeMb -gt $exeLimitMb) {
+    throw ('exe ' + $exeMb + ' MB 超过 ' + $exeLimitMb + ' MB，说明这次没有裁剪（多半是 restore 没带 -p:PublishTrimmed=true）。删掉 obj\ 与 bin\ 后重跑一次完整打包。')
+}
 
 
 # ====== 压 zip ======
@@ -383,12 +424,12 @@ function New-PackageZip {
     )
 }
 
-$fullZip  = Join-Path $distDir ($packageName + '-full.zip')
-$lightZip = Join-Path $distDir ($packageName + '-light.zip')
+$plainZip      = Join-Path $distDir ((Split-Path -Leaf $plainDir) + '.zip')
+$withEngineZip = Join-Path $distDir ((Split-Path -Leaf $withEngineDir) + '.zip')
 
 Write-Host '压包' -ForegroundColor Cyan
-New-PackageZip -Dir $fullDir  -ZipPath $fullZip
-New-PackageZip -Dir $lightDir -ZipPath $lightZip
+New-PackageZip -Dir $plainDir      -ZipPath $plainZip
+New-PackageZip -Dir $withEngineDir -ZipPath $withEngineZip
 
 Remove-Item -LiteralPath $stageRoot -Recurse -Force
 
@@ -397,7 +438,8 @@ Remove-Item -LiteralPath $stageRoot -Recurse -Force
 
 Write-Host ''
 Write-Host '打包完成' -ForegroundColor Green
-foreach ($zip in @($fullZip, $lightZip)) {
+foreach ($zip in @($plainZip, $withEngineZip)) {
     $sizeMb = [math]::Round((Get-Item -LiteralPath $zip).Length / 1MB, 1)
     Write-Host ('  {0,7} MB   {1}' -f $sizeMb, $zip)
 }
+

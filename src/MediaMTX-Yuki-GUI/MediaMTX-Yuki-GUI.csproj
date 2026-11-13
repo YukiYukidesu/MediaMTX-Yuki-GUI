@@ -9,7 +9,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
+
+    <!--
+      GUI 已验证过的 MediaMTX 引擎版本（带引擎那个包预装的就是这一版）。
+      这里只写数字、不带 v：build-release.ps1 拿它直接拼资产名
+      mediamtx_v<版本>_windows_amd64.zip；程序里由 ProgramVersion.RecommendedEngineVersion
+      读出来补上 v 前缀再给界面用。要升就改这一处，别在 C# 与脚本里各写一份。
+    -->
+    <RecommendedEngineVersion>1.21.3</RecommendedEngineVersion>
+
     <Product>MediaMTX-Yuki-GUI</Product>
     <Description>轻量 RTMP 多路转发控制器</Description>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
@@ -26,17 +35,30 @@
     <NoWarn>$(NoWarn);AVLN3001</NoWarn>
 
     <!--
-      运行时不焊进 exe，而是放在 exe 旁边的 runtime.dotnet\ 目录里。
-      这样两个发行版可以共用同一个 exe 文件：完整版在旁边放一份 runtime.dotnet\，
-      精简版什么都不放，让 apphost 回落到系统装的 .NET。
-      只看 AppRelative 会「找不到就报错」，必须再带上 Global 才会回落。
-      应用自己的代码全部焊进单文件 exe（PublishSingleFile），不留散落的 dll。
-      目录布局见 build-release.ps1。详见 docs\交接文档.md §6.9。
+      发布形态：自包含 + 裁剪 + 单文件（见 build-release.ps1）。
+      运行时不外挂 runtime.dotnet\、也不依赖系统装的 .NET——它被裁过之后直接焊在 exe 里，
+      所以出厂产物就是「一个 exe 加一个 Languages\」。以前那套
+      AppHostRelativeDotNet / AppHostDotNetSearch 是给「外挂运行时 + 回落到系统 .NET」用的，
+      改走自包含之后必须删掉：留着它 apphost 仍会优先去 exe 旁边找 runtime.dotnet\。
     -->
-    <AppHostRelativeDotNet>runtime.dotnet</AppHostRelativeDotNet>
-    <AppHostDotNetSearch>AppRelative;Global</AppHostDotNetSearch>
+
+    <!--
+      裁剪（PublishTrimmed）会把 System.Text.Json 的反射序列化开关关掉，
+      配置读写（AppConfig / UpdateOptions 这些 POCO）当场抛
+      「Reflection-based serialization has been disabled」。这个属性会写进 runtimeconfig 的
+      configProperties，把开关显式打开——不写它，裁剪版起不来。
+    -->
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
   </PropertyGroup>
 
+
+  <ItemGroup>
+    <!-- 把推荐引擎版本塞进程序集元数据：运行时读得到，与上面那个属性同源 -->
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>RecommendedEngineVersion</_Parameter1>
+      <_Parameter2>$(RecommendedEngineVersion)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\app.ico" />

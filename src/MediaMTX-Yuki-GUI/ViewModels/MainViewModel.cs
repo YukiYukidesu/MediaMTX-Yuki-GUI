@@ -43,6 +43,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     /// <summary>引擎的下载与替换。</summary>
     private readonly EngineUpdater _engineUpdater;
 
+    private readonly AppUpdater _appUpdater;
+
     /// <summary>界面能力的出口，由 App 在创建窗口后注入；VM 自己不认识任何窗口类型。</summary>
     public IAppHost? AppHost { get; set; }
 
@@ -352,6 +354,22 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         => string.IsNullOrEmpty(EngineVersion) ? L.T("c002-001") : L.T("c002-002") + EngineVersion;
 
     /// <summary>
+    /// 版本号是后到的：启动时先查更新、再问引擎要版本，推荐通道又不联网，
+    /// 于是状态行会先把「当前引擎 与推荐适配版本 v1.22.0 不一致」写出去，中间空一格。
+    /// 版本一落地就重算一次，状态行与「有没有得升级」都按它重新来过。
+    /// </summary>
+    partial void OnEngineVersionChanged(string value)
+    {
+        // 提示卡那段话里也带当前版本号，它是算出来的、不跟属性联动，得单独叫一声
+        OnPropertyChanged(nameof(TipMessage));
+
+        if (!_engineChecked) return;
+
+        RefreshEngineUpdate();
+        RefreshEngineStatus();
+    }
+
+    /// <summary>
     /// 引擎现在到底在不在。每次都现查磁盘：用户可能在两次运行之间把 MediaMTX 目录删掉，
     /// 启动时算一次再缓存住的话，界面会一直骗人。
     /// </summary>
@@ -359,6 +377,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     /// <summary>本程序有新版本时点亮版本号后面的小光点。</summary>
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(InstallAppUpdateCommand))]
     private bool _hasAppUpdate;
 
     partial void OnHasAppUpdateChanged(bool value) => RefreshTip();
@@ -368,19 +387,30 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     [NotifyCanExecuteChangedFor(nameof(InstallEngineUpdateCommand))]
     private bool _hasEngineUpdate;
 
+
+
     partial void OnHasEngineUpdateChanged(bool value) => RefreshTip();
 
-    /// <summary>更新过程的进度文字，界面直接显示；空串表示没在更新。</summary>
+    /// <summary>本程序更新那条状态行。空串表示还没查过。</summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasUpdateStatus))]
-    private string _updateStatus = string.Empty;
+    [NotifyPropertyChangedFor(nameof(HasAppUpdateStatus))]
+    private string _appUpdateStatus = string.Empty;
 
-    /// <summary>有进度文字才显示那一行，空串时整行收起来。</summary>
-    public bool HasUpdateStatus => !string.IsNullOrWhiteSpace(UpdateStatus);
+    /// <summary>有文字才显示那一行，空串时整行收起来。</summary>
+    public bool HasAppUpdateStatus => !string.IsNullOrWhiteSpace(AppUpdateStatus);
+
+    /// <summary>引擎更新那条状态行。两条各管各的，不会互相覆盖。</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasEngineUpdateStatus))]
+    private string _engineUpdateStatus = string.Empty;
+
+    public bool HasEngineUpdateStatus => !string.IsNullOrWhiteSpace(EngineUpdateStatus);
 
     /// <summary>正在下载或安装，这时候按钮要禁用，避免点两次。</summary>
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(CheckUpdatesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CheckAppUpdateCommand))]
+    [NotifyCanExecuteChangedFor(nameof(InstallAppUpdateCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CheckEngineUpdateCommand))]
     [NotifyCanExecuteChangedFor(nameof(InstallEngineUpdateCommand))]
     private bool _isUpdating;
 
@@ -485,7 +515,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         => Tip switch
         {
             TipKind.EngineMissing => L.T("l011-001"),
-            TipKind.EngineUpdate => FormatNote("l011-002", _latestEngineTag, EngineVersion),
+            TipKind.EngineUpdate => IsRecommendedEngineChannel
+                ? FormatNote("l011-004", TargetEngineTag, EngineVersion)
+                : FormatNote("l011-002", _latestEngineTag, EngineVersion),
             TipKind.AppUpdate => FormatNote("l011-003", _latestAppTag, VersionText),
             _ => string.Empty,
         };
@@ -620,6 +652,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         _engineUpdater = new EngineUpdater(() => _cfg.Update.Proxy);
 
+        _appUpdater = new AppUpdater(() => _cfg.Update.Proxy);
+
         Strings.Language = _cfg.Ui.Language;
 
         _engine.LogLine += OnEngineLog;
@@ -692,100 +726,151 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (string.IsNullOrWhiteSpace(version)) return;
 
+        // 赋值会走 OnEngineVersionChanged，那里负责按新版本重算状态行与「有没有得升级」
         EngineVersion = version;
-
-        // 版本号是后到的，回来了就得按它重算一次「有没有得升级」
-        if (_engineChecked) RefreshEngineUpdate();
     }
+
+    /// <summary>本程序更新走的是「只看正式版」那条通道。</summary>
+    private bool IsStableAppChannel
+        => string.Equals(_cfg.Update.AppChannel, UpdateOptions.AppChannelStable, StringComparison.Ordinal);
+
+    /// <summary>引擎更新走的是「推荐适配版本」那条通道。</summary>
+    private bool IsRecommendedEngineChannel
+        => string.Equals(_cfg.Update.EngineChannel, UpdateOptions.EngineChannelRecommended, StringComparison.Ordinal);
+
+    /// <summary>
+    /// 这一轮「引擎目标版本」是哪一版：最新通道是查回来的 tag，推荐通道是写死在程序里的常量。
+    /// 状态行、安装、提示卡都只认它，别直接读 _latestEngineTag——推荐通道下那个字段永远是空的。
+    /// </summary>
+    private string? TargetEngineTag
+        => IsRecommendedEngineChannel ? ProgramVersion.RecommendedEngineVersion : _latestEngineTag;
 
     /// <summary>查本程序有没有新版本。仓库没配时让状态行说清原因。</summary>
     /// <param name="force">true 表示绕过 24 小时缓存。</param>
     private async Task CheckAppUpdateAsync(bool force)
     {
-        if (string.IsNullOrWhiteSpace(_cfg.Update.AppRepo))
-        {
-            RefreshUpdateStatus();
+        // 正式版通道走 /releases/latest，预发布通道才去翻列表
+        _latestAppTag = await _updater.GetLatestTagAsync(
+            _cfg.Update.AppRepoOrDefault,
+            _cfg.Update.AppSource,
+            force,
+            includePrerelease: !IsStableAppChannel);
 
-            return;
-        }
-
-        _latestAppTag = await _updater.GetLatestTagAsync(_cfg.Update.AppRepo, _cfg.Update.AppSource, force);
         _appChecked = true;
 
         HasAppUpdate = IsNewerThan(_latestAppTag, VersionText);
 
-        RefreshUpdateStatus();
+        RefreshAppStatus();
     }
 
     /// <summary>查引擎有没有新版本。</summary>
     /// <param name="force">true 表示绕过 24 小时缓存。</param>
     private async Task CheckEngineUpdateAsync(bool force)
     {
+        // 推荐适配版本是程序里的常量，压根不用联网：本地比一下版本号就够
+        if (IsRecommendedEngineChannel)
+        {
+            _engineChecked = true;
+
+            RefreshEngineUpdate();
+
+            RefreshEngineStatus();
+
+            return;
+        }
+
         _latestEngineTag = await _updater.GetLatestTagAsync(_cfg.Update.EngineRepo, _cfg.Update.EngineSource, force);
         _engineChecked = true;
 
         RefreshEngineUpdate();
 
-        RefreshUpdateStatus();
+        RefreshEngineStatus();
     }
 
     /// <summary>
-    /// 重算「引擎有没有得装」：远端拿到 tag，并且本机没装或确实更旧。
-    /// 引擎没装时本地版本是空的，严格比版本号永远比不出结果，所以这里单独认一次「没装」。
+    /// 重算「引擎有没有得装」。
+    /// <para>
+    /// 最新通道：远端拿到 tag，并且本机没装或确实更旧。
+    /// 推荐通道：只要跟推荐版本号不一致就得换——本机比推荐版新时也要能降回去，
+    /// 引擎升过头带来的未知后果正是这条通道要避免的事。
+    /// </para>
     /// </summary>
     private void RefreshEngineUpdate()
-        => HasEngineUpdate = !string.IsNullOrWhiteSpace(_latestEngineTag)
-            && (!IsEngineInstalled || IsNewerThan(_latestEngineTag, EngineVersion));
+    {
+        string? target = TargetEngineTag;
 
-    /// <summary>本程序有没有配更新仓库。直接看配置，不依赖「这次有没有查过」。</summary>
-    private bool IsAppRepoMissing => string.IsNullOrWhiteSpace(_cfg.Update.AppRepo);
+        if (string.IsNullOrWhiteSpace(target))
+        {
+            HasEngineUpdate = false;
+            return;
+        }
 
-    /// <summary>把两路检查的结果收口成一句状态文字，谁先回来都不会互相覆盖。</summary>
-    private void RefreshUpdateStatus()
+        // 引擎没装时本地版本是空的，严格比版本号永远比不出结果，所以这里单独认一次「没装」
+        HasEngineUpdate = !IsEngineInstalled
+            || (IsRecommendedEngineChannel ? !IsSameVersion(target, EngineVersion) : IsNewerThan(target, EngineVersion));
+    }
+
+    /// <summary>本程序那条状态行。与引擎那条完全独立，先回来谁都不会覆盖谁。</summary>
+    private void RefreshAppStatus()
     {
         if (IsUpdating) return;
 
-        List<string> notes = [];
-
-        if (HasAppUpdate) notes.Add(FormatNote("l016-008", _latestAppTag, VersionText));
-
-        // 引擎都没装，这时候提「有新版本」是废话，下面单独给一句「去装」
-        if (HasEngineUpdate && IsEngineInstalled)
+        if (!_appChecked)
         {
-            notes.Add(FormatNote("l016-009", _latestEngineTag, EngineVersion));
-        }
-
-        if (notes.Count > 0)
-        {
-            UpdateStatus = string.Join("  ", notes);
+            AppUpdateStatus = string.Empty;
             return;
         }
 
-        // 引擎不在是最要紧的一件事，这时候说「已是最新版本」是彻头彻尾的假话
-        if (_engineChecked && HasEngineUpdate)
+        if (HasAppUpdate)
         {
-            UpdateStatus = L.T("l016-017");
+            AppUpdateStatus = FormatNote("l016-008", _latestAppTag, VersionText);
             return;
         }
 
-        bool appFails = _appChecked && string.IsNullOrWhiteSpace(_latestAppTag);
-        bool engineFails = _engineChecked && string.IsNullOrWhiteSpace(_latestEngineTag);
+        // 连版本号都没拿到，多半是网络或源的问题，别骗用户说已是最新。
+        // 正式版通道还多一种可能：仓库里压根没发过正式版（本程序现在只有预览版）。
+        AppUpdateStatus = string.IsNullOrWhiteSpace(_latestAppTag)
+            ? L.T(IsStableAppChannel ? "l016-029" : "l016-013")
+            : L.T("l016-007");
+    }
 
-        // 有一路连版本号都没拿到，多半是网络或源的问题，别骗用户说已是最新
-        if (appFails || engineFails)
+    /// <summary>引擎那条状态行。</summary>
+    private void RefreshEngineStatus()
+    {
+        if (IsUpdating) return;
+
+        if (!_engineChecked)
         {
-            UpdateStatus = L.T("l016-013");
+            EngineUpdateStatus = string.Empty;
             return;
         }
 
-        if (!_appChecked && !_engineChecked)
+        // 引擎没装时「有新版本」是废话，单独给一句「去装」
+        if (!IsEngineInstalled)
         {
-            UpdateStatus = string.Empty;
+            EngineUpdateStatus = L.T("l016-017");
             return;
         }
 
-        // 本程序没配更新源时「已是最新」也是没有依据的，得说清是没源可查
-        UpdateStatus = IsAppRepoMissing ? L.T("l016-018") : L.T("l016-007");
+        string? target = TargetEngineTag;
+
+        // 推荐通道不能沿用「有新版本」的说法：这里常常是把引擎从更高版本降回来
+        if (IsRecommendedEngineChannel)
+        {
+            EngineUpdateStatus = HasEngineUpdate
+                ? FormatNote("l016-027", target, EngineVersion)
+                : FormatNote("l016-028", target, null);
+
+            return;
+        }
+
+        if (HasEngineUpdate)
+        {
+            EngineUpdateStatus = FormatNote("l016-009", target, EngineVersion);
+            return;
+        }
+
+        EngineUpdateStatus = string.IsNullOrWhiteSpace(target) ? L.T("l016-013") : L.T("l016-007");
     }
 
     /// <summary>把语言包里的 {latest} / {current} 换成真实版本号。</summary>
@@ -795,36 +880,121 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             .Replace("{current}", current ?? string.Empty);
 
     /// <summary>下载进度是在后台线程回调的，写界面属性得切回 UI 线程。</summary>
-    private void PostUpdateStatus(string text)
+    /// <param name="apply">把文字写到哪条状态行上。</param>
+    private void PostStatus(Action<string> apply, string text)
     {
         Action<Action>? post = Post;
 
         if (post is null)
         {
-            UpdateStatus = text;
+            apply(text);
             return;
         }
 
-        post(() => UpdateStatus = text);
+        post(() => apply(text));
     }
+
+    /// <summary>引擎那边的进度回调，原有签名保持不变，内部转发到引擎状态行。</summary>
+    private void PostUpdateStatus(string text) => PostStatus(value => EngineUpdateStatus = value, text);
 
     // ====== 更新命令 ======
 
-    private bool CanCheckUpdates => !IsUpdating;
+    private bool CanCheckAppUpdate => !IsUpdating;
 
-    /// <summary>手动查一次更新，绕过本地缓存。</summary>
-    [RelayCommand(CanExecute = nameof(CanCheckUpdates))]
-    private async Task CheckUpdatesAsync()
+    /// <summary>只查本程序，绕过本地缓存。</summary>
+    [RelayCommand(CanExecute = nameof(CanCheckAppUpdate))]
+    private async Task CheckAppUpdateAsync()
     {
         if (IsUpdating) return;
 
-        UpdateStatus = L.T("l016-006");
+        AppUpdateStatus = L.T("l016-006");
 
-        await Task.WhenAll(CheckAppUpdateAsync(force: true), CheckEngineUpdateAsync(force: true));
+        await CheckAppUpdateAsync(force: true);
 
-        RefreshUpdateStatus();
+        ShowToast(HasAppUpdate ? L.T("t004-001") : L.T("t004-002"), ToastKind.Info);
+    }
 
-        ShowToast(HasAppUpdate || HasEngineUpdate ? L.T("t004-001") : L.T("t004-002"), ToastKind.Info);
+    private bool CanCheckEngineUpdate => !IsUpdating;
+
+    /// <summary>只查引擎，绕过本地缓存。</summary>
+    [RelayCommand(CanExecute = nameof(CanCheckEngineUpdate))]
+    private async Task CheckEngineUpdateAsync()
+    {
+        if (IsUpdating) return;
+
+        EngineUpdateStatus = L.T("l016-006");
+
+        await CheckEngineUpdateAsync(force: true);
+
+        ShowToast(HasEngineUpdate ? L.T("t004-001") : L.T("t004-002"), ToastKind.Info);
+    }
+
+    private bool CanInstallAppUpdate => !IsUpdating && HasAppUpdate;
+
+    /// <summary>
+    /// 下载新版并装上。与引擎不同的是：**本程序没法自己覆盖自己**，
+    /// 只能先起一个替换脚本、把主进程退出去，由脚本在退出之后动手。
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanInstallAppUpdate))]
+    private async Task InstallAppUpdateAsync()
+    {
+        if (IsUpdating) return;
+
+        if (string.IsNullOrWhiteSpace(_latestAppTag))
+        {
+            AppUpdateStatus = L.T("l016-013");
+            return;
+        }
+
+        string tag = _latestAppTag;
+
+        IsUpdating = true;
+
+        try
+        {
+            // 引擎先停掉：新进程一起来还会抢那几个端口，旧引擎还占着就会互相踩
+            if (IsEngineRunning) await StopEngineAsync();
+
+            AppUpdateStatus = L.T("l016-010");
+
+            AppUpdater.Package package = await _appUpdater.DownloadAsync(
+                tag,
+                _cfg.Update.AppSource,
+                _cfg.Update.AppRepoOrDefault,
+                L.T("l016-010"),
+                text => PostStatus(value => AppUpdateStatus = value, text));
+
+            string? error = AppUpdater.Prepare(package);
+
+            if (error is not null)
+            {
+                AppUpdateStatus = L.T("l016-012") + error;
+
+                ShowToast(L.T("t004-004"), ToastKind.Error);
+
+                IsUpdating = false;
+
+                return;
+            }
+
+            AppUpdateStatus = FormatNote("l016-011", tag, null);
+
+            ShowToast(L.T("t004-011").Replace("{tag}", tag), ToastKind.Success);
+
+            // 锁要在这里就放掉：替换脚本重启的是新进程，它 TryAcquire 时旧句柄还在
+            // 就会被当成第二个实例直接退出——表现是「更新完程序没了」
+            SingleInstance.Release();
+
+            Services.AppShell.Exit();
+        }
+        catch (Exception ex)
+        {
+            AppUpdateStatus = L.T("l016-012") + EngineUpdater.DescribeError(ex);
+
+            ShowToast(L.T("t004-004"), ToastKind.Error);
+
+            IsUpdating = false;
+        }
     }
 
     private bool CanInstallEngineUpdate => !IsUpdating && HasEngineUpdate;
@@ -838,13 +1008,13 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         if (IsUpdating) return;
 
-        if (string.IsNullOrWhiteSpace(_latestEngineTag))
+        string? tag = TargetEngineTag;
+
+        if (string.IsNullOrWhiteSpace(tag))
         {
-            UpdateStatus = L.T("l016-013");
+            EngineUpdateStatus = L.T("l016-013");
             return;
         }
-
-        string tag = _latestEngineTag;
 
         bool wasRunning = IsEngineRunning;
 
@@ -854,7 +1024,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         {
             if (wasRunning) await StopEngineAsync();
 
-            UpdateStatus = L.T("l016-010");
+            EngineUpdateStatus = L.T("l016-010");
 
             EngineUpdater.Package package = await _engineUpdater.DownloadAsync(
                 tag,
@@ -866,7 +1036,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
             if (error is not null)
             {
-                UpdateStatus = L.T("l016-012") + error;
+                EngineUpdateStatus = L.T("l016-012") + error;
 
                 ShowToast(L.T("t004-004"), ToastKind.Error);
 
@@ -881,13 +1051,13 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             // 装上了就别再举着那张「没检测到引擎」的卡片了
             RefreshTip();
 
-            UpdateStatus = FormatNote("l016-011", tag, null);
+            EngineUpdateStatus = FormatNote("l016-011", tag, null);
 
             ShowToast(L.T("t004-003").Replace("{tag}", tag), ToastKind.Success);
         }
         catch (Exception ex)
         {
-            UpdateStatus = L.T("l016-012") + EngineUpdater.DescribeError(ex);
+            EngineUpdateStatus = L.T("l016-012") + EngineUpdater.DescribeError(ex);
 
             ShowToast(L.T("t004-004"), ToastKind.Error);
         }
@@ -897,6 +1067,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
 
         if (wasRunning) await StartEngineAsync();
+    }
+
+    /// <summary>两个版本号是不是同一版；任一端解析不出来就按「不一样」处理。</summary>
+    private static bool IsSameVersion(string? left, string? right)
+    {
+        if (!SemanticVersion.TryParse(left, out SemanticVersion a)) return false;
+        if (!SemanticVersion.TryParse(right, out SemanticVersion b)) return false;
+
+        return a.CompareTo(b) == 0;
     }
 
     /// <summary>远程版本是否比本地新；任一端解析不出来都按「没有新版本」处理。</summary>

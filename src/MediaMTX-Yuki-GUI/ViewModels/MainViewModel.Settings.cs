@@ -57,7 +57,7 @@ public sealed partial class MainViewModel
     public bool IsShellGroupShown => MatchesSettingsSearch("窗口 托盘 开机 自启 启动 关闭 内存 回收 tray startup window memory");
 
     /// <summary>网络与更新分组是否过搜索。</summary>
-    public bool IsNetworkGroupShown => MatchesSettingsSearch("网络 更新 代理 镜像 源 下载 检查 proxy update source mirror download github");
+    public bool IsNetworkGroupShown => MatchesSettingsSearch("网络 更新 代理 镜像 源 下载 检查 通道 正式 预发布 推荐 版本 proxy update source mirror download github channel stable prerelease recommended version");
 
     /// <summary>拉流源分组：只有高级模式才出现。</summary>
     public bool IsPullGroupShown
@@ -561,6 +561,73 @@ public sealed partial class MainViewModel
         set => ApplySetting(_cfg.Update.CheckEngineOnStartup, value, v => _cfg.Update.CheckEngineOnStartup = v);
     }
 
+    /// <summary>
+    /// 本程序更新查哪个通道：0 正式版 / 1 预发布版。
+    /// 默认预发布——本程序自己就是 alpha，只查正式版会永远查不到东西。
+    /// </summary>
+    public int AppChannelIndex
+    {
+        get => IsStableAppChannel ? 0 : 1;
+        set
+        {
+            string channel = value == 0 ? Models.UpdateOptions.AppChannelStable : Models.UpdateOptions.AppChannelPrerelease;
+
+            if (string.Equals(_cfg.Update.AppChannel, channel, StringComparison.Ordinal)) return;
+
+            _cfg.Update.AppChannel = channel;
+            _store.Save(_cfg);
+
+            // 换通道等于换了一套版本号：上一轮查到的 tag 只代表旧通道，不能再拿来判断
+            _latestAppTag = null;
+            _appChecked = false;
+            HasAppUpdate = false;
+            AppUpdateStatus = string.Empty;
+
+            OnPropertyChanged();
+
+            // 顺手查一次。两个通道是两个缓存键，这一下多半会真的打一次网络
+            _ = CheckAppUpdateAsync(force: false);
+        }
+    }
+
+    /// <summary>引擎更新走哪条通道：0 最新版本 / 1 推荐适配版本。默认最新。</summary>
+    public int EngineChannelIndex
+    {
+        get => IsRecommendedEngineChannel ? 1 : 0;
+        set
+        {
+            string channel = value == 1
+                ? Models.UpdateOptions.EngineChannelRecommended
+                : Models.UpdateOptions.EngineChannelLatest;
+
+            if (string.Equals(_cfg.Update.EngineChannel, channel, StringComparison.Ordinal)) return;
+
+            _cfg.Update.EngineChannel = channel;
+            _store.Save(_cfg);
+
+            // 两条通道的目标版本来自完全不同的地方（远端 tag / 本地常量），旧结果一律作废
+            _latestEngineTag = null;
+            _engineChecked = false;
+            HasEngineUpdate = false;
+            EngineUpdateStatus = string.Empty;
+
+            OnPropertyChanged();
+
+            // 推荐档根本不联网，切过去立刻就能算出「要不要换」；最新档走缓存
+            _ = CheckEngineUpdateAsync(force: false);
+        }
+    }
+
+    /// <summary>
+    /// 引擎更新那行的黄字。带上推荐适配版本号——「未知后果」是相对哪一版说的，
+    /// 不写出来用户没法判断该不该升。
+    /// </summary>
+    public string EngineUpdateCaution
+        => L.T("l016-026").Replace("{version}", Services.ProgramVersion.RecommendedEngineVersion);
+
+    /// <summary>关于页里那行「推荐引擎版本」。</summary>
+    public string RecommendedEngineVersionText => Services.ProgramVersion.RecommendedEngineVersion;
+
     /// <summary>下拉框里能选的更新源，顺序与 SourceCatalog.All 严格一致。</summary>
     public IReadOnlyList<string> UpdateSourceNames
         => Services.SourceCatalog.All.Select(source => L.T(source.NameKey)).ToList();
@@ -961,6 +1028,8 @@ public sealed partial class MainViewModel
             OnPropertyChanged(nameof(MissingText));
             OnPropertyChanged(nameof(HasMissing));
             OnPropertyChanged(nameof(UpdateSourceNames));
+            OnPropertyChanged(nameof(EngineUpdateCaution));
+            OnPropertyChanged(nameof(RecommendedEngineVersionText));
         }
     }
 

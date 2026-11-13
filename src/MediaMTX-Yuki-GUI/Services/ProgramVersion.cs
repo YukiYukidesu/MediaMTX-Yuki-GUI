@@ -11,8 +11,14 @@ namespace MediaMTX_Yuki_GUI.Services;
 /// </summary>
 public static class ProgramVersion
 {
+    /// <summary>csproj 里那个属性注入程序集元数据时用的键名。</summary>
+    private const string RecommendedEngineKey = "RecommendedEngineVersion";
+
+    /// <summary>元数据缺失时的兜底版本，正常构建读不到它。</summary>
+    private const string FallbackRecommendedEngine = "1.21.3";
+
     /// <summary>
-    /// 带 v 前缀的显示串，例如 v0.0.1。
+    /// 带 v 前缀的显示串，例如 v0.0.2。
     /// 数字本体来自 csproj 的 &lt;Version&gt;，改了那边这里自动跟着变。
     /// </summary>
     public static string Text { get; } =
@@ -24,6 +30,31 @@ public static class ProgramVersion
     /// 例：0.0.1 → 1（打印成九位串是 000000001），0.1.0 → 1000（000001000），1.0.0 → 1000000（001000000）。
     /// </summary>
     public static int Code { get; } = Encode(Version);
+
+    /// <summary>
+    /// GUI 已适配的 MediaMTX 引擎版本，带 v 前缀，例如 v1.21.3。
+    /// <para>
+    /// 引擎各版本之间会改配置键与转发行为，本程序只在这一版上验证过，所以它是「推荐适配版本」
+    /// 通道、关于页展示、带引擎那个包（_x64_With_MediaMTX）预装引擎的唯一依据。数字本体在 csproj 的
+    /// &lt;RecommendedEngineVersion&gt;，改动请改那边。
+    /// </para>
+    /// </summary>
+    public static string RecommendedEngineVersion { get; } = ReadRecommendedEngineVersion();
+
+    /// <summary>读 csproj 注入的程序集元数据；万一没配，退回最后一次验证过的版本。</summary>
+    private static string ReadRecommendedEngineVersion()
+    {
+        foreach (AssemblyMetadataAttribute meta in Assembly.GetExecutingAssembly()
+                     .GetCustomAttributes<AssemblyMetadataAttribute>())
+        {
+            if (!string.Equals(meta.Key, RecommendedEngineKey, StringComparison.Ordinal)) continue;
+            if (string.IsNullOrWhiteSpace(meta.Value)) continue;
+
+            return "v" + meta.Value.Trim().TrimStart('v', 'V');
+        }
+
+        return "v" + FallbackRecommendedEngine;
+    }
 
     /// <summary>三段版本号，取不到时退回 0.0.0。</summary>
     private static Version Version

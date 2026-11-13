@@ -33,7 +33,14 @@ public sealed class EngineUpdater
         _net = new NetClient(proxy);
     }
 
-    /// <summary>官方 Windows x64 包的名字，例如 mediamtx_v1.21.3_windows_amd64.zip。</summary>
+    /// <summary>
+    /// 官方 Windows x64 包的名字，例如 mediamtx_v1.21.3_windows_amd64.zip。
+    /// <para>
+    /// 写死 amd64 是因为官方只发这一个 Windows 资产：v1.21.3 的 8 个文件里
+    /// darwin / linux 都有 arm64，Windows 只有 windows_amd64。
+    /// 因此本程序目前也只出 x64 包，做 Windows on ARM 之前得先解决引擎从哪来。
+    /// </para>
+    /// </summary>
     public static string AssetName(string tag)
         => "mediamtx_" + tag + "_windows_amd64.zip";
 

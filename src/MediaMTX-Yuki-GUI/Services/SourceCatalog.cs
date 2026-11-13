@@ -34,9 +34,18 @@ public static class SourceCatalog
     public static UpdateSource Find(string? id)
         => All.FirstOrDefault(source => source.Id == id) ?? All[0];
 
-    /// <summary>拼「查最新 release」的 URL。</summary>
+    /// <summary>拼「查最新正式版」的 URL。注意它<b>不返回预发布</b>。</summary>
     public static string LatestReleaseUrl(UpdateSource source, string repo)
         => source.ApiBase + "/repos/" + repo + "/releases/latest";
+
+    /// <summary>
+    /// 拼「按发布时间倒序列出 release」的 URL，用来连带预发布一起挑。
+    /// <c>/releases/latest</c> 会把 alpha / beta / rc 全部跳过——只有预发布时它直接 404，
+    /// 本程序自己的版本现在正是 alpha，所以那一路必须走这个列表再自己挑最大值。
+    /// </summary>
+    public static string ReleasesUrl(UpdateSource source, string repo, int perPage = 20)
+        => source.ApiBase + "/repos/" + repo + "/releases?per_page="
+           + perPage.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
     /// <summary>拼「下载某个 release 资产」的 URL。</summary>
     public static string AssetUrl(UpdateSource source, string repo, string tag, string assetName)

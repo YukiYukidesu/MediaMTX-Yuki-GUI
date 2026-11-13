@@ -41,32 +41,28 @@ public sealed class UpdateChecker
         string repo,
         string? sourceId = null,
         bool force = false,
-        CancellationToken ct = default)
+        CancellationToken ct = default,
+        bool includePrerelease = false)
     {
         if (string.IsNullOrWhiteSpace(repo)) return null;
 
-        if (!force && TryReadCache(repo, out string cached)) return cached;
+        // 两种查法结果可能不同，缓存必须分开存，否则先查正式版的那一路会把
+        // 后查预发布的那一路覆盖掉（或者反过来）
+        string cacheKey = includePrerelease ? repo + "#pre" : repo;
+
+        if (!force && TryReadCache(cacheKey, out string cached)) return cached;
 
         try
         {
             SourceCatalog.UpdateSource source = SourceCatalog.Find(sourceId);
 
-            using HttpResponseMessage response = await _net.Http
-                .GetAsync(SourceCatalog.LatestReleaseUrl(source, repo), ct)
-                .ConfigureAwait(false);
+            string? value = includePrerelease
+                ? await ReadLatestFromListAsync(source, repo, ct).ConfigureAwait(false)
+                : await ReadLatestStableAsync(source, repo, ct).ConfigureAwait(false);
 
-            if (!response.IsSuccessStatusCode) return null;
-
-            string body = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
-
-            using JsonDocument document = JsonDocument.Parse(body);
-
-            if (!document.RootElement.TryGetProperty("tag_name", out JsonElement tag)) return null;
-
-            string? value = tag.GetString();
             if (string.IsNullOrWhiteSpace(value)) return null;
 
-            WriteCache(repo, value);
+            WriteCache(cacheKey, value);
 
             return value;
         }
@@ -75,6 +71,78 @@ public sealed class UpdateChecker
             // 离线、超时、被墙都走这里，静默跳过
             return null;
         }
+    }
+
+    /// <summary>走 <c>/releases/latest</c> 只拿正式版。</summary>
+    private async Task<string?> ReadLatestStableAsync(
+        SourceCatalog.UpdateSource source,
+        string repo,
+        CancellationToken ct)
+    {
+        using HttpResponseMessage response = await _net.Http
+            .GetAsync(SourceCatalog.LatestReleaseUrl(source, repo), ct)
+            .ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode) return null;
+
+        string body = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+
+        using JsonDocument document = JsonDocument.Parse(body);
+
+        if (!document.RootElement.TryGetProperty("tag_name", out JsonElement tag)) return null;
+
+        return tag.GetString();
+    }
+
+    /// <summary>
+    /// 走 <c>/releases</c> 列表，把预发布一起收进来，按版本号挑最大的那个。
+    /// 列表是「按创建时间倒序」而不是「按版本号」，所以不能直接取第一条——
+    /// 补发一个老版本的修复包时，第一条比真·最新版还老。
+    /// </summary>
+    private async Task<string?> ReadLatestFromListAsync(
+        SourceCatalog.UpdateSource source,
+        string repo,
+        CancellationToken ct)
+    {
+        using HttpResponseMessage response = await _net.Http
+            .GetAsync(SourceCatalog.ReleasesUrl(source, repo), ct)
+            .ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode) return null;
+
+        string body = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+
+        using JsonDocument document = JsonDocument.Parse(body);
+
+        if (document.RootElement.ValueKind != JsonValueKind.Array) return null;
+
+        string? best = null;
+        SemanticVersion bestVersion = default;
+
+        foreach (JsonElement release in document.RootElement.EnumerateArray())
+        {
+            // 草稿在这里根本不会返回，但标记了 draft 的仍可能来自别的 key，保险起见跳过
+            if (release.TryGetProperty("draft", out JsonElement draft) && draft.ValueKind == JsonValueKind.True)
+            {
+                continue;
+            }
+
+            if (!release.TryGetProperty("tag_name", out JsonElement tag)) continue;
+
+            string? candidate = tag.GetString();
+
+            if (string.IsNullOrWhiteSpace(candidate)) continue;
+
+            if (!SemanticVersion.TryParse(candidate, out SemanticVersion version)) continue;
+
+            if (best is null || version.CompareTo(bestVersion) > 0)
+            {
+                best = candidate;
+                bestVersion = version;
+            }
+        }
+
+        return best;
     }
 
     // ====== 缓存 ======

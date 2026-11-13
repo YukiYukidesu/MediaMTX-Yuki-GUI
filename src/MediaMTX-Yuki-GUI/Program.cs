@@ -32,6 +32,10 @@ internal static class Program
         // 正扫着新文件而删不掉，白白占几十 MB。趁启动这会儿没人占，收个尾。
         Services.EngineUpdater.SweepLeftovers();
 
+        // 上次更新本程序要么成功（exe 已换掉、安装包该清），要么卡在半路
+        // （脚本没跑完，update 目录里躺着一个几十 MB 的 zip）。两种情况都该收掉。
+        Services.AppUpdater.SweepLeftovers();
+
         // 开机自启登记的那条命令带 --tray：登录后只留托盘图标，不弹主窗口。
         // 这里就把意图告诉外壳，窗口的建与不建由它决定（它才管得住托盘）。
         Services.AppShell.StartInTray = Array.Exists(args, arg =>

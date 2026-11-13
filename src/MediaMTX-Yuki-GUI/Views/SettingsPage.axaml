@@ -176,7 +176,8 @@
 
         <c:SettingRow Glyph="&#xE896;"
                       Title="{loc:Loc c016-007}"
-                      Description="{loc:Loc l016-002}">
+                      Description="{loc:Loc l016-002}"
+                      Caution="{loc:Loc l016-022}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox HorizontalAlignment="Right"
                       ItemsSource="{Binding UpdateSourceNames}"
@@ -187,7 +188,8 @@
 
         <c:SettingRow Glyph="&#xE8F1;"
                       Title="{loc:Loc c016-008}"
-                      Description="{loc:Loc l016-003}">
+                      Description="{loc:Loc l016-003}"
+                      Caution="{loc:Loc l016-023}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox HorizontalAlignment="Right"
                       ItemsSource="{Binding UpdateSourceNames}"
@@ -221,6 +223,7 @@
                       Title="{loc:Loc c016-010}"
                       Description="{loc:Loc l016-005}"
                       Required="{Binding UpdateProxyRequired}"
+                      Caution="{loc:Loc l016-024}"
                       Warning="{Binding UpdateProxyWarning}">
           <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
             <TextBox Width="256"
@@ -237,26 +240,64 @@
           </StackPanel>
         </c:SettingRow>
 
+        <!-- 本程序更新：按下面的通道决定查正式版还是连预览版一起查，装完自己重启 -->
         <c:SettingRow Glyph="&#xE895;"
-                      Title="{loc:Loc c016-014}"
-                      Description="{loc:Loc l016-014}">
+                      Title="{loc:Loc c016-017}"
+                      Description="{loc:Loc l016-020}"
+                      Caution="{loc:Loc l016-025}">
           <StackPanel Orientation="Horizontal" Spacing="12">
-            <Button Content="{loc:Loc c016-015}"
+            <ComboBox MinWidth="112"
+                      SelectedIndex="{Binding AppChannelIndex, Mode=TwoWay}">
+              <ComboBoxItem Content="{loc:Loc c016-021}" />
+              <ComboBoxItem Content="{loc:Loc c016-022}" />
+            </ComboBox>
+            <Button Content="{loc:Loc c016-019}"
                     MinWidth="88"
-                    Command="{Binding CheckUpdatesCommand}" />
+                    Command="{Binding CheckAppUpdateCommand}" />
             <Button Classes="primary"
-                    Content="{loc:Loc c016-016}"
+                    Content="{loc:Loc c016-020}"
+                    MinWidth="88"
+                    Command="{Binding InstallAppUpdateCommand}"
+                    IsVisible="{Binding HasAppUpdate}" />
+          </StackPanel>
+        </c:SettingRow>
+
+        <TextBlock Text="{Binding AppUpdateStatus}"
+                   Classes="hint"
+                   TextWrapping="Wrap"
+                   Margin="28,0,0,8"
+                   IsVisible="{Binding HasAppUpdateStatus}" />
+
+        <!--
+          引擎更新：只查正式版；装前先停引擎，装完按原状态恢复。
+          通道切到「推荐适配版本」时不看远端，只跟 GUI 验证过的那一版比，不一致就往回换。
+        -->
+        <c:SettingRow Glyph="&#xE7F8;"
+                      Title="{loc:Loc c016-018}"
+                      Description="{loc:Loc l016-021}"
+                      Caution="{Binding EngineUpdateCaution}">
+          <StackPanel Orientation="Horizontal" Spacing="12">
+            <ComboBox MinWidth="132"
+                      SelectedIndex="{Binding EngineChannelIndex, Mode=TwoWay}">
+              <ComboBoxItem Content="{loc:Loc c016-023}" />
+              <ComboBoxItem Content="{loc:Loc c016-024}" />
+            </ComboBox>
+            <Button Content="{loc:Loc c016-019}"
+                    MinWidth="88"
+                    Command="{Binding CheckEngineUpdateCommand}" />
+            <Button Classes="primary"
+                    Content="{loc:Loc c016-020}"
                     MinWidth="88"
                     Command="{Binding InstallEngineUpdateCommand}"
                     IsVisible="{Binding HasEngineUpdate}" />
           </StackPanel>
         </c:SettingRow>
 
-        <TextBlock Text="{Binding UpdateStatus}"
+        <TextBlock Text="{Binding EngineUpdateStatus}"
                    Classes="hint"
                    TextWrapping="Wrap"
                    Margin="28,0,0,8"
-                   IsVisible="{Binding HasUpdateStatus}" />
+                   IsVisible="{Binding HasEngineUpdateStatus}" />
 
       </StackPanel>
     </c:SmoothExpander>
@@ -735,6 +776,19 @@
           </StackPanel>
 
           <TextBlock Grid.Column="1" Text="{Binding EngineVersion}" Classes="hint" />
+        </Grid>
+
+        <!-- 推荐适配的引擎版本：跟软件版本号放一起看，用户才知道「适配到哪一版」 -->
+        <Grid ColumnDefinitions="200,*" Margin="0,8,0,0">
+          <TextBlock Text="{loc:Loc c026-010}" Classes="field-label" />
+
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+            <TextBlock Text="{Binding RecommendedEngineVersionText}" Classes="hint" />
+            <TextBlock Text="{loc:Loc l026-003}"
+                       Classes="hint"
+                       Opacity="0.75"
+                       VerticalAlignment="Center" />
+          </StackPanel>
         </Grid>
 
         <Border Height="1"

@@ -21,7 +21,7 @@ public sealed class AppConfig
     public int ConfigVersion { get; set; }
 
     /// <summary>版本号的字符串形式，纯给人看（日志、关于页），不参与比较。</summary>
-    public string AppVersion { get; set; } = "v0.0.1";
+    public string AppVersion { get; set; } = "v0.0.2";
 
     public EngineOptions Engine { get; set; } = new();
 
