@@ -31,6 +31,9 @@ public sealed class AppUpdater
     /// <param name="Languages">解出来的语言包：文件名 → 内容。</param>
     public sealed record Package(string Tag, string ExePath, IReadOnlyDictionary<string, string> Languages);
 
+    /// <summary>替换脚本的文件名，Prepare 与 SweepLeftovers 共用。</summary>
+    private const string UpdateScriptName = "apply-update.cmd";
+
     private readonly NetClient _net;
 
     /// <summary>走哪条代理去下载，由外部注入（设置页里那句「更新下载代理」）。</summary>
@@ -105,7 +108,7 @@ public sealed class AppUpdater
 
         string backup = target + ".old";
 
-        string script = Path.Combine(AppPaths.UpdateDir, "apply-update.cmd");
+        string script = Path.Combine(AppPaths.UpdateDir, UpdateScriptName);
 
         try
         {
@@ -134,6 +137,19 @@ public sealed class AppUpdater
         {
             if (!Directory.Exists(AppPaths.UpdateDir)) return;
 
+            // 脚本还在，说明上一次更新正走到一半：它后面要从解压目录里拷新 exe，
+            // 这时候把那个目录当垃圾清掉，它就只剩「把 .old 挪回来再重启」一条路，
+            // 等于白跑一趟。脚本正常几秒就自己删掉自己，留给下次启动来清更稳。
+            if (File.Exists(Path.Combine(AppPaths.UpdateDir, UpdateScriptName))) return;
+
+            // 解压出来的目录要连里面一起清：Extract 会把新 exe 与语言包铺在
+            // config\update\[tag]\ 下面，只扫第一层文件的话，卡在「解压完、脚本还没跑起来」
+            // 那个窗口被杀就会永远留着廿几 MB。
+            foreach (string directory in Directory.GetDirectories(AppPaths.UpdateDir))
+            {
+                TryDeleteDirectory(directory);
+            }
+
             foreach (string file in Directory.GetFiles(AppPaths.UpdateDir))
             {
                 // 脚本本身正在跑的时候删不掉，那正好——它跑完会自己删自己
@@ -143,6 +159,19 @@ public sealed class AppUpdater
         catch (Exception)
         {
             // 清不掉不影响启动
+        }
+    }
+
+    /// <summary>删一个目录，连带里面所有东西。删不掉就算了，下次启动再试。</summary>
+    private static void TryDeleteDirectory(string directory)
+    {
+        try
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            // 里面有文件被占着就留着，不影响启动
         }
     }
 
