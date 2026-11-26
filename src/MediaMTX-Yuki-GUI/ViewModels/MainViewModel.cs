@@ -1774,8 +1774,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         RefreshStats();
 
-        // 关系图的圆点与连线跟着这一轮指标一起变，不必等下一次配置变化
-        RefreshMapStates();
+        // 关系图暂不跟指标实时变色：上一版两秒重绘一次整图，实测会让界面隔两秒卡一下。
+        // 结构变化时 RefreshOverview() 仍会整图重建，颜色随之更新。
+        // RefreshMapStates();
 
         long t4 = Environment.TickCount64;
 
