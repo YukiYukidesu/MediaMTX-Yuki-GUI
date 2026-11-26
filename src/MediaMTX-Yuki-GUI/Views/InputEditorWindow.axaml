@@ -18,7 +18,7 @@
     <TextBlock Grid.Row="0"
                Margin="0,0,0,20"
                Classes="page-subtitle"
-               Text="{loc:Loc l003-010}" />
+               Text="{loc:Loc l003-019}" />
 
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
       <StackPanel>
@@ -43,8 +43,8 @@
                   Classes.on="{Binding IsPushKind}"
                   PointerPressed="OnPushKindPressed">
             <StackPanel>
-              <TextBlock Classes="kind-title" Text="{loc:Loc l003-011}" />
-              <TextBlock Classes="kind-note" Text="{loc:Loc l003-012}" />
+              <TextBlock Classes="kind-title" Text="{loc:Loc l003-001}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l003-020}" />
             </StackPanel>
           </Border>
 
@@ -54,8 +54,8 @@
                   IsVisible="{Binding ShowPullCard}"
                   PointerPressed="OnPullKindPressed">
             <StackPanel>
-              <TextBlock Classes="kind-title" Text="{loc:Loc l003-016}" />
-              <TextBlock Classes="kind-note" Text="{loc:Loc l003-018}" />
+              <TextBlock Classes="kind-title" Text="{loc:Loc l003-002}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l003-025}" />
             </StackPanel>
           </Border>
         </Grid>
@@ -98,7 +98,7 @@
                    Classes="danger-hint"
                    IsVisible="{Binding PathInvalid}"
                    Text="{Binding PathErrorText}" />
-        <TextBlock Classes="hint" Text="{loc:Loc l003-019}" />
+        <TextBlock Classes="hint" Text="{loc:Loc l003-026}" />
 
         <!-- 主动拉流时才显示；留空则是接收推流 -->
         <StackPanel Margin="0,16,0,0" IsVisible="{Binding IsPulling}">
@@ -114,8 +114,8 @@
           <TextBlock Margin="0,0,0,4"
                      Classes="danger-hint"
                      IsVisible="{Binding PullUrlInvalid}"
-                     Text="{loc:Loc l003-020}" />
-          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{loc:Loc l003-021}" />
+                     Text="{loc:Loc l003-027}" />
+          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{loc:Loc l003-028}" />
         </StackPanel>
 
         <TextBlock Margin="0,4,0,0"
@@ -139,7 +139,7 @@
                     IsVisible="{Binding HasAccounts}">
               <StackPanel Orientation="Horizontal" Spacing="3">
                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="+" />
-                <TextBlock VerticalAlignment="Center" Text="{loc:Loc l003-022}" />
+                <TextBlock VerticalAlignment="Center" Text="{loc:Loc l003-029}" />
               </StackPanel>
               <Button.Flyout>
                 <Flyout Placement="BottomEdgeAlignedRight"
@@ -158,7 +158,7 @@
                         <TextBlock Margin="4,2,4,4"
                                    Classes="hint"
                                    IsVisible="{Binding !HasSelectableAccounts}"
-                                   Text="{loc:Loc l003-023}" />
+                                   Text="{loc:Loc l003-030}" />
                         <ItemsControl ItemsSource="{Binding SelectableAccounts}">
                           <ItemsControl.ItemTemplate>
                             <DataTemplate>

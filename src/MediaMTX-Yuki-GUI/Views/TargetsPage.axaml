@@ -26,12 +26,12 @@
         <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
                   ItemsSource="{Binding TargetSortChoices}"
                   SelectedIndex="{Binding TargetSortIndex}"
-                  ToolTip.Tip="{loc:Loc l004-005}" />
-        <TextBlock Text="{loc:Loc l004-002}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+                  ToolTip.Tip="{loc:Loc l004-014}" />
+        <TextBlock Text="{loc:Loc l004-011}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding TargetEnabledFirst}"
-                      ToolTip.Tip="{loc:Loc l004-006}" />
+                      ToolTip.Tip="{loc:Loc l004-015}" />
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
@@ -206,9 +206,9 @@
                                      Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
                                      CommandParameter="{Binding Server}" />
                         <c:PillBadge Grid.Column="6" Text="{Binding ProxyText}" Variant="{Binding ProxyVariant}"
-                                     ToolTip.Tip="{loc:Loc l004-007}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc l004-016}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="7" Text="{Binding ResponseText}" Variant="Metric"
-                                     ToolTip.Tip="{loc:Loc l004-008}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc l004-017}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="8" Text="{Binding SpeedText}" Variant="Metric"
                                      ToolTip.Tip="{loc:Loc c004-010}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="9" Text="{Binding SentText}" Variant="Metric"
@@ -254,7 +254,7 @@
                                 HorizontalAlignment="Left" VerticalAlignment="Center">
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
-                              ToolTip.Tip="{loc:Loc l004-009}"
+                              ToolTip.Tip="{loc:Loc l004-018}"
                               Command="{Binding $parent[Window].DataContext.ToggleTargetEnabledCommand}"
                               CommandParameter="{Binding}">
                         <Panel>
@@ -280,7 +280,7 @@
                               Background="Transparent" Cursor="SizeAll"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
-                              ToolTip.Tip="{loc:Loc l004-010}">
+                              ToolTip.Tip="{loc:Loc l004-019}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -304,7 +304,7 @@
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
           <TextBlock Text="{loc:Loc c004-011}" Classes="empty-title" HorizontalAlignment="Center" />
-          <TextBlock Text="{loc:Loc l004-004}" Classes="hint" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc l004-013}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
         <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。

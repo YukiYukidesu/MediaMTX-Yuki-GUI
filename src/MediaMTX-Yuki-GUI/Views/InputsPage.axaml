@@ -26,12 +26,12 @@
         <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
                   ItemsSource="{Binding InputSortChoices}"
                   SelectedIndex="{Binding InputSortIndex}"
-                  ToolTip.Tip="{loc:Loc l003-004}" />
-        <TextBlock Text="{loc:Loc l003-002}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+                  ToolTip.Tip="{loc:Loc l003-013}" />
+        <TextBlock Text="{loc:Loc l003-011}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding InputEnabledFirst}"
-                      ToolTip.Tip="{loc:Loc l003-005}" />
+                      ToolTip.Tip="{loc:Loc l003-014}" />
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
@@ -248,7 +248,7 @@
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
                               IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc l003-006}"
+                              ToolTip.Tip="{loc:Loc l003-015}"
                               Command="{Binding $parent[Window].DataContext.ToggleInputEnabledCommand}"
                               CommandParameter="{Binding}">
                         <Panel>
@@ -277,7 +277,7 @@
                                 Classes.on="{Binding IsRecording}"
                                 IsVisible="{Binding !RuntimeDisabled}"
                                 IsEnabled="{Binding EffectiveEnabled}"
-                                ToolTip.Tip="{loc:Loc l003-007}"
+                                ToolTip.Tip="{loc:Loc l003-016}"
                                 Command="{Binding $parent[Window].DataContext.ToggleInputRecordCommand}"
                                 CommandParameter="{Binding}">
                           <TextBlock Classes="glyph" Text="&#xE7C8;" />
@@ -286,7 +286,7 @@
                         <!-- 录像：关掉录制之后历史片段还在，所以不跟录制开关联动 -->
                         <Button Classes="icon-square"
                                 IsVisible="{Binding !RuntimeDisabled}"
-                                ToolTip.Tip="{loc:Loc l003-008}"
+                                ToolTip.Tip="{loc:Loc l003-017}"
                                 Command="{Binding $parent[Window].DataContext.ShowRecordingsCommand}"
                                 CommandParameter="{Binding}">
                           <TextBlock Classes="glyph" Text="&#xE81C;" />
@@ -303,7 +303,7 @@
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
                               IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc l003-009}">
+                              ToolTip.Tip="{loc:Loc l003-018}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -327,7 +327,7 @@
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
           <TextBlock Text="{loc:Loc c003-008}" Classes="empty-title" HorizontalAlignment="Center" />
-          <TextBlock Text="{loc:Loc l003-003}" Classes="hint" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc l003-012}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
         <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。

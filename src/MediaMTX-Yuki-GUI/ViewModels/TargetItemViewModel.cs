@@ -57,7 +57,7 @@ public sealed partial class TargetItemViewModel : ObservableObject
 
     /// <summary>绑定的输入源显示名，由主视图模型在加载后回填。</summary>
     [ObservableProperty]
-    private string _inputSourceName = L.T("l004-034");
+    private string _inputSourceName = L.T("l004-036");
 
     /// <summary>这条目标走哪条代理：follow 跟随默认 / direct 直连 / custom 自定义。</summary>
     [ObservableProperty]
@@ -149,10 +149,10 @@ public sealed partial class TargetItemViewModel : ObservableObject
     /// 引擎侧更细的说法（推流中、重连中…）留给 <see cref="StateTip"/>，不挤在这四个字里。
     /// </summary>
     public string StateText
-        => RuntimeDisabled ? L.T("l004-046")
-           : !Enabled ? L.T("l004-015")
-           : IsErrored ? L.T("l004-047")
-           : L.T("l004-048");
+        => RuntimeDisabled ? L.T("l004-008")
+           : !Enabled ? L.T("l004-001")
+           : IsErrored ? L.T("l004-048")
+           : L.T("l004-009");
 
     /// <summary>悬停时才看的细分状态，引擎报什么就说什么。</summary>
     public string StateTip
