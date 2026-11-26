@@ -128,10 +128,56 @@
              高级模式下即使还没建账号也留出这块，好让人知道这里能配 -->
         <StackPanel Margin="0,18,0,0" IsVisible="{Binding ShowAccountPicker}">
 
-          <TextBlock Classes="field-label" Text="{loc:Loc c003-043}" />
+          <!-- 标题行右边放「+ 添加账号」：标签再多也不会把它挤到下一行去 -->
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock VerticalAlignment="Center"
+                       Classes="field-label"
+                       Text="{loc:Loc c003-043}" />
 
-          <!-- 账号盒子：有账号时放标签和加号；一个账号都没有时它就是一块空框，
-               免得让人以为这里根本配不了 -->
+            <Button x:Name="AddAccountButton"
+                    Grid.Column="1"
+                    IsVisible="{Binding HasAccounts}">
+              <StackPanel Orientation="Horizontal" Spacing="3">
+                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="+" />
+                <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-048}" />
+              </StackPanel>
+              <Button.Flyout>
+                <Flyout Placement="BottomEdgeAlignedRight"
+                        ShowMode="Transient"
+                        FlyoutPresenterClasses="bare">
+                  <Border Padding="6"
+                          Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                          BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                          BorderThickness="1"
+                          BoxShadow="0 8 24 0 #33000000"
+                          CornerRadius="{StaticResource DsRadiusMd}">
+                    <ScrollViewer MaxHeight="240"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto">
+                      <StackPanel>
+                        <TextBlock Margin="4,2,4,4"
+                                   Classes="hint"
+                                   IsVisible="{Binding !HasSelectableAccounts}"
+                                   Text="{loc:Loc l003-017}" />
+                        <ItemsControl ItemsSource="{Binding SelectableAccounts}">
+                          <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                              <Button Classes="account-option"
+                                      Click="OnPickAccountClick"
+                                      Content="{Binding User}" />
+                            </DataTemplate>
+                          </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                      </StackPanel>
+                    </ScrollViewer>
+                  </Border>
+                </Flyout>
+              </Button.Flyout>
+            </Button>
+          </Grid>
+
+          <!-- 账号盒子：标签最多露三行，再多就在框里滚动，不把下面的开关挤走；
+               一个账号都没有时它就是一块空框，免得让人以为这里根本配不了 -->
           <Border Margin="0,6,0,0"
                   MinHeight="62"
                   Padding="10"
@@ -139,12 +185,14 @@
                   BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                   BorderThickness="1"
                   CornerRadius="{StaticResource DsRadiusMd}">
-            <Panel>
-              <StackPanel IsVisible="{Binding HasAccounts}">
-                <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding SelectedAccounts}">
+            <Grid>
+              <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                            VerticalScrollBarVisibility="Disabled"
+                            IsVisible="{Binding HasAccounts}">
+                <ItemsControl ItemsSource="{Binding SelectedAccounts}">
                   <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                      <WrapPanel Orientation="Horizontal" />
+                      <StackPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                   </ItemsControl.ItemsPanel>
 
@@ -163,49 +211,7 @@
                     </DataTemplate>
                   </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
-                <Button x:Name="AddAccountButton"
-                        Margin="0,2,0,0"
-                        HorizontalAlignment="Left"
-                        IsVisible="{Binding HasAccounts}">
-                  <StackPanel Orientation="Horizontal" Spacing="3">
-                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="+" />
-                    <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-048}" />
-                  </StackPanel>
-                  <Button.Flyout>
-                    <Flyout Placement="BottomEdgeAlignedLeft"
-                            ShowMode="Transient"
-                            FlyoutPresenterClasses="bare">
-                      <Border Padding="6"
-                              Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                              BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                              BorderThickness="1"
-                              BoxShadow="0 8 24 0 #33000000"
-                              CornerRadius="{StaticResource DsRadiusMd}">
-                        <ScrollViewer MaxHeight="240"
-                                      HorizontalScrollBarVisibility="Disabled"
-                                      VerticalScrollBarVisibility="Auto">
-                          <StackPanel>
-                            <TextBlock Margin="4,2,4,4"
-                                       Classes="hint"
-                                       IsVisible="{Binding !HasSelectableAccounts}"
-                                       Text="{loc:Loc l003-017}" />
-                            <ItemsControl ItemsSource="{Binding SelectableAccounts}">
-                              <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                  <Button Classes="account-option"
-                                          Click="OnPickAccountClick"
-                                          Content="{Binding User}" />
-                                </DataTemplate>
-                              </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                          </StackPanel>
-                        </ScrollViewer>
-                      </Border>
-                    </Flyout>
-                  </Button.Flyout>
-                </Button>
-              </StackPanel>
+              </ScrollViewer>
 
               <TextBlock HorizontalAlignment="Center"
                          VerticalAlignment="Center"
@@ -214,7 +220,7 @@
                          TextWrapping="Wrap"
                          IsVisible="{Binding IsAccountListEmpty}"
                          Text="{loc:Loc l003-016}" />
-            </Panel>
+            </Grid>
           </Border>
 
           <TextBlock Margin="0,2,0,0"
