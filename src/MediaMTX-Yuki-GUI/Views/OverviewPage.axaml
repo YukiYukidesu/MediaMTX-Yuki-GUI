@@ -20,7 +20,7 @@
         <DockPanel LastChildFill="True">
           <TextBlock DockPanel.Dock="Left" Text="{Binding Glyph}" FontSize="9" Margin="0,0,5,0"
                      VerticalAlignment="Center" />
-          <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+          <TextBlock Text="{Binding Title}" FontSize="12" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
         </DockPanel>
       </Border>
     </DataTemplate>

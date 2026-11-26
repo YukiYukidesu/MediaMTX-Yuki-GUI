@@ -331,7 +331,7 @@ public sealed partial class MainViewModel
 
         TextLayout layout = new(title, new Typeface(FontFamily.Default), MapNodeFontSize, Brushes.Black);
 
-        return layout.WidthIncludingTrailingWhitespace + 18;
+        return layout.WidthIncludingTrailingWhitespace;
     }
 
     private static double EstimateNodeWidth(string title)
