@@ -2287,9 +2287,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     private async Task RefreshResponseAsync(CancellationToken ct)
     {
-        foreach (TargetItemViewModel item in Targets.Where(item => item.Enabled).ToList())
+        List<TargetItemViewModel> rows = [.. Targets.Where(item => item.Enabled)];
+
+        // 串行探测时每条目标要等一次 TCP 建连（域名还要先解析），几十条累加就是秒级；
+        // 并发发起，最慢的那条决定总耗时
+        string[] texts = await Task.WhenAll(rows.Select(item => ProbeResponseAsync(item.Server, ct)));
+
+        for (int index = 0; index < rows.Count; index++)
         {
-            item.ResponseText = await ProbeResponseAsync(item.Server, ct);
+            rows[index].ResponseText = texts[index];
         }
     }
 
