@@ -149,7 +149,10 @@ public sealed partial class MainViewModel
             }
             else
             {
-                clusterWidths[index] = source is null ? widest : sourceWidths[index] + MapClusterGap + widest;
+                // 孤儿目标要把左边那截断头虚线也算进去
+                clusterWidths[index] = source is null
+                    ? MapLinkStub + widest
+                    : sourceWidths[index] + MapClusterGap + widest;
             }
             blockHeights[index] = ClusterHeight(targets.Count);
         }
@@ -188,7 +191,7 @@ public sealed partial class MainViewModel
             double clusterWidth = clusterWidths[placement.Id];
             double sourceRight = clusterX + sourceWidths[placement.Id];
             // 孤儿目标没有源，左边不留簇内间距，否则就是一块空白
-            double targetX = source is null ? clusterX : sourceRight + MapClusterGap;
+            double targetX = source is null ? clusterX + MapLinkStub : sourceRight + MapClusterGap;
             double blockHeight = blockHeights[placement.Id];
             double sourceY = clusterY + (blockHeight - MapNodeHeight) / 2;
 
