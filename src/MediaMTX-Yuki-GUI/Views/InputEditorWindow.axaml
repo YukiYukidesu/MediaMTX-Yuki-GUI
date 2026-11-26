@@ -179,8 +179,8 @@
           <!-- 账号盒子：标签最多露三行，再多就在框里滚动，不把下面的开关挤走；
                一个账号都没有时它就是一块空框，免得让人以为这里根本配不了 -->
           <Border Margin="0,6,0,0"
-                  MinHeight="62"
-                  Padding="10"
+                  MinHeight="48"
+                  Padding="10,8,10,3"
                   Background="{DynamicResource DsWellBrush}"
                   BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                   BorderThickness="1"
@@ -189,6 +189,13 @@
               <ScrollViewer HorizontalScrollBarVisibility="Auto"
                             VerticalScrollBarVisibility="Disabled"
                             IsVisible="{Binding HasAccounts}">
+                <!-- 换成列表页那种扁平滚动条：默认那条带两端箭头、还粗，
+                     而且它贴着 ScrollViewer 的底，框内留白一多就显得悬在半空 -->
+                <ScrollViewer.Styles>
+                  <Style Selector="ScrollBar:horizontal">
+                    <Setter Property="Theme" Value="{StaticResource DsFlatScrollBar}" />
+                  </Style>
+                </ScrollViewer.Styles>
                 <ItemsControl ItemsSource="{Binding SelectedAccounts}">
                   <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -220,6 +227,14 @@
                          TextWrapping="Wrap"
                          IsVisible="{Binding IsAccountListEmpty}"
                          Text="{loc:Loc l003-016}" />
+
+              <TextBlock HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Classes="hint"
+                         TextAlignment="Center"
+                         TextWrapping="Wrap"
+                         IsVisible="{Binding ShowPickHint}"
+                         Text="{loc:Loc l003-018}" />
             </Grid>
           </Border>
 

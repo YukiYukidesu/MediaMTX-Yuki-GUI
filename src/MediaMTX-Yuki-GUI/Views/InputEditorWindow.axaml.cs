@@ -148,6 +148,9 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
     /// <summary>还能挑的账号不为空；全加完了就在弹层里说一句「账号都在这儿了」。</summary>
     public bool HasSelectableAccounts => SelectableAccounts.Count > 0;
 
+    /// <summary>账号建好了、但这颗标签一颗都没选：框里给一句「没选就等于不限制」。</summary>
+    public bool ShowPickHint => _accounts.Count > 0 && SelectedAccounts.Count == 0;
+
     public ObservableCollection<ProtocolChoice> ProtocolChoices { get; } =
     [
         new(InputProtocols.Rtmp, "RTMP"),
@@ -586,6 +589,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
         Raise(nameof(HasSelectableAccounts));
         Raise(nameof(IsAccountListEmpty));
+        Raise(nameof(ShowPickHint));
     }
 
     private bool Set<T>(ref T field, T value, [CallerMemberName] string? name = null)
