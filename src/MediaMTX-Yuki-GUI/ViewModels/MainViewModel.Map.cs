@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MediaMTX_Yuki_GUI.Controls;
+using MediaMTX_Yuki_GUI.Services;
 
 namespace MediaMTX_Yuki_GUI.ViewModels;
 
@@ -14,9 +15,8 @@ public sealed partial class MainViewModel
     private const double MapRowGap = 8;
     private const double MapBlockGap = 20;
     // 簇内：源右缘到目标左缘的距离；簇之间再拉开，才看得出「哪些是一组」
-    private const double MapClusterGap = 32;
-    private const double MapGridGapX = 40;
-    private const double MapGridGapY = 30;
+    private const double MapClusterGap = 72;
+    private const double MapGridGap = 32;
     private const double MapPadding = 4;
 
     // 胶囊宽度的估算：字号 12，中文按整字、拉丁按半个字，再加图标、间距、两侧内边距与一点余量
@@ -107,7 +107,7 @@ public sealed partial class MainViewModel
             clusters.Add((null, [target]));
         }
 
-        // 列宽取所有簇里最宽的那个源、最宽的那个目标：列宽统一，网格才对得齐
+        // 列宽取所有簇里最宽的那个源、最宽的那个目标：簇宽统一，装箱出来的矩形才整齐
         double sourceWidth = MapMinNodeWidth;
         double targetWidth = MapMinNodeWidth;
 
@@ -123,31 +123,55 @@ public sealed partial class MainViewModel
 
         double clusterWidth = sourceWidth + MapClusterGap + targetWidth;
 
-        // 一行能放几簇由面板宽度定：放得下几簇就并排几簇，放不下就换行
-        int fitColumns = (int)Math.Floor((_mapViewportWidth - MapPadding * 2 + MapGridGapX) / (clusterWidth + MapGridGapX));
-        int cols = Math.Clamp(fitColumns, 1, Math.Max(1, clusters.Count));
-        int rows = (clusters.Count + cols - 1) / cols;
-
-        double[] rowHeights = new double[Math.Max(1, rows)];
+        // 每簇当成一个矩形交给装箱器：宽度统一，高度随目标数量变
+        List<PackItem> blocks = [];
 
         for (int index = 0; index < clusters.Count; index++)
         {
-            int row = index / cols;
-
-            rowHeights[row] = Math.Max(rowHeights[row], ClusterHeight(clusters[index].Targets.Count));
+            blocks.Add(new PackItem(index, clusterWidth, ClusterHeight(clusters[index].Targets.Count)));
         }
 
-        double contentWidth = cols * clusterWidth + (cols - 1) * MapGridGapX;
+        // 高度给足：装箱只负责「按列铺开」，永远放得下；多出来的高度由滚动条兜着
+        double stackHeight = 0;
+
+        foreach (PackItem block in blocks)
+        {
+            stackHeight += block.Height + MapGridGap;
+        }
+
+        PackResult packed = PackSolver.Solve(
+            Math.Max(1, _mapViewportWidth - MapPadding * 2),
+            Math.Max(1, Math.Max(stackHeight, _mapViewportHeight - MapPadding * 2)),
+            blocks,
+            MapGridGap);
+
+        List<PackPlacement> placements = [.. packed.Placements];
+
+        // 装箱失败（只在面板比一簇还小时发生）就退回竖排：宁可滚动，也不丢节点
+        if (placements.Count != clusters.Count)
+        {
+            placements.Clear();
+
+            double fallbackY = 0;
+
+            for (int index = 0; index < clusters.Count; index++)
+            {
+                placements.Add(new PackPlacement(index, 0, fallbackY));
+                fallbackY += ClusterHeight(clusters[index].Targets.Count) + MapGridGap;
+            }
+        }
+
+        double contentWidth = 0;
         double contentHeight = 0;
 
-        for (int row = 0; row < rows; row++)
+        foreach (PackPlacement placement in placements)
         {
-            contentHeight += rowHeights[row];
-
-            if (row < rows - 1) contentHeight += MapGridGapY;
+            PackItem item = blocks[placement.Id];
+            contentWidth = Math.Max(contentWidth, placement.X + item.Width);
+            contentHeight = Math.Max(contentHeight, placement.Y + item.Height);
         }
 
-        // 画布至少和面板一样大：内容多就往下长（纵向滚动），内容少就居中，不整体缩放
+        // 画布至少和面板一样大：内容多就往下长（纵向滚动），内容少就居中
         double mapWidth = Math.Max(contentWidth + MapPadding * 2, _mapViewportWidth);
         double mapHeight = Math.Max(contentHeight + MapPadding * 2, _mapViewportHeight);
         double left = Math.Max(MapPadding, (mapWidth - contentWidth) / 2);
@@ -156,72 +180,62 @@ public sealed partial class MainViewModel
         List<RelationLinkShape> links = [];
         HashSet<string> alive = new(StringComparer.Ordinal);
 
-        double clusterY = top;
-
-        for (int row = 0; row < rows; row++)
+        foreach (PackPlacement placement in placements)
         {
-            for (int col = 0; col < cols; col++)
+            (InputItemViewModel? source, List<TargetItemViewModel> targets) = clusters[placement.Id];
+
+            double clusterX = left + placement.X;
+            double clusterY = top + placement.Y;
+            double sourceRight = clusterX + sourceWidth;
+            double targetX = sourceRight + MapClusterGap;
+            double blockHeight = ClusterHeight(targets.Count);
+            double sourceY = clusterY + (blockHeight - MapNodeHeight) / 2;
+
+            if (source is not null)
             {
-                int index = row * cols + col;
+                double nodeWidth = EstimateNodeWidth(source.DisplayName);
 
-                if (index >= clusters.Count) break;
+                RelationNode sourceNode = UpsertNode("s:" + source.Id, true, sourceRight - nodeWidth, sourceY, nodeWidth, alive);
+                FillSourceNode(sourceNode, source, engineRunning);
 
-                (InputItemViewModel? source, List<TargetItemViewModel> targets) = clusters[index];
-
-                double clusterX = left + col * (clusterWidth + MapGridGapX);
-                double sourceRight = clusterX + sourceWidth;
-                double targetX = sourceRight + MapClusterGap;
-                double blockHeight = ClusterHeight(targets.Count);
-                double sourceY = clusterY + (blockHeight - MapNodeHeight) / 2;
-
-                if (source is not null)
+                // 一个目标都没绑：右边伸一小截断头虚线，一眼看出这条源没接东西
+                if (targets.Count == 0)
                 {
-                    double nodeWidth = EstimateNodeWidth(source.DisplayName);
-
-                    RelationNode sourceNode = UpsertNode("s:" + source.Id, true, sourceRight - nodeWidth, sourceY, nodeWidth, alive);
-                    FillSourceNode(sourceNode, source, engineRunning);
-
-                    // 一个目标都没绑：右边伸一小截断头虚线，一眼看出这条源没接东西
-                    if (targets.Count == 0)
-                    {
-                        links.Add(new RelationLinkShape(
-                            sourceRight,
-                            sourceY + MapNodeHeight / 2,
-                            sourceRight + MapLinkStub,
-                            sourceY + MapNodeHeight / 2,
-                            MapLinkState.Off));
-                    }
-                }
-
-                double targetY = clusterY;
-
-                foreach (TargetItemViewModel target in targets)
-                {
-                    RelationNode targetNode = UpsertNode(
-                        "t:" + target.Id,
-                        false,
-                        targetX,
-                        targetY,
-                        EstimateNodeWidth(target.DisplayName),
-                        alive);
-
-                    FillTargetNode(targetNode, target, engineRunning, source is null);
-
-                    if (source is not null)
-                    {
-                        links.Add(new RelationLinkShape(
-                            sourceRight,
-                            sourceY + MapNodeHeight / 2,
-                            targetX,
-                            targetY + MapNodeHeight / 2,
-                            LinkState(source, target, engineRunning)));
-                    }
-
-                    targetY += MapNodeHeight + MapRowGap;
+                    links.Add(new RelationLinkShape(
+                        sourceRight,
+                        sourceY + MapNodeHeight / 2,
+                        sourceRight + MapLinkStub,
+                        sourceY + MapNodeHeight / 2,
+                        MapLinkState.Off));
                 }
             }
 
-            clusterY += rowHeights[row] + MapGridGapY;
+            double targetY = clusterY;
+
+            foreach (TargetItemViewModel target in targets)
+            {
+                RelationNode targetNode = UpsertNode(
+                    "t:" + target.Id,
+                    false,
+                    targetX,
+                    targetY,
+                    EstimateNodeWidth(target.DisplayName),
+                    alive);
+
+                FillTargetNode(targetNode, target, engineRunning, source is null);
+
+                if (source is not null)
+                {
+                    links.Add(new RelationLinkShape(
+                        sourceRight,
+                        sourceY + MapNodeHeight / 2,
+                        targetX,
+                        targetY + MapNodeHeight / 2,
+                        LinkState(source, target, engineRunning)));
+                }
+
+                targetY += MapNodeHeight + MapRowGap;
+            }
         }
 
         DropStaleNodes(alive);
