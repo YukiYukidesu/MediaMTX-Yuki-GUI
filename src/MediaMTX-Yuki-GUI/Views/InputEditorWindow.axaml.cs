@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -70,17 +71,19 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
         _advancedMode = advancedMode;
         _accounts = accounts;
 
-        // 这条 path 允许哪些账号推。空集合 = 不限制，界面上把每一行都置成「未勾选」，
-        // 旁边那句说明会讲清空勾选意味着谁都能推
+        // 这条 path 允许哪些账号推。空集合 = 不限制，界面上就是一颗标签都没有；
+        // 已选的那些显示成带叉的标签，剩下的进「+」弹层里等着被挑
+        HashSet<string> allowed = new(item.PublishAccountIds, StringComparer.OrdinalIgnoreCase);
+
         foreach (AuthAccountItemViewModel account in accounts)
         {
-            AccountChecks.Add(new PublishAccountCheck(
-                account.Id,
-                account.User,
-                item.PublishAccountIds.Contains(account.Id, StringComparer.OrdinalIgnoreCase)));
+            if (allowed.Contains(account.Id))
+                SelectedAccounts.Add(new AccountChip(account.Id, account.User));
         }
 
-        ShowAccountPicker = accounts.Count > 0;
+        RebuildSelectable();
+
+        ShowAccountPicker = advancedMode || accounts.Count > 0;
 
         // 简洁模式下不出现录制开关；已经在录的那一路保持原值，不让一次编辑把它抹掉
         _record = item.Record;
@@ -88,7 +91,10 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
         SourceName = item.Name;
         Protocol = item.Protocol;
         PathName = item.Path;
-        Port = item.Port > 0 ? item.Port.ToString(CultureInfo.InvariantCulture) : "";
+        // 端口框只在用户特意改过端口时才带数字；跟协议默认值一样就留空，靠占位说明
+        Port = item.Port > 0 && item.Port != InputProtocols.DefaultPort(item.Protocol)
+            ? item.Port.ToString(CultureInfo.InvariantCulture)
+            : "";
         Enabled = isNew || item.Enabled;
         _pullUrl = item.SourceUrl;
         _sourceKind = item.SourceUrl.Length > 0 ? SourceKindPull : SourceKindPush;
@@ -123,11 +129,24 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
     public string ConfirmText
         => _isNew ? L.T("c001-021") : L.T("c001-022");
 
-    /// <summary>「允许推流的账号」每一行的勾选状态。</summary>
-    public ObservableCollection<PublishAccountCheck> AccountChecks { get; } = [];
+    /// <summary>「允许推流的账号」里已经加进来的那些，显示成一颗颗带叉的标签。</summary>
+    public ObservableCollection<AccountChip> SelectedAccounts { get; } = [];
 
-    /// <summary>账号表为空时整块不显示——没建过账号的时候摆一串空勾选框只会让人困惑。</summary>
+    /// <summary>「+」弹层里还能挑的账号：账号表里还没被加进来的。</summary>
+    public ObservableCollection<AccountOption> SelectableAccounts { get; } = [];
+
+    /// <summary>账号表为空时整块不显示——没建过账号的时候摆一堆空标签只会让人困惑。
+    /// 高级模式下例外：这块要露出来，好让人知道这里能配。</summary>
     public bool ShowAccountPicker { get; }
+
+    /// <summary>高级模式下账号表还是空的：显示一句引导，别只留个空块。</summary>
+    public bool IsAccountListEmpty => _accounts.Count == 0;
+
+    /// <summary>一个账号都没建：连「+」按钮都不出现，省得点开是个空列表。</summary>
+    public bool HasAccounts => _accounts.Count > 0;
+
+    /// <summary>还能挑的账号不为空；全加完了就在弹层里说一句「账号都在这儿了」。</summary>
+    public bool HasSelectableAccounts => SelectableAccounts.Count > 0;
 
     public ObservableCollection<ProtocolChoice> ProtocolChoices { get; } =
     [
@@ -227,9 +246,19 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
         get => _protocol;
         set
         {
+            string previous = _protocol;
+
             if (!Set(ref _protocol, value))
             {
                 return;
+            }
+
+            // 换了协议，框里那串数字多半是旧协议的默认值，清掉让新协议的默认接管
+            if (Port.Length > 0
+                && int.TryParse(Port, NumberStyles.Integer, CultureInfo.InvariantCulture, out int current)
+                && current == InputProtocols.DefaultPort(previous))
+            {
+                Port = "";
             }
 
             Raise(nameof(PortPlaceholder));
@@ -509,20 +538,55 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
         _item.SourceUrl = IsPulling ? PullUrl.Trim() : "";
         _item.Record = RecordShown;
 
-        // 全都没勾就当成「不限制」，跟空列表语义一致
+        // 一颗标签都没加就当成「不限制」，跟空列表语义一致
         _item.PublishAccountIds.Clear();
 
-        foreach (PublishAccountCheck check in AccountChecks)
-        {
-            if (check.IsChecked)
-                _item.PublishAccountIds.Add(check.Id);
-        }
+        foreach (AccountChip chip in SelectedAccounts)
+            _item.PublishAccountIds.Add(chip.Id);
 
         Close(true);
     }
 
     private void Cancel()
         => Close(false);
+
+    /// <summary>从弹层里挑了一个账号：加进已选，弹层收起来。</summary>
+    private void OnPickAccountClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { DataContext: AccountOption option })
+            return;
+
+        SelectedAccounts.Add(new AccountChip(option.Id, option.User));
+        RebuildSelectable();
+        AddAccountButton.Flyout?.Hide();
+    }
+
+    /// <summary>点了标签上的叉：从已选里摘掉，回到候选列表。</summary>
+    private void OnRemoveAccountClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Button { DataContext: AccountChip chip })
+            return;
+
+        SelectedAccounts.Remove(chip);
+        RebuildSelectable();
+    }
+
+    /// <summary>按账号表原顺序把候选列表重算一遍。加一个、摘一个都走它，省得两头各维护一份。</summary>
+    private void RebuildSelectable()
+    {
+        SelectableAccounts.Clear();
+
+        HashSet<string> picked = new(SelectedAccounts.Select(chip => chip.Id), StringComparer.OrdinalIgnoreCase);
+
+        foreach (AuthAccountItemViewModel account in _accounts)
+        {
+            if (!picked.Contains(account.Id))
+                SelectableAccounts.Add(new AccountOption(account.Id, account.User));
+        }
+
+        Raise(nameof(HasSelectableAccounts));
+        Raise(nameof(IsAccountListEmpty));
+    }
 
     private bool Set<T>(ref T field, T value, [CallerMemberName] string? name = null)
     {
@@ -546,22 +610,17 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
         public override string ToString() => Name;
     }
 
-    /// <summary>「允许推流的账号」里的一行。勾上就是只允许这些账号推这条 path。</summary>
-    public partial class PublishAccountCheck : ObservableObject
+    /// <summary>已选账号标签上的一行。只读快照——「在不在 SelectedAccounts 里」就是勾没勾。</summary>
+    public sealed record AccountChip(string Id, string User)
     {
-        public PublishAccountCheck(string id, string user, bool isChecked)
-        {
-            Id = id;
-            User = user;
-            _isChecked = isChecked;
-        }
+        // 标签在无障碍树里拿 ToString 当名字，不覆盖会显示成一长串记录体
+        public override string ToString() => User;
+    }
 
-        public string Id { get; }
-
-        public string User { get; }
-
-        [ObservableProperty]
-        private bool _isChecked;
+    /// <summary>「+」弹层里的一行候选账号。</summary>
+    public sealed record AccountOption(string Id, string User)
+    {
+        public override string ToString() => User;
     }
 
 }

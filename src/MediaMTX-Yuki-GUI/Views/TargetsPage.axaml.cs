@@ -1,3 +1,4 @@
+using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -27,5 +28,30 @@ public partial class TargetsPage : UserControl
             L.T("c001-018"),
             L.T("c001-020"),
             () => viewModel.RemoveTargetCommand.Execute(item));
+    }
+
+    /// <summary>批量绑定：开个小窗选输入源，点了确定才动列表。</summary>
+    private void OnBindTargetsClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel viewModel) return;
+
+        int count = viewModel.SelectedCount;
+
+        if (count == 0) return;
+        if (TopLevel.GetTopLevel(this) is not Window owner) return;
+
+        string headline = L.T("l004-022").Replace("{n}", count.ToString(CultureInfo.InvariantCulture));
+        BindTargetsWindow window = new(headline, viewModel.BindInputChoices);
+
+        // 关窗后照 Confirmed 判断，不走 await —— 这一页没有异步事件处理器
+        window.Closed += (_, _) =>
+        {
+            if (!window.Confirmed) return;
+            if (window.Selected is not InputChoice choice) return;
+
+            viewModel.BindSelectedTargets(choice.Id);
+        };
+
+        window.ShowDialog(owner);
     }
 }

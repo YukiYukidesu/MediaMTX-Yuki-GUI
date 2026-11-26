@@ -1269,6 +1269,39 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     }
 
     /// <summary>
+    /// 把勾选的转发目标批量绑到同一条输入源上。
+    /// 只改绑定的那一条，端口、地址这些一律不碰；一条都没变就只回一句提示。
+    /// </summary>
+    public void BindSelectedTargets(string inputId)
+    {
+        int changed = 0;
+
+        foreach (TargetItemViewModel item in Targets)
+        {
+            if (!item.IsSelected) continue;
+            if (string.Equals(item.InputSourceId, inputId, StringComparison.Ordinal)) continue;
+
+            item.InputSourceId = inputId;
+            changed++;
+        }
+
+        if (changed > 0)
+        {
+            ApplySoon();
+            RefreshOverview();
+        }
+
+        ShowToast(changed > 0
+            ? L.T("t004-007").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            : L.T("t004-008"),
+            changed > 0 ? ToastKind.Success : ToastKind.Info);
+    }
+
+    /// <summary>批量绑定弹层里的候选：只列真实存在的输入源，不带「未指定」。</summary>
+    public IReadOnlyList<InputChoice> BindInputChoices
+        => Inputs.Select(input => new InputChoice(input.Id, input.ShortId + " : " + input.DisplayName)).ToList();
+
+    /// <summary>
     /// 删除勾选的转发目标。批量删的是一片，误触代价大，走模态确认。
     /// </summary>
     [RelayCommand(CanExecute = nameof(HasSelection))]

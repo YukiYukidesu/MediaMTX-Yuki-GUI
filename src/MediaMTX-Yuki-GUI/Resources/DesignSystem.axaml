@@ -466,6 +466,70 @@
     <Setter Property="Foreground" Value="{StaticResource DsDangerStrong}" />
   </Style>
 
+  <Style Selector="Button.batch-blue">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="#0B6BCB" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Foreground" Value="#0B6BCB" />
+    <Setter Property="Padding" Value="10,3" />
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="CornerRadius" Value="4" />
+  </Style>
+
+  <Style Selector="Button.batch-blue:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="#140B6BCB" />
+    <Setter Property="BorderBrush" Value="#0B6BCB" />
+    <Setter Property="Foreground" Value="#0B6BCB" />
+  </Style>
+
+  <Style Selector="Button.batch-blue:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#240B6BCB" />
+    <Setter Property="BorderBrush" Value="#0B6BCB" />
+    <Setter Property="Foreground" Value="#0B6BCB" />
+  </Style>
+
+  <!-- 已选账号的标签：一颗浅底胶囊 + 一个叉，点叉就摘掉 -->
+  <Style Selector="Border.account-chip">
+    <Setter Property="Background" Value="{DynamicResource DsWellBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="8,2,2,2" />
+  </Style>
+
+  <Style Selector="Button.chip-close">
+    <Setter Property="MinWidth" Value="0" />
+    <Setter Property="Padding" Value="4,0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+  </Style>
+
+  <Style Selector="Button.chip-close:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource DsDangerStrong}" />
+  </Style>
+
+  <Style Selector="Button.chip-close:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource DsDangerStrong}" />
+  </Style>
+
+  <!-- 「+」弹层里的候选行：整行可点，悬停给一点底色 -->
+  <Style Selector="Button.account-option">
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="MinWidth" Value="150" />
+    <Setter Property="Padding" Value="10,5" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+
+  <Style Selector="Button.account-option:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource DsWellBrush}" />
+  </Style>
+
   <!-- 气泡确认：Flyout 自带的宿主容器本身就有底色、边框和 12 号内边距，
        里面再套一层我们自己画的圆角框，看着就是「框外面还有一个框」。
        把宿主整个抹平，外观全交给内容里那一层。 -->

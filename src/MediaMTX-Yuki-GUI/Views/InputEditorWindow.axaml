@@ -123,13 +123,14 @@
                    IsVisible="{Binding HasPortWarning}"
                    Text="{Binding PortWarning}" />
 
-        <!-- 允许推流的账号：一个都不勾 = 不限制，任何账号都能推这条 path。
-             账号表是空的时候整块不出现，没建账号摆一串空勾选框只会让人困惑 -->
+        <!-- 允许推流的账号：一颗标签都没加 = 不限制，任何账号都能推这条 path。
+             账号多的时候点「+」从弹层里挑，已选的显示成带叉的标签，点叉就摘掉；
+             高级模式下即使还没建账号也留出这块，好让人知道这里能配 -->
         <StackPanel Margin="0,18,0,0" IsVisible="{Binding ShowAccountPicker}">
 
           <TextBlock Classes="field-label" Text="{loc:Loc c003-043}" />
 
-          <ItemsControl Margin="0,4,0,0" ItemsSource="{Binding AccountChecks}">
+          <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding SelectedAccounts}">
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>
                 <WrapPanel Orientation="Horizontal" />
@@ -138,16 +139,72 @@
 
             <ItemsControl.ItemTemplate>
               <DataTemplate>
-                <CheckBox Margin="0,0,16,0"
-                          Content="{Binding User}"
-                          IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                <Border Classes="account-chip" Margin="0,0,6,6">
+                  <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="{Binding User}" />
+                    <Button Margin="2,0,0,0"
+                            Classes="chip-close"
+                            Click="OnRemoveAccountClick"
+                            Content="&#x00D7;"
+                            ToolTip.Tip="{loc:Loc c003-055}" />
+                  </StackPanel>
+                </Border>
               </DataTemplate>
             </ItemsControl.ItemTemplate>
           </ItemsControl>
 
+          <Button x:Name="AddAccountButton"
+                  Margin="0,2,0,0"
+                  HorizontalAlignment="Left"
+                  IsVisible="{Binding HasAccounts}">
+            <StackPanel Orientation="Horizontal" Spacing="3">
+              <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="+" />
+              <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-054}" />
+            </StackPanel>
+            <Button.Flyout>
+              <Flyout Placement="BottomEdgeAlignedLeft"
+                      ShowMode="Transient"
+                      FlyoutPresenterClasses="bare">
+                <Border Padding="6"
+                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        BoxShadow="0 8 24 0 #33000000"
+                        CornerRadius="{StaticResource DsRadiusMd}">
+                  <ScrollViewer MaxHeight="240"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                      <TextBlock Margin="4,2,4,4"
+                                 Classes="hint"
+                                 IsVisible="{Binding !HasSelectableAccounts}"
+                                 Text="{loc:Loc l003-017}" />
+                      <ItemsControl ItemsSource="{Binding SelectableAccounts}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate>
+                            <Button Classes="account-option"
+                                    Click="OnPickAccountClick"
+                                    Content="{Binding User}" />
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </StackPanel>
+                  </ScrollViewer>
+                </Border>
+              </Flyout>
+            </Button.Flyout>
+          </Button>
+
+          <TextBlock Margin="0,4,0,0"
+                     Classes="hint"
+                     TextWrapping="Wrap"
+                     IsVisible="{Binding IsAccountListEmpty}"
+                     Text="{loc:Loc l003-016}" />
+
           <TextBlock Margin="0,2,0,0"
                      Classes="hint"
                      TextWrapping="Wrap"
+                     IsVisible="{Binding HasAccounts}"
                      Text="{loc:Loc l003-014}" />
         </StackPanel>
 

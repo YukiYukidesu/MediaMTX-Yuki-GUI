@@ -1,0 +1,36 @@
+<ui:FAAppWindow x:Class="MediaMTX_Yuki_GUI.Views.BindTargetsWindow"
+                xmlns="https://github.com/avaloniaui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:ui="using:FluentAvalonia.UI.Windowing"
+                xmlns:loc="using:MediaMTX_Yuki_GUI"
+                Title="{loc:Loc c004-064}"
+                Width="460"
+                SizeToContent="Height"
+                CanResize="False"
+                CanMaximize="False"
+                WindowStartupLocation="CenterOwner"
+                TextOptions.TextRenderingMode="Antialias">
+
+  <Grid RowDefinitions="Auto,Auto" Margin="24">
+
+    <StackPanel Grid.Row="0">
+      <TextBlock x:Name="HeadlineText" Classes="page-subtitle" TextWrapping="Wrap" />
+
+      <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-049}" />
+      <ComboBox x:Name="InputBox" Margin="0,4,0,0" HorizontalAlignment="Stretch">
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Name}" />
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <TextBlock x:Name="EmptyHint" Margin="0,6,0,0" Classes="hint" Text="{loc:Loc l004-021}" />
+    </StackPanel>
+
+    <StackPanel Grid.Row="1" Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+      <Button MinWidth="88" Content="{loc:Loc c001-020}" Click="OnCancelClick" IsCancel="True" />
+      <Button x:Name="ConfirmButton" Margin="8,0,0,0" MinWidth="88" Classes="primary"
+              Content="{loc:Loc c001-026}" Click="OnConfirmClick" IsDefault="True" />
+    </StackPanel>
+  </Grid>
+</ui:FAAppWindow>
