@@ -1725,7 +1725,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         // 两秒一轮时，每轮属性更新让界面线程被堵 0.4~0.9 秒（[UI] 卡顿日志实测），
         // 先拉长到五秒确认归因，再把每轮要刷的字段压下来
-        using PeriodicTimer timer = new(TimeSpan.FromSeconds(5));
+        using PeriodicTimer timer = new(TimeSpan.FromSeconds(2));
 
         try
         {
@@ -1770,7 +1770,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         bool checkErrors = (_metricsRound++ % 5) == 0;
 
         // 只有输入源页（1）与输出目标页（2）看得到这些行；别的页面不写，省掉整轮重绘
-        bool commitRows = SelectedPage is 1 or 2;
+        // 数值每轮都算（统计要用），界面上隔一轮写一次：速率本来就是给人看个趋势，
+        // 每次写都会让整行重绘，隔一轮能把重绘次数砍半
+        bool commitRows = SelectedPage is 1 or 2 && (_metricsRound % 2 == 1);
 
         foreach (InputItemViewModel input in Inputs)
         {
