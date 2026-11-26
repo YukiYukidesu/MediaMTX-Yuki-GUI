@@ -133,22 +133,7 @@ public sealed partial class MainViewModel
         for (int candidate = 1; candidate <= maxColumns; candidate++)
         {
             double width = (viewportWidth - MapPadding * 2 - (candidate - 1) * MapGridGap) / candidate;
-            int rows = (clusters.Count + candidate - 1) / candidate;
-            double[] heights = new double[rows];
-            double totalHeight = 0;
-
-            for (int position = 0; position < order.Count; position++)
-            {
-                int row = position / candidate;
-
-                heights[row] = Math.Max(heights[row], ClusterHeight(clusters[order[position]].Targets.Count));
-            }
-
-            for (int row = 0; row < rows; row++)
-            {
-                totalHeight += heights[row] + (row == rows - 1 ? 0 : MapGridGap);
-            }
-
+            (double totalHeight, _) = StackIntoColumns(candidate, order, clusters, MapGridGap);
             double totalWidth = candidate * width + (candidate - 1) * MapGridGap;
             double scale = Math.Min(viewportWidth / totalWidth, viewportHeight / totalHeight);
 
@@ -170,38 +155,15 @@ public sealed partial class MainViewModel
         }
 
         // 固定列数网格：每行最多 columns 簇，行高取该行最高的那一簇，横向铺满面板
-        int rowCount = (clusters.Count + columns - 1) / columns;
-        double[] rowHeights = new double[rowCount];
-
-        for (int position = 0; position < order.Count; position++)
-        {
-            int row = position / columns;
-
-            rowHeights[row] = Math.Max(rowHeights[row], ClusterHeight(clusters[order[position]].Targets.Count));
-        }
-
+        (double contentHeight, List<PackPlacement> stacked) = StackIntoColumns(columns, order, clusters, MapGridGap);
         List<PackPlacement> placements = [];
 
-        for (int position = 0; position < order.Count; position++)
+        foreach (PackPlacement stack in stacked)
         {
-            int row = position / columns;
-            double rowY = 0;
-
-            for (int above = 0; above < row; above++)
-            {
-                rowY += rowHeights[above] + MapGridGap;
-            }
-
-            placements.Add(new PackPlacement(order[position], (position % columns) * (clusterWidth + MapGridGap), rowY));
+            placements.Add(new PackPlacement(stack.Id, stack.X * (clusterWidth + MapGridGap), stack.Y));
         }
 
         double contentWidth = clusters.Count == 0 ? 0 : columns * clusterWidth + (columns - 1) * MapGridGap;
-        double contentHeight = 0;
-
-        for (int row = 0; row < rowCount; row++)
-        {
-            contentHeight += rowHeights[row] + (row == rowCount - 1 ? 0 : MapGridGap);
-        }
 
         // 画布只包住内容：外层 Viewbox 负责等比缩放与居中，永远不滚动
         double mapWidth = contentWidth + MapPadding * 2;
@@ -309,6 +271,42 @@ public sealed partial class MainViewModel
     }
 
     /// <summary>按名字估一颗胶囊的宽度：中文按整字、拉丁按半字，再加图标与两侧留白。</summary>
+    /// <summary>
+    /// 把簇依次塞进当前最矮的一列：列高自然拉平，不会像按行铺那样在矮簇下方留空洞。
+    /// 返回的是「列号 + 该列内的 Y」，列号由调用方按簇宽换算成 X。
+    /// </summary>
+    private static (double TotalHeight, List<PackPlacement> Placements) StackIntoColumns(
+        int columns,
+        List<int> order,
+        List<(InputItemViewModel? Source, List<TargetItemViewModel> Targets)> clusters,
+        double gap)
+    {
+        List<PackPlacement> placements = [];
+        double[] columnHeights = new double[columns];
+
+        foreach (int index in order)
+        {
+            int target = 0;
+
+            for (int column = 1; column < columns; column++)
+            {
+                if (columnHeights[column] < columnHeights[target]) target = column;
+            }
+
+            placements.Add(new PackPlacement(index, target, columnHeights[target]));
+            columnHeights[target] += ClusterHeight(clusters[index].Targets.Count) + gap;
+        }
+
+        double totalHeight = 0;
+
+        foreach (double height in columnHeights)
+        {
+            totalHeight = Math.Max(totalHeight, height);
+        }
+
+        return (Math.Max(0, totalHeight - gap), placements);
+    }
+
     private static double EstimateNodeWidth(string title)
     {
         double textWidth = 0;
