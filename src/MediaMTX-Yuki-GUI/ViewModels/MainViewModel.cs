@@ -2320,10 +2320,12 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private async Task AddTargetAsync()
     {
+        // 新建默认「未指定」：绑定是推流的前提，替用户猜一条容易让他以为配好了，
+        // 结果是悄悄多推一路出去。让他自己在下拉里挑。
         TargetItemViewModel item = new()
         {
             Name = NextTargetName(),
-            InputSourceId = Inputs.FirstOrDefault()?.Id ?? "",
+            InputSourceId = string.Empty,
         };
 
         await ShowTargetEditorAsync(item, isNew: true);
