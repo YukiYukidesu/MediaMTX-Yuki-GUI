@@ -143,37 +143,24 @@ public sealed partial class MainViewModel
             blockHeights[index] = ClusterHeight(targets.Count);
         }
 
-        // 摆法只服务缩放比：高的先放，每簇塞进当前最矮的一列（列宽随该列最宽的簇走）
-        List<int> order = [.. Enumerable.Range(0, clusters.Count).OrderByDescending(index => blockHeights[index])];
 
-        List<PackPlacement> placements = [];
-        double contentWidth = 0;
-        double contentHeight = 0;
-        double bestScale = 0;
+        // 纯数学：每簇当一块矩形交给底左填充，缩放比由包围盒直接算，不做任何扫描
+        double canvasWidth = Math.Max(1, viewportWidth - MapPadding * 2);
+        double canvasHeight = Math.Max(1, viewportHeight - MapPadding * 2);
 
-        // 列数从 1 到 n 全试一遍：不预设任何上限，谁让包围盒的缩放比最大就选谁
-        for (int candidate = 1; candidate <= Math.Max(1, clusters.Count); candidate++)
+        List<PackItem> items = [];
+
+        for (int index = 0; index < clusters.Count; index++)
         {
-            (double width, double height, List<PackPlacement> arranged) = StackWide(
-                candidate,
-                order,
-                clusterWidths,
-                blockHeights,
-                MapGridGap);
-
-            double scale = Math.Min(viewportWidth / width, viewportHeight / height);
-
-            if (scale <= bestScale) continue;
-
-            bestScale = scale;
-            contentWidth = width;
-            contentHeight = height;
-            placements = arranged;
+            items.Add(new PackItem(index, clusterWidths[index], blockHeights[index]));
         }
 
-        // 画布只包住内容：外层 Viewbox 负责等比缩放与居中，永远不滚动
-        double mapWidth = contentWidth + MapPadding * 2;
-        double mapHeight = contentHeight + MapPadding * 2;
+        TightResult tight = TightPacker.Pack(canvasWidth, canvasHeight, items, MapGridGap);
+        List<PackPlacement> placements = [.. tight.Placements];
+
+        // 画布按 100% 尺寸铺开，外层 Viewbox 缩到一屏（缩放比就是 tight.Scale）
+        double mapWidth = tight.Width + MapPadding * 2;
+        double mapHeight = tight.Height + MapPadding * 2;
         double left = MapPadding;
         double top = MapPadding;
 
