@@ -83,7 +83,7 @@
     <Grid Grid.Row="2" RowDefinitions="Auto,*">
       <StackPanel Grid.Row="0" Margin="{StaticResource DsCardGap}">
         <TextBlock Text="{loc:Loc c002-001}" FontSize="15" FontWeight="SemiBold" />
-        <TextBlock Text="{loc:Loc l002-006}" Classes="hint" TextWrapping="Wrap" />
+        <TextBlock Text="{loc:Loc l002-001}" Classes="hint" TextWrapping="Wrap" />
       </StackPanel>
 
       <Border Grid.Row="1" Classes="well" Padding="12">
@@ -134,11 +134,11 @@
                        HorizontalAlignment="Center"
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
             <TextBlock Text="{loc:Loc c002-002}" Classes="empty-title" HorizontalAlignment="Center" />
-            <TextBlock Text="{loc:Loc l002-010}" Classes="hint" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc l002-003}" Classes="hint" HorizontalAlignment="Center" />
           </StackPanel>
 
           <!-- 孤儿目标现在图上看得见，这条提示仍然有用：它在说这些目标不会被推流 -->
-          <TextBlock Grid.Row="1" Text="{loc:Loc l002-008}" FontSize="11.5" Foreground="#D9822B"
+          <TextBlock Grid.Row="1" Text="{loc:Loc l002-002}" FontSize="11.5" Foreground="#D9822B"
                      Margin="0,8,0,0" TextWrapping="Wrap"
                      IsVisible="{Binding HasUnboundTargets}" />
 

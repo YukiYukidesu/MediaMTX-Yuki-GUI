@@ -54,10 +54,10 @@ public sealed partial class MainViewModel
     private bool _targetEnabledFirst = true;
 
     public IReadOnlyList<string> InputSortChoices => BuildSortChoices(
-        L.T("l003-032"), [L.T("c003-002"), L.T("c003-004"), L.T("c003-005")]);
+        L.T("l003-037"), [L.T("c003-002"), L.T("c003-004"), L.T("c003-005")]);
 
     public IReadOnlyList<string> TargetSortChoices => BuildSortChoices(
-        L.T("l004-043"), [L.T("l004-006"), L.T("c004-005"), L.T("c004-006")]);
+        L.T("l004-048"), [L.T("l004-015"), L.T("c004-005"), L.T("c004-006")]);
 
     /// <summary>
     /// 排序下拉的内容：第一项是手动顺序，其余按「键 × 方向」展开成「备注 ↑ / 备注 ↓ / 协议 ↑…」。

@@ -18,12 +18,12 @@
         <Button Padding="12,4" FontSize="12"
                 Content="{loc:Loc b007-002}"
                 IsEnabled="{Binding HasLogs}"
-                ToolTip.Tip="{loc:Loc l007-003}"
+                ToolTip.Tip="{loc:Loc l007-002}"
                 Command="{Binding CopyLogsCommand}" />
         <Button Padding="12,4" FontSize="12"
                 Content="{loc:Loc b007-003}"
                 IsEnabled="{Binding HasLogs}"
-                ToolTip.Tip="{loc:Loc l007-004}"
+                ToolTip.Tip="{loc:Loc l007-003}"
                 Command="{Binding ExportLogsCommand}" />
         <Button Padding="12,4" FontSize="12"
                 Content="{loc:Loc b007-001}"

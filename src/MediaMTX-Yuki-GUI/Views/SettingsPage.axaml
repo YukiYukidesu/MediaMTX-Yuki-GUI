@@ -31,7 +31,7 @@
 
         <c:SettingRow Glyph="&#xE790;"
                       Title="{loc:Loc cs01-002}"
-                      Description="{loc:Loc ls01-004}">
+                      Description="{loc:Loc ls01-003}">
           <ComboBox HorizontalAlignment="Right"
                     SelectedIndex="{Binding ThemeIndex, Mode=TwoWay}">
             <ComboBoxItem Content="{loc:Loc bs01-001}" Tag="system" />
@@ -176,8 +176,8 @@
 
         <c:SettingRow Glyph="&#xE896;"
                       Title="{loc:Loc cs04-002}"
-                      Description="{loc:Loc ls04-022}"
-                      Caution="{loc:Loc ls04-015}">
+                      Description="{loc:Loc ls04-011}"
+                      Caution="{loc:Loc ls04-007}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox HorizontalAlignment="Right"
                       ItemsSource="{Binding UpdateSourceNames}"
@@ -188,8 +188,8 @@
 
         <c:SettingRow Glyph="&#xE8F1;"
                       Title="{loc:Loc cs04-003}"
-                      Description="{loc:Loc ls04-023}"
-                      Caution="{loc:Loc ls04-016}">
+                      Description="{loc:Loc ls04-012}"
+                      Caution="{loc:Loc ls04-008}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox HorizontalAlignment="Right"
                       ItemsSource="{Binding UpdateSourceNames}"
@@ -200,9 +200,9 @@
 
         <c:SettingRow Glyph="&#xE968;"
                       Title="{loc:Loc cs04-004}"
-                      Description="{loc:Loc ls04-003}"
+                      Description="{loc:Loc ls04-002}"
                       Required="{Binding StreamProxyRequired}"
-                      Caution="{loc:Loc ls04-012}"
+                      Caution="{loc:Loc ls04-004}"
                       Warning="{Binding StreamProxyWarning}">
           <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
             <TextBox Width="256"
@@ -221,9 +221,9 @@
 
         <c:SettingRow Glyph="&#xE968;"
                       Title="{loc:Loc cs04-005}"
-                      Description="{loc:Loc ls04-005}"
+                      Description="{loc:Loc ls04-003}"
                       Required="{Binding UpdateProxyRequired}"
-                      Caution="{loc:Loc ls04-017}"
+                      Caution="{loc:Loc ls04-009}"
                       Warning="{Binding UpdateProxyWarning}">
           <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
             <TextBox Width="256"
@@ -243,8 +243,8 @@
         <!-- 本程序更新：按下面的通道决定查正式版还是连预览版一起查，装完自己重启 -->
         <c:SettingRow Glyph="&#xE895;"
                       Title="{loc:Loc cs04-006}"
-                      Description="{loc:Loc ls04-013}"
-                      Caution="{loc:Loc ls04-018}">
+                      Description="{loc:Loc ls04-005}"
+                      Caution="{loc:Loc ls04-010}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox MinWidth="112"
                       SelectedIndex="{Binding AppChannelIndex, Mode=TwoWay}">
@@ -274,7 +274,7 @@
         -->
         <c:SettingRow Glyph="&#xE7F8;"
                       Title="{loc:Loc cs04-007}"
-                      Description="{loc:Loc ls04-014}"
+                      Description="{loc:Loc ls04-006}"
                       Caution="{Binding EngineUpdateCaution}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox MinWidth="132"

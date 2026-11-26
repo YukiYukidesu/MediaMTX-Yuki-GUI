@@ -31,9 +31,9 @@
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc b001-006}" Command="{Binding RemoveSelectedAccountsCommand}" />
+                Content="{loc:Loc b001-004}" Command="{Binding RemoveSelectedAccountsCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
-                Content="{loc:Loc l005-006}" Command="{Binding AddAccountCommand}" />
+                Content="{loc:Loc l005-003}" Command="{Binding AddAccountCommand}" />
       </StackPanel>
     </Grid>
 
@@ -95,13 +95,13 @@
                                 HorizontalAlignment="Left"
                                 Margin="8,0,0,0">
                       <Button Classes="icon-square"
-                              ToolTip.Tip="{loc:Loc l001-004}"
+                              ToolTip.Tip="{loc:Loc l001-002}"
                               Command="{Binding $parent[Window].DataContext.EditAccountCommand}"
                               CommandParameter="{Binding}">
                         <TextBlock Classes="glyph" Text="&#xE70F;" />
                       </Button>
                       <Button Classes="icon-square danger"
-                              ToolTip.Tip="{loc:Loc l001-005}"
+                              ToolTip.Tip="{loc:Loc l001-003}"
                               Click="OnRemoveAccountClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>
@@ -126,7 +126,7 @@
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
           <TextBlock Classes="empty-title" Text="{loc:Loc c005-004}" />
-          <TextBlock Classes="hint" Text="{loc:Loc l005-007}" />
+          <TextBlock Classes="hint" Text="{loc:Loc l005-004}" />
         </StackPanel>
 
       </Grid>

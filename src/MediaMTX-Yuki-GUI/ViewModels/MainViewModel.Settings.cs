@@ -623,7 +623,7 @@ public sealed partial class MainViewModel
     /// 不写出来用户没法判断该不该升。
     /// </summary>
     public string EngineUpdateCaution
-        => L.T("ls04-019").Replace("{version}", Services.ProgramVersion.RecommendedEngineVersion);
+        => L.T("ls04-021").Replace("{version}", Services.ProgramVersion.RecommendedEngineVersion);
 
     /// <summary>关于页里那行「推荐引擎版本」。</summary>
     public string RecommendedEngineVersionText => Services.ProgramVersion.RecommendedEngineVersion;
@@ -866,7 +866,7 @@ public sealed partial class MainViewModel
         bool ok = await AppHost.ConfirmAsync(
             L.T(toAdvanced ? "l008-007" : "l008-009"),
             L.T(toAdvanced ? "l008-008" : "l008-010"),
-            L.T("l008-005"));
+            L.T("l008-006"));
 
         if (!ok) return;
 

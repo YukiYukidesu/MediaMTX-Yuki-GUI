@@ -115,7 +115,7 @@ public sealed partial class Localization : ObservableObject
                 if (!done)
                 {
                     // 没翻完的语言也照样列出来，只是挂个后缀提醒一下
-                    displayName += " · " + Instance["ls01-003"];
+                    displayName += " · " + Instance["ls01-004"];
                 }
 
                 result.Add(new LanguageInfo(culture, displayName, done));

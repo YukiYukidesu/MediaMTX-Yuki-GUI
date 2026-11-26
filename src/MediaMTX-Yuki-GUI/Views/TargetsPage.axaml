@@ -26,26 +26,26 @@
         <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
                   ItemsSource="{Binding TargetSortChoices}"
                   SelectedIndex="{Binding TargetSortIndex}"
-                  ToolTip.Tip="{loc:Loc l004-011}" />
-        <TextBlock Text="{loc:Loc l004-013}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+                  ToolTip.Tip="{loc:Loc l004-016}" />
+        <TextBlock Text="{loc:Loc l004-003}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding TargetEnabledFirst}"
-                      ToolTip.Tip="{loc:Loc l004-004}" />
+                      ToolTip.Tip="{loc:Loc l004-014}" />
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
-        <Button Classes="batch-green" Content="{loc:Loc b004-002}" Command="{Binding StartSelectedCommand}" />
-        <Button Classes="batch-red" Content="{loc:Loc b004-003}" Command="{Binding StopSelectedCommand}" />
+        <Button Classes="batch-green" Content="{loc:Loc b001-001}" Command="{Binding StartSelectedCommand}" />
+        <Button Classes="batch-red" Content="{loc:Loc b001-002}" Command="{Binding StopSelectedCommand}" />
         <Button Classes="batch-blue"
-                Content="{loc:Loc b004-008}"
+                Content="{loc:Loc b001-003}"
                 Click="OnBindTargetsClick"
                 IsEnabled="{Binding HasSelection}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc b001-006}" Command="{Binding RemoveSelectedCommand}" />
+                Content="{loc:Loc b001-004}" Command="{Binding RemoveSelectedCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
-                Content="{loc:Loc b004-004}" Command="{Binding AddTargetCommand}" />
+                Content="{loc:Loc b004-002}" Command="{Binding AddTargetCommand}" />
       </StackPanel>
     </Grid>
 
@@ -206,9 +206,9 @@
                                      Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
                                      CommandParameter="{Binding Server}" />
                         <c:PillBadge Grid.Column="6" Text="{Binding ProxyText}" Variant="{Binding ProxyVariant}"
-                                     ToolTip.Tip="{loc:Loc l004-054}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc l004-019}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="7" Text="{Binding ResponseText}" Variant="Metric"
-                                     ToolTip.Tip="{loc:Loc l004-006}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc l004-015}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="8" Text="{Binding SpeedText}" Variant="Metric"
                                      ToolTip.Tip="{loc:Loc c004-010}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="9" Text="{Binding SentText}" Variant="Metric"
@@ -254,7 +254,7 @@
                                 HorizontalAlignment="Left" VerticalAlignment="Center">
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
-                              ToolTip.Tip="{loc:Loc l004-015}"
+                              ToolTip.Tip="{loc:Loc l004-017}"
                               Command="{Binding $parent[Window].DataContext.ToggleTargetEnabledCommand}"
                               CommandParameter="{Binding}">
                         <Panel>
@@ -264,14 +264,14 @@
                         </Panel>
                       </Button>
 
-                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc l001-004}"
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc l001-002}"
                               IsEnabled="{Binding !RuntimeDisabled}"
                               Command="{Binding $parent[Window].DataContext.OpenTargetCommand}"
                               CommandParameter="{Binding}">
                         <TextBlock Classes="glyph" Text="&#xE70F;" />
                       </Button>
 
-                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc l001-005}"
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc l001-003}"
                               Click="OnRemoveTargetClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>
@@ -280,7 +280,7 @@
                               Background="Transparent" Cursor="SizeAll"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
-                              ToolTip.Tip="{loc:Loc l004-053}">
+                              ToolTip.Tip="{loc:Loc l004-018}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -304,7 +304,7 @@
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
           <TextBlock Text="{loc:Loc c004-011}" Classes="empty-title" HorizontalAlignment="Center" />
-          <TextBlock Text="{loc:Loc l004-005}" Classes="hint" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc l004-001}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
         <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。

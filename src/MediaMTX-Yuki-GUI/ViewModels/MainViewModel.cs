@@ -323,12 +323,12 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     public string PageSubtitle => SelectedPage switch
     {
-        0 => L.T("l002-002"),
-        1 => L.T("l003-003"),
-        2 => L.T("l004-003"),
+        0 => L.T("l002-005"),
+        1 => L.T("l003-026"),
+        2 => L.T("l004-022"),
         3 => L.T("l007-001"),
-        6 => L.T("l008-001"),
-        7 => L.T("l005-002"),
+        6 => L.T("l008-005"),
+        7 => L.T("l005-006"),
         _ => L.T("ls00-001"),
     };
 
@@ -351,7 +351,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private string _engineVersion = string.Empty;
 
     public string EngineVersionText
-        => string.IsNullOrEmpty(EngineVersion) ? L.T("l002-001") : L.T("l002-003").Replace("{version}", EngineVersion);
+        => string.IsNullOrEmpty(EngineVersion) ? L.T("l002-004") : L.T("l002-006").Replace("{version}", EngineVersion);
 
     /// <summary>
     /// 版本号是后到的：启动时先查更新、再问引擎要版本，推荐通道又不联网，
@@ -463,7 +463,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     // ====== 引擎状态 ======
 
     [ObservableProperty]
-    private string _engineStatus = L.T("l002-005");
+    private string _engineStatus = L.T("l002-008");
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEngineStopped))]
@@ -524,7 +524,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     /// <summary>按钮文字跟着说什么变：没装是「前往下载」，有新版是「前往更新」。</summary>
     public string TipActionText
-        => Tip == TipKind.EngineMissing ? L.T("b001-001") : L.T("b001-003");
+        => Tip == TipKind.EngineMissing ? L.T("b001-012") : L.T("b001-013");
 
     /// <summary>图标同理：缺引擎是警告三角，有新版本是向下的箭头。</summary>
     public string TipGlyph
@@ -707,7 +707,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (removed <= 0) return;
 
-        Logs.Add(L.T("l007-002").Replace("{n}", removed.ToString(CultureInfo.InvariantCulture)));
+        Logs.Add(L.T("l007-004").Replace("{n}", removed.ToString(CultureInfo.InvariantCulture)));
 
         while (Logs.Count > 500) Logs.RemoveAt(0);
     }
@@ -823,14 +823,14 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (HasAppUpdate)
         {
-            AppUpdateStatus = FormatNote("ls04-007", _latestAppTag, VersionText);
+            AppUpdateStatus = FormatNote("ls04-016", _latestAppTag, VersionText);
             return;
         }
 
         // 连版本号都没拿到，多半是网络或源的问题，别骗用户说已是最新。
         // 正式版通道还多一种可能：仓库里压根没发过正式版（本程序现在只有预览版）。
         AppUpdateStatus = string.IsNullOrWhiteSpace(_latestAppTag)
-            ? L.T(IsStableAppChannel ? "ls04-021" : "ls04-029")
+            ? L.T(IsStableAppChannel ? "ls04-023" : "ls04-029")
             : L.T("ls04-025");
     }
 
@@ -858,7 +858,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (IsRecommendedEngineChannel)
         {
             EngineUpdateStatus = HasEngineUpdate
-                ? FormatNote("ls04-020", target, EngineVersion)
+                ? FormatNote("ls04-022", target, EngineVersion)
                 : FormatNote("ls04-032", target, null);
 
             return;
@@ -866,7 +866,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (HasEngineUpdate)
         {
-            EngineUpdateStatus = FormatNote("ls04-009", target, EngineVersion);
+            EngineUpdateStatus = FormatNote("ls04-018", target, EngineVersion);
             return;
         }
 
@@ -1227,10 +1227,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public bool IsAllSelected => Targets.Count > 0 && SelectedCount == Targets.Count;
 
     /// <summary>工具栏右侧的勾选提示。</summary>
-    public string SelectionText => SelectedCount == 0 ? L.T("l001-002") : L.T("l001-003").Replace("{n}", SelectedCount.ToString());
+    public string SelectionText => SelectedCount == 0 ? L.T("l001-004") : L.T("l001-005").Replace("{n}", SelectedCount.ToString());
 
     /// <summary>全选按钮的文案，全选之后就变成取消全选。</summary>
-    public string SelectAllText => IsAllSelected ? L.T("b001-005") : L.T("b001-004");
+    public string SelectAllText => IsAllSelected ? L.T("b001-015") : L.T("b001-014");
 
     /// <summary>全选与取消全选的切换。</summary>
     [RelayCommand]
@@ -1315,8 +1315,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         {
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
-                L.T("l004-030").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("l001-005"),
+                L.T("l004-036").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                L.T("l001-003"),
                 destructive: true);
 
             if (!ok) return;
@@ -1538,7 +1538,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     private async Task StartEngineAsync()
     {
-        EngineStatus = L.T("l002-007");
+        EngineStatus = L.T("l002-009");
         StatusDetail = string.Empty;
 
         // 先把中转站开起来：runtime.yml 里的本地地址要带真实端口
@@ -1569,7 +1569,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
 
         IsEngineRunning = true;
-        EngineStatus = L.T("l002-009");
+        EngineStatus = L.T("l002-010");
         RefreshStatusDetail();
         ShowToast(L.T("t010-001"), ToastKind.Success);
 
@@ -1682,7 +1682,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
                 {
                     // 已经在 UI 线程上（本方法由 OnEngineExited 在 UI 线程启动），直接写
                     EngineStatus = L.T("l002-015");
-                    StatusDetail = L.T("l002-004");
+                    StatusDetail = L.T("l002-007");
                     ShowToast(L.T("t010-004"), ToastKind.Error);
 
                     return;
@@ -2305,7 +2305,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             Targets.Select(item => item.Name).Where(name => !string.IsNullOrWhiteSpace(name)),
             StringComparer.Ordinal);
 
-        string baseName = L.T("l004-042");
+        string baseName = L.T("l004-047");
 
         if (!used.Contains(baseName)) return baseName;
 
@@ -2661,7 +2661,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (names.Count == 0) return;
 
-        OnEngineLog(L.T("ls04-011").Replace("{names}", signature));
+        OnEngineLog(L.T("ls04-020").Replace("{names}", signature));
     }
 
     /// <summary>中转站按 Id 找回目标配置。</summary>

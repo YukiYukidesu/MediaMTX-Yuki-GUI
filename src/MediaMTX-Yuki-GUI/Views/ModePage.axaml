@@ -36,10 +36,10 @@
                            IsVisible="{Binding IsSimpleMode}" />
             </StackPanel>
 
-            <TextBlock Text="{loc:Loc l008-002}" Classes="hint" TextWrapping="Wrap" />
+            <TextBlock Text="{loc:Loc l008-001}" Classes="hint" TextWrapping="Wrap" />
 
             <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
-            <TextBlock Text="{loc:Loc l008-003}" TextWrapping="Wrap" LineHeight="22" />
+            <TextBlock Text="{loc:Loc l008-002}" TextWrapping="Wrap" LineHeight="22" />
 
             <Button Content="{loc:Loc b008-002}"
                     Margin="0,6,0,0"
@@ -75,10 +75,10 @@
                            IsVisible="{Binding IsAdvancedMode}" />
             </StackPanel>
 
-            <TextBlock Text="{loc:Loc l008-004}" Classes="hint" TextWrapping="Wrap" />
+            <TextBlock Text="{loc:Loc l008-003}" Classes="hint" TextWrapping="Wrap" />
 
             <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
-            <TextBlock Text="{loc:Loc l008-006}" TextWrapping="Wrap" LineHeight="22" />
+            <TextBlock Text="{loc:Loc l008-004}" TextWrapping="Wrap" LineHeight="22" />
 
             <Button Classes="primary"
                     Content="{loc:Loc b008-002}"

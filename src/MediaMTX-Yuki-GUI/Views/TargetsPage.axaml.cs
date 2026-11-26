@@ -25,8 +25,8 @@ public partial class TargetsPage : UserControl
         Popconfirm.Show(
             (Control)sender,
             L.T("c004-019").Replace("{name}", item.DisplayName),
-            L.T("l001-005"),
-            L.T("b001-008"),
+            L.T("l001-003"),
+            L.T("b001-006"),
             () => viewModel.RemoveTargetCommand.Execute(item));
     }
 
@@ -40,7 +40,7 @@ public partial class TargetsPage : UserControl
         if (count == 0) return;
         if (TopLevel.GetTopLevel(this) is not Window owner) return;
 
-        string headline = L.T("l004-034").Replace("{n}", count.ToString(CultureInfo.InvariantCulture));
+        string headline = L.T("l004-039").Replace("{n}", count.ToString(CultureInfo.InvariantCulture));
         BindTargetsWindow window = new(headline, viewModel.BindInputChoices);
 
         // 关窗后照 Confirmed 判断，不走 await —— 这一页没有异步事件处理器

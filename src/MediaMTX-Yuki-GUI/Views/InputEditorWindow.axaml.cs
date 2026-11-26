@@ -124,10 +124,10 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
     private IReadOnlyCollection<int> OwnPorts { get; }
 
     public string WindowTitle
-        => _isNew ? L.T("b003-003") : L.T("c003-012");
+        => _isNew ? L.T("b003-001") : L.T("c003-012");
 
     public string ConfirmText
-        => _isNew ? L.T("b001-009") : L.T("b001-010");
+        => _isNew ? L.T("b001-007") : L.T("b001-008");
 
     /// <summary>「允许推流的账号」里已经加进来的那些，显示成一颗颗带叉的标签。</summary>
     public ObservableCollection<AccountChip> SelectedAccounts { get; } = [];
@@ -175,7 +175,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
             if (name.Length == 0) return string.Empty;
 
             return _otherNames.Contains(name, StringComparer.Ordinal)
-                ? L.T("l003-002").Replace("{name}", name)
+                ? L.T("l003-025").Replace("{name}", name)
                 : string.Empty;
         }
     }
@@ -196,15 +196,15 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (path.Length == 0)
             {
-                return L.T("l003-036");
+                return L.T("l003-041");
             }
 
             if (!IsValidPathName(path))
             {
-                return L.T("l003-038");
+                return L.T("l003-042");
             }
 
-            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("l003-039") : string.Empty;
+            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("l003-043") : string.Empty;
         }
     }
 
@@ -390,7 +390,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>来源方式下面那行小字。</summary>
     public string SourceKindHint
-        => IsPulling ? L.T("l003-013") : L.T("l003-011");
+        => IsPulling ? L.T("l003-008") : L.T("l003-007");
 
     public string Port
     {
@@ -449,7 +449,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>端口框里的灰字：不填就用协议默认端口。</summary>
     public string PortPlaceholder
-        => L.T("l003-035").Replace("{port}", InputProtocols.DefaultPort(Protocol).ToString());
+        => L.T("l003-040").Replace("{port}", InputProtocols.DefaultPort(Protocol).ToString());
 
     public string PortWarning
     {
@@ -459,10 +459,10 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (port <= 0)
             {
-                return L.T("l003-042");
+                return L.T("l003-044");
             }
 
-            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("l003-043");
+            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("l003-045");
         }
     }
 

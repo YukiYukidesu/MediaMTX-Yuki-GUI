@@ -26,22 +26,22 @@
         <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
                   ItemsSource="{Binding InputSortChoices}"
                   SelectedIndex="{Binding InputSortIndex}"
-                  ToolTip.Tip="{loc:Loc l003-008}" />
-        <TextBlock Text="{loc:Loc l003-010}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+                  ToolTip.Tip="{loc:Loc l003-019}" />
+        <TextBlock Text="{loc:Loc l003-006}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding InputEnabledFirst}"
-                      ToolTip.Tip="{loc:Loc l003-004}" />
+                      ToolTip.Tip="{loc:Loc l003-018}" />
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
-        <Button Classes="batch-green" Content="{loc:Loc b003-001}" Command="{Binding StartSelectedInputsCommand}" />
-        <Button Classes="batch-red" Content="{loc:Loc b003-002}" Command="{Binding StopSelectedInputsCommand}" />
+        <Button Classes="batch-green" Content="{loc:Loc b001-001}" Command="{Binding StartSelectedInputsCommand}" />
+        <Button Classes="batch-red" Content="{loc:Loc b001-002}" Command="{Binding StopSelectedInputsCommand}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc b001-006}" Command="{Binding RemoveSelectedInputsCommand}" />
+                Content="{loc:Loc b001-004}" Command="{Binding RemoveSelectedInputsCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
-                Content="{loc:Loc b003-003}" Command="{Binding AddInputCommand}" />
+                Content="{loc:Loc b003-001}" Command="{Binding AddInputCommand}" />
       </StackPanel>
     </Grid>
 
@@ -248,7 +248,7 @@
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
                               IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc l003-012}"
+                              ToolTip.Tip="{loc:Loc l003-020}"
                               Command="{Binding $parent[Window].DataContext.ToggleInputEnabledCommand}"
                               CommandParameter="{Binding}">
                         <Panel>
@@ -258,7 +258,7 @@
                         </Panel>
                       </Button>
 
-                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc l001-004}"
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc l001-002}"
                               IsVisible="{Binding !RuntimeDisabled}"
                               Command="{Binding $parent[Window].DataContext.OpenInputCommand}"
                               CommandParameter="{Binding}">
@@ -277,7 +277,7 @@
                                 Classes.on="{Binding IsRecording}"
                                 IsVisible="{Binding !RuntimeDisabled}"
                                 IsEnabled="{Binding EffectiveEnabled}"
-                                ToolTip.Tip="{loc:Loc l003-014}"
+                                ToolTip.Tip="{loc:Loc l003-021}"
                                 Command="{Binding $parent[Window].DataContext.ToggleInputRecordCommand}"
                                 CommandParameter="{Binding}">
                           <TextBlock Classes="glyph" Text="&#xE7C8;" />
@@ -286,14 +286,14 @@
                         <!-- 录像：关掉录制之后历史片段还在，所以不跟录制开关联动 -->
                         <Button Classes="icon-square"
                                 IsVisible="{Binding !RuntimeDisabled}"
-                                ToolTip.Tip="{loc:Loc l003-016}"
+                                ToolTip.Tip="{loc:Loc l003-022}"
                                 Command="{Binding $parent[Window].DataContext.ShowRecordingsCommand}"
                                 CommandParameter="{Binding}">
                           <TextBlock Classes="glyph" Text="&#xE81C;" />
                         </Button>
                       </StackPanel>
 
-                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc l001-005}"
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc l001-003}"
                               Click="OnRemoveInputClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>
@@ -303,7 +303,7 @@
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
                               IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc l003-041}">
+                              ToolTip.Tip="{loc:Loc l003-023}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -327,7 +327,7 @@
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
           <TextBlock Text="{loc:Loc c003-008}" Classes="empty-title" HorizontalAlignment="Center" />
-          <TextBlock Text="{loc:Loc l003-005}" Classes="hint" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc l003-002}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
         <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。
