@@ -1,17 +1,5 @@
 {
 // ===== G01 通用：侧栏导航、共用按钮、提示卡、重启提示 =====
-  "b001-001": "", // not manually reviewed
-  "b001-002": "", // not manually reviewed
-  "b001-003": "", // not manually reviewed
-  "b001-004": "", // not manually reviewed
-  "b001-005": "", // not manually reviewed
-  "b001-006": "", // not manually reviewed
-  "b001-007": "", // not manually reviewed
-  "b001-008": "", // not manually reviewed
-  "b001-009": "", // not manually reviewed
-  "b001-010": "", // not manually reviewed
-  "b001-011": "", // not manually reviewed
-  "b001-012": "", // not manually reviewed
   "c001-001": "", // not manually reviewed
   "c001-002": "", // not manually reviewed
   "c001-003": "", // not manually reviewed
@@ -24,6 +12,18 @@
   "c001-010": "", // not manually reviewed
   "c001-011": "", // not manually reviewed
   "c001-012": "", // not manually reviewed
+  "b001-001": "", // not manually reviewed
+  "b001-002": "", // not manually reviewed
+  "b001-003": "", // not manually reviewed
+  "b001-004": "", // not manually reviewed
+  "b001-005": "", // not manually reviewed
+  "b001-006": "", // not manually reviewed
+  "b001-007": "", // not manually reviewed
+  "b001-008": "", // not manually reviewed
+  "b001-009": "", // not manually reviewed
+  "b001-010": "", // not manually reviewed
+  "b001-011": "", // not manually reviewed
+  "b001-012": "", // not manually reviewed
   "l001-001": "", // not manually reviewed
   "l001-002": "", // not manually reviewed
   "l001-003": "", // not manually reviewed
@@ -48,10 +48,10 @@
   "t001-017": "", // not manually reviewed
   "t001-018": "", // not manually reviewed
 // ===== G02 概览页 =====
-  "b002-001": "", // not manually reviewed
-  "b002-002": "", // not manually reviewed
   "c002-001": "", // not manually reviewed
   "c002-002": "", // not manually reviewed
+  "b002-001": "", // not manually reviewed
+  "b002-002": "", // not manually reviewed
   "l002-001": "", // not manually reviewed
   "l002-002": "", // not manually reviewed
   "l002-003": "", // not manually reviewed
@@ -83,9 +83,6 @@
   "l002-029": "", // not manually reviewed
   "l002-030": "", // not manually reviewed
 // ===== G03 输入源：列表、编辑窗、toast =====
-  "b003-001": "", // not manually reviewed
-  "b003-002": "", // not manually reviewed
-  "b003-003": "", // not manually reviewed
   "c003-001": "", // not manually reviewed
   "c003-002": "", // not manually reviewed
   "c003-003": "", // not manually reviewed
@@ -105,6 +102,9 @@
   "c003-017": "", // not manually reviewed
   "c003-018": "", // not manually reviewed
   "c003-019": "", // not manually reviewed
+  "b003-001": "", // not manually reviewed
+  "b003-002": "", // not manually reviewed
+  "b003-003": "", // not manually reviewed
   "l003-001": "", // not manually reviewed
   "l003-002": "", // not manually reviewed
   "l003-003": "", // not manually reviewed
@@ -163,14 +163,6 @@
   "t003-011": "", // not manually reviewed
   "t003-012": "", // not manually reviewed
 // ===== G04 输出目标：列表、编辑窗、toast =====
-  "b004-001": "", // not manually reviewed
-  "b004-002": "", // not manually reviewed
-  "b004-003": "", // not manually reviewed
-  "b004-004": "", // not manually reviewed
-  "b004-005": "", // not manually reviewed
-  "b004-006": "", // not manually reviewed
-  "b004-007": "", // not manually reviewed
-  "b004-008": "", // not manually reviewed
   "c004-001": "", // not manually reviewed
   "c004-002": "", // not manually reviewed
   "c004-003": "", // not manually reviewed
@@ -190,6 +182,14 @@
   "c004-017": "", // not manually reviewed
   "c004-018": "", // not manually reviewed
   "c004-019": "", // not manually reviewed
+  "b004-001": "", // not manually reviewed
+  "b004-002": "", // not manually reviewed
+  "b004-003": "", // not manually reviewed
+  "b004-004": "", // not manually reviewed
+  "b004-005": "", // not manually reviewed
+  "b004-006": "", // not manually reviewed
+  "b004-007": "", // not manually reviewed
+  "b004-008": "", // not manually reviewed
   "l004-001": "", // not manually reviewed
   "l004-002": "", // not manually reviewed
   "l004-003": "", // not manually reviewed
@@ -305,10 +305,10 @@
   "t007-003": "", // not manually reviewed
   "t007-004": "", // not manually reviewed
 // ===== G08 工作模式页 =====
-  "b008-001": "", // not manually reviewed
-  "b008-002": "", // not manually reviewed
   "c008-001": "", // not manually reviewed
   "c008-002": "", // not manually reviewed
+  "b008-001": "", // not manually reviewed
+  "b008-002": "", // not manually reviewed
   "l008-001": "", // not manually reviewed
   "l008-002": "", // not manually reviewed
   "l008-003": "", // not manually reviewed
@@ -341,48 +341,48 @@
   "ls00-002": "", // not manually reviewed
   "ls00-003": "", // not manually reviewed
 // ===== s01 =====
+  "cs01-001": "", // not manually reviewed
+  "cs01-002": "", // not manually reviewed
+  "cs01-003": "", // not manually reviewed
+  "cs01-004": "", // not manually reviewed
+  "cs01-005": "", // not manually reviewed
   "bs01-001": "", // not manually reviewed
   "bs01-002": "", // not manually reviewed
   "bs01-003": "", // not manually reviewed
   "bs01-004": "", // not manually reviewed
   "bs01-005": "", // not manually reviewed
   "bs01-006": "", // not manually reviewed
-  "cs01-001": "", // not manually reviewed
-  "cs01-002": "", // not manually reviewed
-  "cs01-003": "", // not manually reviewed
-  "cs01-004": "", // not manually reviewed
-  "cs01-005": "", // not manually reviewed
   "ls01-001": "", // not manually reviewed
   "ls01-002": "", // not manually reviewed
   "ls01-003": "", // not manually reviewed
   "ls01-004": "", // not manually reviewed
   "ls01-005": "", // not manually reviewed
 // ===== s02 =====
+  "cs02-001": "", // not manually reviewed
+  "cs02-002": "", // not manually reviewed
+  "cs02-003": "", // not manually reviewed
+  "cs02-004": "", // not manually reviewed
   "bs02-001": "", // not manually reviewed
   "bs02-002": "", // not manually reviewed
   "bs02-003": "", // not manually reviewed
   "bs02-004": "", // not manually reviewed
   "bs02-005": "", // not manually reviewed
   "bs02-006": "", // not manually reviewed
-  "cs02-001": "", // not manually reviewed
-  "cs02-002": "", // not manually reviewed
-  "cs02-003": "", // not manually reviewed
-  "cs02-004": "", // not manually reviewed
   "ls02-001": "", // not manually reviewed
   "ls02-002": "", // not manually reviewed
   "ls02-003": "", // not manually reviewed
   "ls02-004": "", // not manually reviewed
 // ===== s03 =====
-  "bs03-001": "", // not manually reviewed
-  "bs03-002": "", // not manually reviewed
-  "bs03-003": "", // not manually reviewed
-  "bs03-004": "", // not manually reviewed
   "cs03-001": "", // not manually reviewed
   "cs03-002": "", // not manually reviewed
   "cs03-003": "", // not manually reviewed
   "cs03-004": "", // not manually reviewed
   "cs03-005": "", // not manually reviewed
   "cs03-006": "", // not manually reviewed
+  "bs03-001": "", // not manually reviewed
+  "bs03-002": "", // not manually reviewed
+  "bs03-003": "", // not manually reviewed
+  "bs03-004": "", // not manually reviewed
   "ls03-001": "", // not manually reviewed
   "ls03-002": "", // not manually reviewed
   "ls03-003": "", // not manually reviewed
@@ -390,6 +390,13 @@
   "ls03-005": "", // not manually reviewed
   "ls03-006": "", // not manually reviewed
 // ===== s04 =====
+  "cs04-001": "", // not manually reviewed
+  "cs04-002": "", // not manually reviewed
+  "cs04-003": "", // not manually reviewed
+  "cs04-004": "", // not manually reviewed
+  "cs04-005": "", // not manually reviewed
+  "cs04-006": "", // not manually reviewed
+  "cs04-007": "", // not manually reviewed
   "bs04-001": "", // not manually reviewed
   "bs04-002": "", // not manually reviewed
   "bs04-003": "", // not manually reviewed
@@ -399,13 +406,6 @@
   "bs04-007": "", // not manually reviewed
   "bs04-008": "", // not manually reviewed
   "bs04-009": "", // not manually reviewed
-  "cs04-001": "", // not manually reviewed
-  "cs04-002": "", // not manually reviewed
-  "cs04-003": "", // not manually reviewed
-  "cs04-004": "", // not manually reviewed
-  "cs04-005": "", // not manually reviewed
-  "cs04-006": "", // not manually reviewed
-  "cs04-007": "", // not manually reviewed
   "ls04-001": "", // not manually reviewed
   "ls04-002": "", // not manually reviewed
   "ls04-003": "", // not manually reviewed
@@ -512,19 +512,19 @@
   "ls11-005": "", // not manually reviewed
   "ls11-006": "", // not manually reviewed
 // ===== s12 =====
-  "bs12-001": "", // not manually reviewed
   "cs12-001": "", // not manually reviewed
   "cs12-002": "", // not manually reviewed
   "cs12-003": "", // not manually reviewed
   "cs12-004": "", // not manually reviewed
+  "bs12-001": "", // not manually reviewed
   "ts12-001": "", // not manually reviewed
 // ===== s13 =====
-  "bs13-001": "", // not manually reviewed
   "cs13-001": "", // not manually reviewed
   "cs13-002": "", // not manually reviewed
   "cs13-003": "", // not manually reviewed
   "cs13-004": "", // not manually reviewed
   "cs13-005": "", // not manually reviewed
+  "bs13-001": "", // not manually reviewed
   "ls13-001": "", // not manually reviewed
   "ls13-002": "", // not manually reviewed
   "ls13-003": "", // not manually reviewed
