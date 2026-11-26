@@ -1,3 +1,6 @@
+using Avalonia.Media.TextFormatting;
+using Avalonia.Media;
+using System.Globalization;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Avalonia;
@@ -22,7 +25,7 @@ public sealed partial class MainViewModel
 
     // 胶囊宽度的估算：字号 12，中文按整字、拉丁按半个字，再加图标、间距、两侧内边距与一点余量
     private const double MapNodeFontSize = 12;
-    private const double MapNodeChrome = 36;
+    private const double MapNodeChrome = 30;
     /// <summary>胶囊的最小宽度：只防「A」这种一个字被压成一条缝，不设上限（长名字靠名字自己撑宽）。</summary>
     private const double MapMinNodeWidth = 64;
 
@@ -321,16 +324,19 @@ public sealed partial class MainViewModel
         return (Math.Max(0, cursor - gap), Math.Max(0, totalHeight - gap), placements);
     }
 
+    /// <summary>精确量出这段文字在节点字号下的宽度：交给渲染引擎算，不留估算误差。</summary>
+    private static double MeasureTextWidth(string title)
+    {
+        if (title.Length == 0) return 0;
+
+        TextLayout layout = new(title, new Typeface(FontFamily.Default), MapNodeFontSize, Brushes.Black);
+
+        return layout.WidthIncludingTrailingWhitespace + 18;
+    }
+
     private static double EstimateNodeWidth(string title)
     {
-        double textWidth = 0;
-
-        foreach (char ch in title)
-        {
-            textWidth += ch > 0x2E7F ? MapNodeFontSize * 1.09 : MapNodeFontSize * 0.61;
-        }
-
-        return Math.Clamp(Math.Ceiling(textWidth) + MapNodeChrome, MapMinNodeWidth, MapMaxNodeWidth);
+        return Math.Max(MapMinNodeWidth, Math.Ceiling(MeasureTextWidth(title)) + MapNodeChrome);
     }
 
     /// <summary>取一个节点：没有就新建并入列，有就把坐标挪过去；位置变了记一笔脏。</summary>
