@@ -1769,7 +1769,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         RefreshStats();
 
         // 关系图的圆点与连线跟着这一轮指标一起变，不必等下一次配置变化
-        RebuildMap();
+        RefreshMapStates();
     }
 
     /// <summary>

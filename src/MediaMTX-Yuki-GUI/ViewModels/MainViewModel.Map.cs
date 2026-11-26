@@ -91,6 +91,40 @@ public sealed partial class MainViewModel
     /// 一个输入源连同它绑定的目标算一簇，孤儿目标自己算一簇；簇按网格横排，一行放不下就换行。
     /// 只做增量：已有节点改坐标与状态，新节点追加，消失的节点移除，界面不会闪一下。
     /// </remarks>
+    /// <summary>
+    /// 只刷状态与连线，不动坐标：指标每两秒来一次，整张图重排（装箱枚举列数）太贵，
+    /// 会变成「每两秒卡一下」。
+    /// </summary>
+    public void RefreshMapStates()
+    {
+        if (_mapNodes.Count == 0) return;
+
+        bool engineRunning = IsEngineRunning;
+        List<RelationLinkShape> links = [];
+
+        foreach (InputItemViewModel source in Inputs)
+        {
+            if (!_mapNodes.TryGetValue("s:" + source.Id, out RelationNode? node)) continue;
+
+            FillSourceNode(node, source, engineRunning);
+
+            foreach (TargetItemViewModel target in source.Outputs)
+            {
+                if (!_mapNodes.TryGetValue("t:" + target.Id, out RelationNode? targetNode)) continue;
+
+                FillTargetNode(targetNode, target, engineRunning, false);
+                links.Add(new RelationLinkShape(
+                    node.X + node.Width,
+                    node.Y + node.Height / 2,
+                    targetNode.X,
+                    targetNode.Y + targetNode.Height / 2,
+                    LinkState(source, target, engineRunning)));
+            }
+        }
+
+        MapLinks = links;
+    }
+
     private void RebuildMap()
     {
         bool engineRunning = IsEngineRunning;
