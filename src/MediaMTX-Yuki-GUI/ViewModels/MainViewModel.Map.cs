@@ -197,7 +197,16 @@ public sealed partial class MainViewModel
 
             if (source is not null)
             {
-                RelationNode sourceNode = UpsertNode("s:" + source.Id, true, sourceRight - nodeWidth, sourceY, nodeWidth, alive);
+                // 胶囊宽度随名字走，到列宽上限就停（再长就靠省略号）
+                double sourceNodeWidth = Math.Clamp(EstimateNodeWidth(source.DisplayName), MapMinNodeWidth, nodeWidth);
+
+                RelationNode sourceNode = UpsertNode(
+                    "s:" + source.Id,
+                    true,
+                    sourceRight - sourceNodeWidth,
+                    sourceY,
+                    sourceNodeWidth,
+                    alive);
                 FillSourceNode(sourceNode, source, engineRunning);
 
                 // 一个目标都没绑：右边伸一小截断头虚线，一眼看出这条源没接东西
@@ -216,12 +225,14 @@ public sealed partial class MainViewModel
 
             foreach (TargetItemViewModel target in targets)
             {
+                double targetNodeWidth = Math.Clamp(EstimateNodeWidth(target.DisplayName), MapMinNodeWidth, nodeWidth);
+
                 RelationNode targetNode = UpsertNode(
                     "t:" + target.Id,
                     false,
                     targetX,
                     targetY,
-                    nodeWidth,
+                    targetNodeWidth,
                     alive);
 
                 FillTargetNode(targetNode, target, engineRunning, source is null);
