@@ -1,5 +1,6 @@
 using Avalonia.Interactivity;
 using FluentAvalonia.UI.Windowing;
+using MediaMTX_Yuki_GUI.Services;
 using MediaMTX_Yuki_GUI.ViewModels;
 
 namespace MediaMTX_Yuki_GUI.Views;
@@ -10,6 +11,9 @@ public partial class BindTargetsWindow : FAAppWindow
     public BindTargetsWindow(string headline, IReadOnlyList<InputChoice> choices)
     {
         InitializeComponent();
+
+        // 弹窗跟主窗用同一套背景材质，不然主窗是云母、弹出的框是纯灰，像两个程序
+        WindowBackdrop.Attach(this);
 
         HeadlineText.Text = headline;
         InputBox.ItemsSource = choices;
