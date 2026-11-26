@@ -70,10 +70,6 @@ public sealed partial class MainViewModel
     [ObservableProperty]
     private int _mapVersion;
 
-    /// <summary>每簇一圈淡边的矩形，只用来观察布局边界。</summary>
-    [ObservableProperty]
-    private IReadOnlyList<Rect> _mapBoxes = [];
-
     /// <summary>图里一个节点都没有：页面显示空状态。</summary>
     public bool IsMapEmpty => MapSources.Count == 0 && MapTargets.Count == 0;
 
@@ -177,8 +173,6 @@ public sealed partial class MainViewModel
         double mapHeight = tight.Height + MapPadding * 2;
         double left = MapPadding;
         double top = MapPadding;
-
-        List<Rect> boxes = [];
         List<RelationLinkShape> links = [];
         HashSet<string> alive = new(StringComparer.Ordinal);
 
@@ -194,8 +188,6 @@ public sealed partial class MainViewModel
             double targetX = source is null ? clusterX + MapLinkStub : sourceRight + MapClusterGap;
             double blockHeight = blockHeights[placement.Id];
             double sourceY = clusterY + (blockHeight - MapNodeHeight) / 2;
-
-            boxes.Add(new Rect(clusterX - MapPadding, clusterY - MapPadding, clusterWidth, blockHeight));
 
             if (source is not null)
             {
@@ -268,7 +260,6 @@ public sealed partial class MainViewModel
         SyncNodeColumns();
 
         MapLinks = links;
-        MapBoxes = boxes;
         MapWidth = mapWidth;
         MapHeight = mapHeight;
 

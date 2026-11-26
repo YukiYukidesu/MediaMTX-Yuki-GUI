@@ -88,8 +88,6 @@
             <Canvas Width="{Binding MapWidth}" Height="{Binding MapHeight}">
 
               <!-- 每簇一圈淡边，方便看出装箱边界 -->
-              <c:RelationBoxes Boxes="{Binding MapBoxes}"
-                               Width="{Binding MapWidth}" Height="{Binding MapHeight}" />
 
               <!-- 连线垫在最底层，节点卡片盖在上面 -->
               <c:RelationLinks Links="{Binding MapLinks}"
