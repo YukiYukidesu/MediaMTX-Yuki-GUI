@@ -33,3 +33,5 @@ desktop.ini
 AGENTS.md
 # 阶段 0 的探针工程与截图工装：开发过程材料，不随仓库分发
 .phase0/
+# 语言包的译者说明：内部资料，跟 docs/ 一样留在本机、不随仓库分发
+Languages/README.md
