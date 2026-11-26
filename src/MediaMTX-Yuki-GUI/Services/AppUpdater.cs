@@ -278,20 +278,28 @@ public sealed class AppUpdater
         sb.AppendLine("chcp 65001 >nul");
         sb.AppendLine("setlocal");
 
-        // 主进程没退干净时 exe 是写不进去的，最多等 60 秒
+        // 主进程退出前 exe 不能覆盖写，copy 会失败；copy 成功就说明可以换了，最多试 60 秒。
+        // 先拷一份旧 exe 当备份：读文件不受运行锁限制，进程还在也拷得出来。
+        sb.AppendLine("if exist " + Q(target) + " copy /y " + Q(target) + " " + Q(backup) + " >nul 2>&1");
         sb.AppendLine("set /a tries=0");
         sb.AppendLine(":wait");
-        sb.AppendLine("timeout /t 1 /nobreak >nul");
-        sb.AppendLine("2>nul (>>" + Q(Path.Combine(AppPaths.UpdateDir, "probe.lock")) + " call ) && (");
-        sb.AppendLine("  set /a tries+=1");
-        sb.AppendLine("  if %tries% lss 60 goto wait");
-        sb.AppendLine(")");
-
-        sb.AppendLine("if exist " + Q(target) + " move /y " + Q(target) + " " + Q(backup) + " >nul 2>&1");
         sb.AppendLine("copy /y " + Q(package.ExePath) + " " + Q(target) + " >nul 2>&1");
+        sb.AppendLine("if not errorlevel 1 goto done");
+        sb.AppendLine("set /a tries+=1");
+        sb.AppendLine("if %tries% geq 60 goto giveup");
+        sb.AppendLine("timeout /t 1 /nobreak >nul");
+        sb.AppendLine("goto wait");
+
+        // 60 秒还被占：主进程没退干净（或被杀软拦着），把它拉起来，旧文件原样没动
+        sb.AppendLine(":giveup");
+        sb.AppendLine("if exist " + Q(target) + " start \"\" " + Q(target));
+        sb.AppendLine("del /q " + Q(backup) + " >nul 2>&1");
+        sb.AppendLine("exit /b 1");
+
+        sb.AppendLine(":done");
 
         sb.AppendLine("if not exist " + Q(target) + " (");
-        sb.AppendLine("  if exist " + Q(backup) + " move /y " + Q(backup) + " " + Q(target) + " >nul 2>&1");
+        sb.AppendLine("  if exist " + Q(backup) + " copy /y " + Q(backup) + " " + Q(target) + " >nul 2>&1");
         sb.AppendLine("  start \"\" " + Q(target));
         sb.AppendLine("  exit /b 1");
         sb.AppendLine(")");
