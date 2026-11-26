@@ -153,7 +153,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
             if (name.Length == 0) return string.Empty;
 
             return _otherNames.Contains(name, StringComparer.Ordinal)
-                ? L.T("c003-040").Replace("{name}", name)
+                ? L.T("l003-002").Replace("{name}", name)
                 : string.Empty;
         }
     }
@@ -174,15 +174,15 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (path.Length == 0)
             {
-                return L.T("c003-039");
+                return L.T("c003-038");
             }
 
             if (!IsValidPathName(path))
             {
-                return L.T("c003-042");
+                return L.T("c003-040");
             }
 
-            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("c003-043") : string.Empty;
+            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("c003-041") : string.Empty;
         }
     }
 
@@ -358,7 +358,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>来源方式下面那行小字。</summary>
     public string SourceKindHint
-        => IsPulling ? L.T("l003-009") : L.T("l003-008");
+        => IsPulling ? L.T("l003-010") : L.T("l003-009");
 
     public string Port
     {
@@ -427,10 +427,10 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (port <= 0)
             {
-                return L.T("l003-010");
+                return L.T("c003-045");
             }
 
-            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("l003-011");
+            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("c003-046");
         }
     }
 

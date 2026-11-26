@@ -1,7 +1,6 @@
 {
-  "_language_name": "English",
+  "_language_name": "Chinese (Simplified)",
   "_translated": "false",
-
   // ===== G01 通用：侧栏导航、共用按钮、提示卡、重启提示 =====
   "c001-001": "", // not manually reviewed
   "c001-002": "", // not manually reviewed
@@ -29,17 +28,6 @@
   "c001-024": "", // not manually reviewed
   "c001-025": "", // not manually reviewed
   "c001-026": "", // not manually reviewed
-  "c001-027": "", // not manually reviewed
-  "c001-028": "", // not manually reviewed
-  "c001-029": "", // not manually reviewed
-  "c001-030": "", // not manually reviewed
-  "c001-031": "", // not manually reviewed
-  "c001-032": "", // not manually reviewed
-  "c001-033": "", // not manually reviewed
-  "l001-001": "", // not manually reviewed
-  "l001-002": "", // not manually reviewed
-  "l001-003": "", // not manually reviewed
-  "l001-004": "", // not manually reviewed
   "t001-001": "", // not manually reviewed
   "t001-002": "", // not manually reviewed
   "t001-003": "", // not manually reviewed
@@ -52,7 +40,15 @@
   "t001-010": "", // not manually reviewed
   "t001-011": "", // not manually reviewed
   "t001-012": "", // not manually reviewed
-
+  "t001-013": "", // not manually reviewed
+  "t001-014": "", // not manually reviewed
+  "t001-015": "", // not manually reviewed
+  "t001-016": "", // not manually reviewed
+  "t001-017": "", // not manually reviewed
+  "t001-018": "", // not manually reviewed
+  "t001-019": "", // not manually reviewed
+  "t001-020": "", // not manually reviewed
+  "t001-021": "", // not manually reviewed
   // ===== G02 概览页 =====
   "c002-001": "", // not manually reviewed
   "c002-002": "", // not manually reviewed
@@ -76,21 +72,20 @@
   "c002-020": "", // not manually reviewed
   "c002-021": "", // not manually reviewed
   "c002-022": "", // not manually reviewed
+  "c002-023": "", // not manually reviewed
+  "c002-024": "", // not manually reviewed
+  "c002-025": "", // not manually reviewed
+  "c002-026": "", // not manually reviewed
+  "c002-027": "", // not manually reviewed
+  "c002-028": "", // not manually reviewed
+  "c002-029": "", // not manually reviewed
+  "c002-030": "", // not manually reviewed
+  "c002-031": "", // not manually reviewed
   "l002-001": "", // not manually reviewed
   "l002-002": "", // not manually reviewed
   "l002-003": "", // not manually reviewed
   "l002-004": "", // not manually reviewed
   "l002-005": "", // not manually reviewed
-  "l002-006": "", // not manually reviewed
-  "l002-007": "", // not manually reviewed
-  "l002-008": "", // not manually reviewed
-  "l002-009": "", // not manually reviewed
-  "l002-010": "", // not manually reviewed
-  "l002-011": "", // not manually reviewed
-  "l002-012": "", // not manually reviewed
-  "l002-013": "", // not manually reviewed
-  "l002-014": "", // not manually reviewed
-
   // ===== G03 输入源：列表、编辑窗、toast =====
   "c003-001": "", // not manually reviewed
   "c003-002": "", // not manually reviewed
@@ -137,6 +132,14 @@
   "c003-043": "", // not manually reviewed
   "c003-044": "", // not manually reviewed
   "c003-045": "", // not manually reviewed
+  "c003-046": "", // not manually reviewed
+  "c003-047": "", // not manually reviewed
+  "c003-048": "", // not manually reviewed
+  "c003-049": "", // not manually reviewed
+  "c003-050": "", // not manually reviewed
+  "c003-051": "", // not manually reviewed
+  "c003-052": "", // not manually reviewed
+  "c003-053": "", // not manually reviewed
   "l003-001": "", // not manually reviewed
   "l003-002": "", // not manually reviewed
   "l003-003": "", // not manually reviewed
@@ -158,15 +161,6 @@
   "t003-004": "", // not manually reviewed
   "t003-005": "", // not manually reviewed
   "t003-006": "", // not manually reviewed
-  "t003-007": "", // not manually reviewed
-  "t003-008": "", // not manually reviewed
-  "t003-009": "", // not manually reviewed
-  "t003-010": "", // not manually reviewed
-  "t003-011": "", // not manually reviewed
-  "t003-012": "", // not manually reviewed
-  "t003-013": "", // not manually reviewed
-  "t003-014": "", // not manually reviewed
-
   // ===== G04 输出目标：列表、编辑窗、toast =====
   "c004-001": "", // not manually reviewed
   "c004-002": "", // not manually reviewed
@@ -225,6 +219,12 @@
   "c004-055": "", // not manually reviewed
   "c004-056": "", // not manually reviewed
   "c004-057": "", // not manually reviewed
+  "c004-058": "", // not manually reviewed
+  "c004-059": "", // not manually reviewed
+  "c004-060": "", // not manually reviewed
+  "c004-061": "", // not manually reviewed
+  "c004-062": "", // not manually reviewed
+  "c004-063": "", // not manually reviewed
   "l004-001": "", // not manually reviewed
   "l004-002": "", // not manually reviewed
   "l004-003": "", // not manually reviewed
@@ -251,13 +251,6 @@
   "t004-004": "", // not manually reviewed
   "t004-005": "", // not manually reviewed
   "t004-006": "", // not manually reviewed
-  "t004-007": "", // not manually reviewed
-  "t004-008": "", // not manually reviewed
-  "t004-009": "", // not manually reviewed
-  "t004-010": "", // not manually reviewed
-  "t004-011": "", // not manually reviewed
-  "t004-012": "", // not manually reviewed
-
   // ===== G05 账号：列表、编辑窗、toast =====
   "c005-001": "", // not manually reviewed
   "c005-002": "", // not manually reviewed
@@ -273,13 +266,12 @@
   "l005-003": "", // not manually reviewed
   "l005-004": "", // not manually reviewed
   "l005-005": "", // not manually reviewed
+  "l005-006": "", // not manually reviewed
+  "l005-007": "", // not manually reviewed
   "t005-001": "", // not manually reviewed
   "t005-002": "", // not manually reviewed
   "t005-003": "", // not manually reviewed
   "t005-004": "", // not manually reviewed
-  "t005-005": "", // not manually reviewed
-  "t005-006": "", // not manually reviewed
-
   // ===== G06 统计页 =====
   "c006-001": "", // not manually reviewed
   "c006-002": "", // not manually reviewed
@@ -288,26 +280,24 @@
   "c006-005": "", // not manually reviewed
   "c006-006": "", // not manually reviewed
   "c006-007": "", // not manually reviewed
+  "c006-008": "", // not manually reviewed
   "l006-001": "", // not manually reviewed
   "l006-002": "", // not manually reviewed
   "l006-003": "", // not manually reviewed
   "l006-004": "", // not manually reviewed
-  "l006-005": "", // not manually reviewed
-
   // ===== G07 日志页 =====
   "c007-001": "", // not manually reviewed
   "c007-002": "", // not manually reviewed
   "c007-003": "", // not manually reviewed
   "c007-004": "", // not manually reviewed
+  "c007-005": "", // not manually reviewed
+  "c007-006": "", // not manually reviewed
+  "c007-007": "", // not manually reviewed
   "l007-001": "", // not manually reviewed
-  "l007-002": "", // not manually reviewed
-  "l007-003": "", // not manually reviewed
-  "l007-004": "", // not manually reviewed
   "t007-001": "", // not manually reviewed
   "t007-002": "", // not manually reviewed
   "t007-003": "", // not manually reviewed
   "t007-004": "", // not manually reviewed
-
   // ===== G08 工作模式页 =====
   "c008-001": "", // not manually reviewed
   "c008-002": "", // not manually reviewed
@@ -316,7 +306,6 @@
   "c008-005": "", // not manually reviewed
   "c008-006": "", // not manually reviewed
   "c008-007": "", // not manually reviewed
-  "c008-008": "", // not manually reviewed
   "l008-001": "", // not manually reviewed
   "l008-002": "", // not manually reviewed
   "l008-003": "", // not manually reviewed
@@ -324,7 +313,7 @@
   "l008-005": "", // not manually reviewed
   "l008-006": "", // not manually reviewed
   "l008-007": "", // not manually reviewed
-
+  "t008-001": "", // not manually reviewed
   // ===== G09 录像窗 =====
   "c009-001": "", // not manually reviewed
   "c009-002": "", // not manually reviewed
@@ -333,34 +322,30 @@
   "c009-005": "", // not manually reviewed
   "c009-006": "", // not manually reviewed
   "c009-007": "", // not manually reviewed
+  "c009-008": "", // not manually reviewed
+  "c009-009": "", // not manually reviewed
+  "c009-010": "", // not manually reviewed
   "l009-001": "", // not manually reviewed
   "l009-002": "", // not manually reviewed
   "l009-003": "", // not manually reviewed
   "l009-004": "", // not manually reviewed
-  "l009-005": "", // not manually reviewed
-  "l009-006": "", // not manually reviewed
-  "l009-007": "", // not manually reviewed
-
   // ===== G10 引擎启停 toast =====
   "t010-001": "", // not manually reviewed
   "t010-002": "", // not manually reviewed
   "t010-003": "", // not manually reviewed
   "t010-004": "", // not manually reviewed
   "t010-005": "", // not manually reviewed
-
   // ===== G11 更新 toast =====
   "t011-001": "", // not manually reviewed
   "t011-002": "", // not manually reviewed
   "t011-003": "", // not manually reviewed
   "t011-004": "", // not manually reviewed
   "t011-005": "", // not manually reviewed
-
   // ===== S00 设置页头与搜索 =====
   "cs00-001": "", // not manually reviewed
   "cs00-002": "", // not manually reviewed
   "ls00-001": "", // not manually reviewed
   "ls00-002": "", // not manually reviewed
-
   // ===== S01 设置·界面外观 =====
   "cs01-001": "", // not manually reviewed
   "cs01-002": "", // not manually reviewed
@@ -374,11 +359,10 @@
   "cs01-010": "", // not manually reviewed
   "cs01-011": "", // not manually reviewed
   "cs01-012": "", // not manually reviewed
+  "cs01-013": "", // not manually reviewed
+  "cs01-014": "", // not manually reviewed
   "ls01-001": "", // not manually reviewed
   "ls01-002": "", // not manually reviewed
-  "ls01-003": "", // not manually reviewed
-  "ls01-004": "", // not manually reviewed
-
   // ===== S02 设置·窗口与启动 =====
   "cs02-001": "", // not manually reviewed
   "cs02-002": "", // not manually reviewed
@@ -390,11 +374,10 @@
   "cs02-008": "", // not manually reviewed
   "cs02-009": "", // not manually reviewed
   "cs02-010": "", // not manually reviewed
+  "cs02-011": "", // not manually reviewed
+  "cs02-012": "", // not manually reviewed
   "ls02-001": "", // not manually reviewed
   "ls02-002": "", // not manually reviewed
-  "ls02-003": "", // not manually reviewed
-  "ls02-004": "", // not manually reviewed
-
   // ===== S03 设置·引擎行为 =====
   "cs03-001": "", // not manually reviewed
   "cs03-002": "", // not manually reviewed
@@ -406,13 +389,12 @@
   "cs03-008": "", // not manually reviewed
   "cs03-009": "", // not manually reviewed
   "cs03-010": "", // not manually reviewed
+  "cs03-011": "", // not manually reviewed
+  "cs03-012": "", // not manually reviewed
   "ls03-001": "", // not manually reviewed
   "ls03-002": "", // not manually reviewed
   "ls03-003": "", // not manually reviewed
   "ls03-004": "", // not manually reviewed
-  "ls03-005": "", // not manually reviewed
-  "ls03-006": "", // not manually reviewed
-
   // ===== S04 设置·网络与更新 =====
   "cs04-001": "", // not manually reviewed
   "cs04-002": "", // not manually reviewed
@@ -435,6 +417,17 @@
   "cs04-019": "", // not manually reviewed
   "cs04-020": "", // not manually reviewed
   "cs04-021": "", // not manually reviewed
+  "cs04-022": "", // not manually reviewed
+  "cs04-023": "", // not manually reviewed
+  "cs04-024": "", // not manually reviewed
+  "cs04-025": "", // not manually reviewed
+  "cs04-026": "", // not manually reviewed
+  "cs04-027": "", // not manually reviewed
+  "cs04-028": "", // not manually reviewed
+  "cs04-029": "", // not manually reviewed
+  "cs04-030": "", // not manually reviewed
+  "cs04-031": "", // not manually reviewed
+  "cs04-032": "", // not manually reviewed
   "ls04-001": "", // not manually reviewed
   "ls04-002": "", // not manually reviewed
   "ls04-003": "", // not manually reviewed
@@ -451,18 +444,6 @@
   "ls04-014": "", // not manually reviewed
   "ls04-015": "", // not manually reviewed
   "ls04-016": "", // not manually reviewed
-  "ls04-017": "", // not manually reviewed
-  "ls04-018": "", // not manually reviewed
-  "ls04-019": "", // not manually reviewed
-  "ls04-020": "", // not manually reviewed
-  "ls04-021": "", // not manually reviewed
-  "ls04-022": "", // not manually reviewed
-  "ls04-023": "", // not manually reviewed
-  "ls04-024": "", // not manually reviewed
-  "ls04-025": "", // not manually reviewed
-  "ls04-026": "", // not manually reviewed
-  "ls04-027": "", // not manually reviewed
-
   // ===== S05 设置·容错与调参 =====
   "cs05-001": "", // not manually reviewed
   "cs05-002": "", // not manually reviewed
@@ -471,30 +452,27 @@
   "cs05-005": "", // not manually reviewed
   "cs05-006": "", // not manually reviewed
   "cs05-007": "", // not manually reviewed
+  "cs05-008": "", // not manually reviewed
+  "cs05-009": "", // not manually reviewed
+  "cs05-010": "", // not manually reviewed
+  "cs05-011": "", // not manually reviewed
+  "cs05-012": "", // not manually reviewed
+  "cs05-013": "", // not manually reviewed
   "ls05-001": "", // not manually reviewed
-  "ls05-002": "", // not manually reviewed
-  "ls05-003": "", // not manually reviewed
-  "ls05-004": "", // not manually reviewed
-  "ls05-005": "", // not manually reviewed
-  "ls05-006": "", // not manually reviewed
-  "ls05-007": "", // not manually reviewed
-
   // ===== S06 设置·运维接口 =====
   "cs06-001": "", // not manually reviewed
   "cs06-002": "", // not manually reviewed
   "cs06-003": "", // not manually reviewed
+  "cs06-004": "", // not manually reviewed
+  "cs06-005": "", // not manually reviewed
+  "cs06-006": "", // not manually reviewed
+  "cs06-007": "", // not manually reviewed
   "ls06-001": "", // not manually reviewed
-  "ls06-002": "", // not manually reviewed
-  "ls06-003": "", // not manually reviewed
-  "ls06-004": "", // not manually reviewed
-  "ls06-005": "", // not manually reviewed
-
   // ===== S07 设置·推流鉴权 =====
   "cs07-001": "", // not manually reviewed
+  "cs07-002": "", // not manually reviewed
   "ls07-001": "", // not manually reviewed
   "ls07-002": "", // not manually reviewed
-  "ls07-003": "", // not manually reviewed
-
   // ===== S08 设置·拉流源 =====
   "cs08-001": "", // not manually reviewed
   "cs08-002": "", // not manually reviewed
@@ -504,7 +482,6 @@
   "ls08-002": "", // not manually reviewed
   "ls08-003": "", // not manually reviewed
   "ls08-004": "", // not manually reviewed
-
   // ===== S09 设置·播放协议 =====
   "cs09-001": "", // not manually reviewed
   "cs09-002": "", // not manually reviewed
@@ -518,7 +495,6 @@
   "ls09-004": "", // not manually reviewed
   "ls09-005": "", // not manually reviewed
   "ls09-006": "", // not manually reviewed
-
   // ===== S10 设置·连接治理 =====
   "cs10-001": "", // not manually reviewed
   "cs10-002": "", // not manually reviewed
@@ -528,7 +504,6 @@
   "ls10-002": "", // not manually reviewed
   "ls10-003": "", // not manually reviewed
   "ls10-004": "", // not manually reviewed
-
   // ===== S11 设置·录制 =====
   "cs11-001": "", // not manually reviewed
   "cs11-002": "", // not manually reviewed
@@ -542,7 +517,6 @@
   "ls11-004": "", // not manually reviewed
   "ls11-005": "", // not manually reviewed
   "ls11-006": "", // not manually reviewed
-
   // ===== S12 设置·目录 =====
   "cs12-001": "", // not manually reviewed
   "cs12-002": "", // not manually reviewed
@@ -550,7 +524,6 @@
   "cs12-004": "", // not manually reviewed
   "cs12-005": "", // not manually reviewed
   "ts12-001": "", // not manually reviewed
-
   // ===== S13 设置·关于 =====
   "cs13-001": "", // not manually reviewed
   "cs13-002": "", // not manually reviewed
@@ -558,7 +531,7 @@
   "cs13-004": "", // not manually reviewed
   "cs13-005": "", // not manually reviewed
   "cs13-006": "", // not manually reviewed
+  "cs13-007": "", // not manually reviewed
   "ls13-001": "", // not manually reviewed
   "ls13-002": "", // not manually reviewed
-  "ls13-003": "", // not manually reviewed
 }

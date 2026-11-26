@@ -45,7 +45,7 @@
         </ComboBox>
 
         <StackPanel Orientation="Horizontal" Spacing="4">
-          <TextBlock Classes="field-label" Text="{loc:Loc c004-048}" />
+          <TextBlock Classes="field-label" Text="{loc:Loc c004-047}" />
           <TextBlock Text="*" Classes="required-mark" />
         </StackPanel>
         <TextBox Margin="0,4,0,4"
@@ -55,14 +55,14 @@
         <TextBlock Margin="0,0,0,4"
                    Classes="danger-hint"
                    IsVisible="{Binding ServerInvalid}"
-                   Text="{loc:Loc c004-055}" />
+                   Text="{loc:Loc c004-054}" />
         <TextBlock Classes="hint" Text="{loc:Loc l004-014}" />
 
-        <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-049}" />
+        <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-048}" />
         <TextBox Margin="0,4,0,4" Text="{Binding StreamKey, Mode=TwoWay}" />
         <TextBlock Classes="hint" Text="{loc:Loc l004-015}" />
 
-        <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-050}" />
+        <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-049}" />
         <ComboBox Margin="0,4,0,0"
                   HorizontalAlignment="Stretch"
                   ItemsSource="{Binding InputChoices}"
@@ -84,12 +84,12 @@
                   HorizontalAlignment="Stretch"
                   SelectedIndex="{Binding ProxyIndex, Mode=TwoWay}"
                   IsEnabled="{Binding CanUseProxy}">
-          <ComboBoxItem Content="{loc:Loc c004-051}" Tag="follow" />
-          <ComboBoxItem Content="{loc:Loc c004-052}" Tag="direct" />
-          <ComboBoxItem Content="{loc:Loc c004-053}" Tag="system" />
+          <ComboBoxItem Content="{loc:Loc c004-050}" Tag="follow" />
+          <ComboBoxItem Content="{loc:Loc c004-051}" Tag="direct" />
+          <ComboBoxItem Content="{loc:Loc c004-052}" Tag="system" />
           <ComboBoxItem Content="{loc:Loc c004-026}" Tag="custom" />
         </ComboBox>
-        <TextBlock Classes="hint" Text="{loc:Loc l004-020}" />
+        <TextBlock Classes="hint" Text="{loc:Loc l004-019}" />
         <TextBlock Margin="0,4,0,0"
                    Classes="danger-hint"
                    IsVisible="{Binding !CanUseProxy}"
@@ -97,7 +97,7 @@
 
         <StackPanel IsVisible="{Binding HasCustomProxy}">
           <StackPanel Margin="0,12,0,0" Orientation="Horizontal" Spacing="4">
-            <TextBlock Classes="field-label" Text="{loc:Loc c004-054}" />
+            <TextBlock Classes="field-label" Text="{loc:Loc c004-053}" />
             <TextBlock Text="*" Classes="required-mark" />
           </StackPanel>
           <TextBox Margin="0,4,0,4"
@@ -108,14 +108,14 @@
           <TextBlock Margin="0,0,0,4"
                      Classes="danger-hint"
                      IsVisible="{Binding ProxyUrlInvalid}"
-                     Text="{loc:Loc l004-019}" />
+                     Text="{loc:Loc c004-058}" />
           <TextBlock Classes="hint" Text="{loc:Loc l004-017}" />
         </StackPanel>
 
         <StackPanel Margin="0,16,0,0"
                     Orientation="Horizontal"
                     Spacing="10">
-          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c004-057}" />
+          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c004-055}" />
           <ToggleSwitch VerticalAlignment="Center" IsChecked="{Binding Enabled, Mode=TwoWay}" />
         </StackPanel>
       </StackPanel>

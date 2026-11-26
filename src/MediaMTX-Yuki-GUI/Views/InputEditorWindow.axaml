@@ -18,7 +18,7 @@
     <TextBlock Grid.Row="0"
                Margin="0,0,0,20"
                Classes="page-subtitle"
-               Text="{loc:Loc l003-005}" />
+               Text="{loc:Loc l003-006}" />
 
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
       <StackPanel>
@@ -44,7 +44,7 @@
                   PointerPressed="OnPushKindPressed">
             <StackPanel>
               <TextBlock Classes="kind-title" Text="{loc:Loc c003-019}" />
-              <TextBlock Classes="kind-note" Text="{loc:Loc l003-008}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l003-009}" />
             </StackPanel>
           </Border>
 
@@ -55,7 +55,7 @@
                   PointerPressed="OnPullKindPressed">
             <StackPanel>
               <TextBlock Classes="kind-title" Text="{loc:Loc c003-018}" />
-              <TextBlock Classes="kind-note" Text="{loc:Loc l003-009}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l003-010}" />
             </StackPanel>
           </Border>
         </Grid>
@@ -98,7 +98,7 @@
                    Classes="danger-hint"
                    IsVisible="{Binding PathInvalid}"
                    Text="{Binding PathErrorText}" />
-        <TextBlock Classes="hint" Text="{loc:Loc l003-006}" />
+        <TextBlock Classes="hint" Text="{loc:Loc l003-007}" />
 
         <!-- 主动拉流时才显示；留空则是接收推流 -->
         <StackPanel Margin="0,16,0,0" IsVisible="{Binding IsPulling}">
@@ -114,8 +114,8 @@
           <TextBlock Margin="0,0,0,4"
                      Classes="danger-hint"
                      IsVisible="{Binding PullUrlInvalid}"
-                     Text="{loc:Loc c003-038}" />
-          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{loc:Loc l003-007}" />
+                     Text="{loc:Loc l003-001}" />
+          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{loc:Loc l003-008}" />
         </StackPanel>
 
         <TextBlock Margin="0,4,0,0"
@@ -127,7 +127,7 @@
              账号表是空的时候整块不出现，没建账号摆一串空勾选框只会让人困惑 -->
         <StackPanel Margin="0,18,0,0" IsVisible="{Binding ShowAccountPicker}">
 
-          <TextBlock Classes="field-label" Text="{loc:Loc c003-045}" />
+          <TextBlock Classes="field-label" Text="{loc:Loc c003-043}" />
 
           <ItemsControl Margin="0,4,0,0" ItemsSource="{Binding AccountChecks}">
             <ItemsControl.ItemsPanel>
@@ -148,20 +148,20 @@
           <TextBlock Margin="0,2,0,0"
                      Classes="hint"
                      TextWrapping="Wrap"
-                     Text="{loc:Loc l003-015}" />
+                     Text="{loc:Loc l003-014}" />
         </StackPanel>
 
         <!-- 两个开关并排在最后一行：先启用，才谈得上录制，所以录制的开关跟着前一个走 -->
         <StackPanel Margin="0,20,0,0"
                     Orientation="Horizontal"
                     Spacing="10">
-          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-041}" />
+          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-039}" />
           <ToggleSwitch VerticalAlignment="Center" IsChecked="{Binding Enabled, Mode=TwoWay}" />
           <StackPanel Margin="24,0,0,0"
                       Orientation="Horizontal"
                       Spacing="10"
                       IsVisible="{Binding IsAdvancedMode}">
-            <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-044}" />
+            <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-042}" />
             <ToggleSwitch VerticalAlignment="Center"
                           IsChecked="{Binding RecordShown, Mode=TwoWay}"
                           IsEnabled="{Binding Enabled}" />

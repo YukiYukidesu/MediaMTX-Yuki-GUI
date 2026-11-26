@@ -31,7 +31,7 @@
 
         <c:SettingRow Glyph="&#xE790;"
                       Title="{loc:Loc cs01-002}"
-                      Description="{loc:Loc ls01-001}">
+                      Description="{loc:Loc cs01-013}">
           <ComboBox HorizontalAlignment="Right"
                     SelectedIndex="{Binding ThemeIndex, Mode=TwoWay}">
             <ComboBoxItem Content="{loc:Loc cs01-003}" Tag="system" />
@@ -42,7 +42,7 @@
 
         <c:SettingRow Glyph="&#xE790;"
                       Title="{loc:Loc cs01-006}"
-                      Description="{loc:Loc ls01-002}">
+                      Description="{loc:Loc ls01-001}">
           <ComboBox HorizontalAlignment="Right"
                     SelectedIndex="{Binding WindowBackdropIndex, Mode=TwoWay}">
             <ComboBoxItem Content="{loc:Loc cs01-007}" Tag="mica" />
@@ -66,7 +66,7 @@
 
         <c:SettingRow Glyph="&#xE7F8;"
                       Title="{loc:Loc cs01-012}"
-                      Description="{loc:Loc ls01-004}">
+                      Description="{loc:Loc ls01-002}">
           <ToggleSwitch IsChecked="{Binding HardwareAcceleration, Mode=TwoWay}" />
         </c:SettingRow>
 
@@ -87,19 +87,19 @@
 
         <c:SettingRow Glyph="&#xE7E8;"
                       Title="{loc:Loc cs02-002}"
-                      Description="{loc:Loc ls02-002}">
+                      Description="{loc:Loc cs02-011}">
           <ToggleSwitch IsChecked="{Binding StartWithWindows}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE921;"
                       Title="{loc:Loc cs02-003}"
-                      Description="{loc:Loc ls02-003}">
+                      Description="{loc:Loc cs02-012}">
           <ToggleSwitch IsChecked="{Binding CloseToTray}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE81C;"
                       Title="{loc:Loc cs02-004}"
-                      Description="{loc:Loc ls02-004}">
+                      Description="{loc:Loc ls02-002}">
           <ComboBox HorizontalAlignment="Right"
                     SelectedIndex="{Binding MemoryTrimIndex, Mode=TwoWay}">
             <ComboBoxItem Content="{loc:Loc cs02-005}" Tag="instant" />
@@ -125,19 +125,19 @@
 
         <c:SettingRow Glyph="&#xE768;"
                       Title="{loc:Loc cs03-002}"
-                      Description="{loc:Loc ls03-002}">
+                      Description="{loc:Loc cs03-011}">
           <ToggleSwitch IsChecked="{Binding AutoStartEngine}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE72C;"
                       Title="{loc:Loc cs03-003}"
-                      Description="{loc:Loc ls03-003}">
+                      Description="{loc:Loc cs03-012}">
           <ToggleSwitch IsChecked="{Binding AutoRestartEngine}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE81C;"
                       Title="{loc:Loc cs03-004}"
-                      Description="{loc:Loc ls03-004}">
+                      Description="{loc:Loc ls03-002}">
           <ComboBox HorizontalAlignment="Right"
                     SelectedIndex="{Binding LogRetentionIndex, Mode=TwoWay}">
             <ComboBoxItem Content="{loc:Loc cs03-005}" />
@@ -149,13 +149,13 @@
 
         <c:SettingRow Glyph="&#xE8B7;"
                       Title="{loc:Loc cs03-009}"
-                      Description="{loc:Loc ls03-005}">
+                      Description="{loc:Loc ls03-003}">
           <ToggleSwitch IsChecked="{Binding PathAllOthers}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE916;"
                       Title="{loc:Loc cs03-010}"
-                      Description="{loc:Loc ls03-006}">
+                      Description="{loc:Loc ls03-004}">
           <ToggleSwitch IsChecked="{Binding UseAbsoluteTimestamp}" />
         </c:SettingRow>
       </StackPanel>
@@ -176,8 +176,8 @@
 
         <c:SettingRow Glyph="&#xE896;"
                       Title="{loc:Loc cs04-007}"
-                      Description="{loc:Loc ls04-002}"
-                      Caution="{loc:Loc ls04-020}">
+                      Description="{loc:Loc cs04-022}"
+                      Caution="{loc:Loc ls04-010}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox HorizontalAlignment="Right"
                       ItemsSource="{Binding UpdateSourceNames}"
@@ -188,8 +188,8 @@
 
         <c:SettingRow Glyph="&#xE8F1;"
                       Title="{loc:Loc cs04-008}"
-                      Description="{loc:Loc ls04-003}"
-                      Caution="{loc:Loc ls04-021}">
+                      Description="{loc:Loc cs04-023}"
+                      Caution="{loc:Loc ls04-011}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox HorizontalAlignment="Right"
                       ItemsSource="{Binding UpdateSourceNames}"
@@ -200,9 +200,9 @@
 
         <c:SettingRow Glyph="&#xE968;"
                       Title="{loc:Loc cs04-009}"
-                      Description="{loc:Loc ls04-004}"
+                      Description="{loc:Loc ls04-002}"
                       Required="{Binding StreamProxyRequired}"
-                      Caution="{loc:Loc ls04-015}"
+                      Caution="{loc:Loc ls04-007}"
                       Warning="{Binding StreamProxyWarning}">
           <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
             <TextBox Width="256"
@@ -221,9 +221,9 @@
 
         <c:SettingRow Glyph="&#xE968;"
                       Title="{loc:Loc cs04-010}"
-                      Description="{loc:Loc ls04-005}"
+                      Description="{loc:Loc ls04-003}"
                       Required="{Binding UpdateProxyRequired}"
-                      Caution="{loc:Loc ls04-022}"
+                      Caution="{loc:Loc ls04-012}"
                       Warning="{Binding UpdateProxyWarning}">
           <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
             <TextBox Width="256"
@@ -243,8 +243,8 @@
         <!-- 本程序更新：按下面的通道决定查正式版还是连预览版一起查，装完自己重启 -->
         <c:SettingRow Glyph="&#xE895;"
                       Title="{loc:Loc cs04-014}"
-                      Description="{loc:Loc ls04-018}"
-                      Caution="{loc:Loc ls04-023}">
+                      Description="{loc:Loc ls04-008}"
+                      Caution="{loc:Loc ls04-013}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox MinWidth="112"
                       SelectedIndex="{Binding AppChannelIndex, Mode=TwoWay}">
@@ -274,7 +274,7 @@
         -->
         <c:SettingRow Glyph="&#xE7F8;"
                       Title="{loc:Loc cs04-015}"
-                      Description="{loc:Loc ls04-019}"
+                      Description="{loc:Loc ls04-009}"
                       Caution="{Binding EngineUpdateCaution}">
           <StackPanel Orientation="Horizontal" Spacing="12">
             <ComboBox MinWidth="132"
@@ -316,37 +316,37 @@
 
         <c:SettingRow Glyph="&#xE8A5;"
                       Title="{loc:Loc cs05-002}"
-                      Description="{loc:Loc ls05-002}">
+                      Description="{loc:Loc cs05-008}">
           <TextBox Width="88" TextAlignment="Right" Text="{Binding MaxReaders}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE73E;"
                       Title="{loc:Loc cs05-003}"
-                      Description="{loc:Loc ls05-003}">
+                      Description="{loc:Loc cs05-009}">
           <ToggleSwitch IsChecked="{Binding AlwaysAvailable}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE8AB;"
                       Title="{loc:Loc cs05-004}"
-                      Description="{loc:Loc ls05-004}">
+                      Description="{loc:Loc cs05-010}">
           <ToggleSwitch IsChecked="{Binding OverridePublisher}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE916;"
                       Title="{loc:Loc cs05-005}"
-                      Description="{loc:Loc ls05-005}">
+                      Description="{loc:Loc cs05-011}">
           <TextBox Width="88" TextAlignment="Right" Text="{Binding ReadTimeoutSeconds}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE916;"
                       Title="{loc:Loc cs05-006}"
-                      Description="{loc:Loc ls05-006}">
+                      Description="{loc:Loc cs05-012}">
           <TextBox Width="88" TextAlignment="Right" Text="{Binding WriteTimeoutSeconds}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE8EF;"
                       Title="{loc:Loc cs05-007}"
-                      Description="{loc:Loc ls05-007}">
+                      Description="{loc:Loc cs05-013}">
           <TextBox Width="88" TextAlignment="Right" Text="{Binding WriteQueueSize}" />
         </c:SettingRow>
 
@@ -367,19 +367,19 @@
 
         <c:SettingRow Glyph="&#xE968;"
                       Title="Control API"
-                      Description="{loc:Loc ls06-002}">
+                      Description="{loc:Loc cs06-004}">
           <TextBox Width="88" TextAlignment="Right" Text="{Binding ApiPort}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE9D9;"
                       Title="Metrics"
-                      Description="{loc:Loc ls06-003}">
+                      Description="{loc:Loc cs06-005}">
           <TextBox Width="88" TextAlignment="Right" Text="{Binding MetricsPort}" />
         </c:SettingRow>
 
         <c:SettingRow Glyph="&#xE7F4;"
                       Title="{loc:Loc cs06-002}"
-                      Description="{loc:Loc ls06-004}">
+                      Description="{loc:Loc cs06-006}">
           <StackPanel Orientation="Horizontal" Spacing="14">
             <TextBox Width="88" TextAlignment="Right" VerticalAlignment="Center"
                      IsEnabled="{Binding PprofEnabled}"
@@ -390,7 +390,7 @@
 
         <c:SettingRow Glyph="&#xE768;"
                       Title="{loc:Loc cs06-003}"
-                      Description="{loc:Loc ls06-005}">
+                      Description="{loc:Loc cs06-007}">
           <StackPanel Orientation="Horizontal" Spacing="14">
             <TextBox Width="88" TextAlignment="Right" VerticalAlignment="Center"
                      IsEnabled="{Binding PlaybackEnabled}"
@@ -415,8 +415,8 @@
                    Margin="0,0,0,8" />
 
         <c:SettingRow Glyph="&#xE72E;"
-                      Title="{loc:Loc ls07-002}"
-                      Description="{loc:Loc ls07-003}">
+                      Title="{loc:Loc cs07-002}"
+                      Description="{loc:Loc ls07-002}">
           <ToggleSwitch IsChecked="{Binding AuthEnabled}" />
         </c:SettingRow>
 
@@ -802,7 +802,7 @@
 
           <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
             <TextBlock Text="{Binding RecommendedEngineVersionText}" Classes="hint" />
-            <TextBlock Text="{loc:Loc ls13-003}"
+            <TextBlock Text="{loc:Loc cs13-007}"
                        Classes="hint"
                        Opacity="0.75"
                        VerticalAlignment="Center" />

@@ -31,7 +31,7 @@
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding InputEnabledFirst}"
-                      ToolTip.Tip="{loc:Loc l003-002}" />
+                      ToolTip.Tip="{loc:Loc l003-004}" />
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
@@ -303,7 +303,7 @@
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
                               IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc l003-003}">
+                              ToolTip.Tip="{loc:Loc c003-044}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -327,7 +327,7 @@
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
           <TextBlock Text="{loc:Loc c003-023}" Classes="empty-title" HorizontalAlignment="Center" />
-          <TextBlock Text="{loc:Loc l003-004}" Classes="hint" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc l003-005}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
         <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。

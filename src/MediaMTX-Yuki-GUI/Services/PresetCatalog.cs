@@ -30,18 +30,18 @@ public static class PresetCatalog
             L.T("l004-010")),
 
         new("youtube", "YouTube", "rtmps://a.rtmps.youtube.com/live2",
-            L.T("c004-043")),
+            L.T("l004-001")),
 
         new("twitch", "Twitch", "rtmp://live.twitch.tv/app/",
-            L.T("c004-044")),
+            L.T("c004-043")),
 
-        new("huya", L.T("c004-045"), "",
+        new("huya", L.T("c004-044"), "",
             L.T("l004-011")),
 
-        new("douyu", L.T("c004-046"), "",
+        new("douyu", L.T("c004-045"), "",
             L.T("l004-012")),
 
-        new(CustomId, L.T("c004-047"), "",
+        new(CustomId, L.T("c004-046"), "",
             L.T("l004-013")),
     };
 

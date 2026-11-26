@@ -112,7 +112,7 @@ public sealed partial class TargetEditorWindow : FAAppWindow, INotifyPropertyCha
             if (name.Length == 0) return string.Empty;
 
             return _otherNames.Contains(name, StringComparer.Ordinal)
-                ? L.T("c004-056").Replace("{name}", name)
+                ? L.T("l004-002").Replace("{name}", name)
                 : string.Empty;
         }
     }

@@ -193,8 +193,8 @@ public sealed partial class MainViewModel
         int changed = SetEnabledForInputSelection(true);
 
         ShowToast(changed > 0
-            ? L.T("t003-005").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
-            : L.T("t003-013"),
+            ? L.T("t003-001").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            : L.T("t003-005"),
             changed > 0 ? ToastKind.Success : ToastKind.Info);
     }
 
@@ -204,8 +204,8 @@ public sealed partial class MainViewModel
         int changed = SetEnabledForInputSelection(false);
 
         ShowToast(changed > 0
-            ? L.T("t003-006").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
-            : L.T("t003-014"),
+            ? L.T("t003-002").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            : L.T("t003-006"),
             changed > 0 ? ToastKind.Success : ToastKind.Info);
     }
 
@@ -220,9 +220,9 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("t001-012"),
-                L.T("t003-011").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("t001-010"),
+                L.T("c001-026"),
+                L.T("l003-015").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                L.T("c001-019"),
                 destructive: true);
 
             if (!ok) return;
@@ -237,7 +237,7 @@ public sealed partial class MainViewModel
         RefreshOverview();
         ScheduleApply();
 
-        ShowToast(L.T("t003-012").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)), ToastKind.Success);
+        ShowToast(L.T("t003-004").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)), ToastKind.Success);
     }
 
     [RelayCommand]
@@ -295,7 +295,7 @@ public sealed partial class MainViewModel
         RefreshOverview();
         ScheduleApply();
 
-        ShowToast(L.T(isNew ? "t003-001" : "t003-002").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(isNew ? "c003-047" : "c003-048").Replace("{name}", item.DisplayName), ToastKind.Success);
 
         return true;
     }
@@ -339,7 +339,7 @@ public sealed partial class MainViewModel
 
         item.Enabled = !item.Enabled;
 
-        ShowToast(L.T(item.Enabled ? "t003-003" : "t003-004").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(item.Enabled ? "c003-049" : "c003-050").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
 
     /// <summary>
@@ -354,7 +354,7 @@ public sealed partial class MainViewModel
         item.Record = !item.Record;
         NeedsEngineRestart = true;
 
-        ShowToast(L.T(item.Record ? "t003-007" : "t003-008").Replace("{name}", item.DisplayName), ToastKind.Warn);
+        ShowToast(L.T(item.Record ? "c003-051" : "c003-052").Replace("{name}", item.DisplayName), ToastKind.Warn);
     }
 
     /// <summary>
@@ -410,7 +410,7 @@ public sealed partial class MainViewModel
         RefreshOverview();
         ScheduleApply();
 
-        ShowToast(L.T("t003-009").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T("t003-003").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
 
     /// <summary>新增一条输入：先弹窗填，确认了才加进列表。</summary>

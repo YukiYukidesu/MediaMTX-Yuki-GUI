@@ -59,12 +59,12 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
         // 窗口顶上一整条印全：备注、完整 Id、完整地址。列表里那列「编号」只截前 6 位，
         // 要核对是哪一条时得到这儿看全文。
         WindowTitle = L.T("c009-003") + " · " + displayName;
-        Subtitle = L.T("c009-004")
+        Subtitle = L.T("l009-001")
             .Replace("{name}", displayName)
             .Replace("{id}", inputId)
             .Replace("{address}", address);
-        EmptyTitle = L.T("c009-006");
-        EmptyText = L.T("l009-001");
+        EmptyTitle = L.T("c009-005");
+        EmptyText = L.T("l009-002");
 
         RefreshCommand = new AsyncRelayCommand(LoadAsync);
         DeleteSegmentCommand = new AsyncRelayCommand<RecordingRow>(DeleteSegmentAsync);
@@ -157,8 +157,8 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
             if (segments is null)
             {
                 // null 是「读不到」，不是「没有」，别让人误以为一段都没录
-                EmptyTitle = L.T("c009-007");
-                EmptyText = L.T("l009-007");
+                EmptyTitle = L.T("c009-006");
+                EmptyText = L.T("l009-004");
                 Raise(nameof(IsEmpty));
                 Raise(nameof(HasRows));
 
@@ -170,9 +170,9 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
                 Rows.Add(RecordingRow.From(segment.Start, segment.Duration));
             }
 
-            EmptyTitle = L.T("c009-006");
-            EmptyText = L.T("l009-001");
-            StatusText = Rows.Count == 0 ? "" : L.T("l009-003").Replace("{n}", Rows.Count.ToString(CultureInfo.InvariantCulture));
+            EmptyTitle = L.T("c009-005");
+            EmptyText = L.T("l009-002");
+            StatusText = Rows.Count == 0 ? "" : L.T("c009-008").Replace("{n}", Rows.Count.ToString(CultureInfo.InvariantCulture));
         }
         catch (OperationCanceledException)
         {
@@ -197,9 +197,9 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
 
         Popconfirm.Show(
             button,
-            L.T("l009-004"),
-            L.T("t001-010"),
-            L.T("t001-011"),
+            L.T("l009-003"),
+            L.T("c001-019"),
+            L.T("c001-021"),
             () => _ = DeleteSegmentAsync(row));
     }
 
@@ -212,14 +212,14 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
         if (ok)
         {
             Rows.Remove(row);
-            StatusText = L.T("l009-005");
+            StatusText = L.T("c009-009");
             Raise(nameof(IsEmpty));
             Raise(nameof(HasRows));
 
             return;
         }
 
-        StatusText = L.T("l009-006");
+        StatusText = L.T("c009-010");
     }
 
     // ====== 通知 ======
