@@ -88,7 +88,7 @@ public sealed partial class TargetEditorWindow : FAAppWindow, INotifyPropertyCha
         => _isNew ? L.T("c004-033") : L.T("c004-038");
 
     public string ConfirmText
-        => _isNew ? L.T("c001-022") : L.T("c001-023");
+        => _isNew ? L.T("c001-021") : L.T("c001-022");
 
     public ObservableCollection<PlatformPreset> PlatformChoices { get; } =
         new(PresetCatalog.All);

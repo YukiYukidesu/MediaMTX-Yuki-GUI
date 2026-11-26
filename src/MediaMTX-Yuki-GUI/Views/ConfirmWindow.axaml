@@ -25,7 +25,7 @@
                 Orientation="Horizontal">
       <!-- 取消永远在执行按钮左边：右边那颗才是「这一步要做的事」 -->
       <Button MinWidth="88"
-              Content="{loc:Loc c001-021}"
+              Content="{loc:Loc c001-020}"
               Command="{Binding CancelCommand}"
               IsCancel="True" />
 

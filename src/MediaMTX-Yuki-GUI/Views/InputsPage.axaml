@@ -39,7 +39,7 @@
         <Button Classes="batch-green" Content="{loc:Loc c003-020}" Command="{Binding StartSelectedInputsCommand}" />
         <Button Classes="batch-red" Content="{loc:Loc c003-021}" Command="{Binding StopSelectedInputsCommand}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc c001-020}" Command="{Binding RemoveSelectedInputsCommand}" />
+                Content="{loc:Loc c001-019}" Command="{Binding RemoveSelectedInputsCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
                 Content="{loc:Loc c003-022}" Command="{Binding AddInputCommand}" />
       </StackPanel>
@@ -113,7 +113,7 @@
           <!-- 操作列的文字与行内按钮都靠左：按钮数量会随模式变（简洁模式少两颗），
                靠右对齐的话第一个按钮的位置会跟着跳，跟分界线的间距就不固定了 -->
           <TextBlock Grid.Column="2" Classes="column-header" Margin="4,0,0,0"
-                     Text="{loc:Loc c001-017}" HorizontalAlignment="Left" />
+                     Text="{loc:Loc c001-016}" HorizontalAlignment="Left" />
         </Grid>
 
         <!-- 行数超出底框就在框内纵向滚动：底框高度固定，行多也不会把整页撑长 -->
@@ -258,7 +258,7 @@
                         </Panel>
                       </Button>
 
-                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc c001-018}"
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc c001-017}"
                               IsVisible="{Binding !RuntimeDisabled}"
                               Command="{Binding $parent[Window].DataContext.OpenInputCommand}"
                               CommandParameter="{Binding}">
@@ -293,7 +293,7 @@
                         </Button>
                       </StackPanel>
 
-                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c001-019}"
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c001-018}"
                               Click="OnRemoveInputClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>

@@ -31,8 +31,8 @@ public partial class InputsPage : UserControl
         Popconfirm.Show(
             (Control)sender,
             L.T("c003-053").Replace("{name}", item.DisplayName),
-            L.T("c001-019"),
-            L.T("c001-021"),
+            L.T("c001-018"),
+            L.T("c001-020"),
             () => viewModel.RemoveInputCommand.Execute(item));
     }
 }

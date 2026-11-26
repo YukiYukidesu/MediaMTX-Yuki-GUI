@@ -351,7 +351,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private string _engineVersion = string.Empty;
 
     public string EngineVersionText
-        => string.IsNullOrEmpty(EngineVersion) ? L.T("c002-001") : L.T("c002-002") + EngineVersion;
+        => string.IsNullOrEmpty(EngineVersion) ? L.T("c002-001") : L.T("c002-002").Replace("{version}", EngineVersion);
 
     /// <summary>
     /// 版本号是后到的：启动时先查更新、再问引擎要版本，推荐通道又不联网，
@@ -616,7 +616,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private string _localPushUrl = "rtmp://127.0.0.1:1935/live";
 
     [ObservableProperty]
-    private string _statusDetail = L.T("c002-024");
+    private string _statusDetail = L.T("c002-023");
 
     // ====== 数据 ======
 
@@ -1227,7 +1227,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public bool IsAllSelected => Targets.Count > 0 && SelectedCount == Targets.Count;
 
     /// <summary>工具栏右侧的勾选提示。</summary>
-    public string SelectionText => SelectedCount == 0 ? L.T("c001-014") : L.T("c001-015") + SelectedCount + L.T("c001-016");
+    public string SelectionText => SelectedCount == 0 ? L.T("c001-014") : L.T("c001-015").Replace("{n}", SelectedCount.ToString());
 
     /// <summary>全选按钮的文案，全选之后就变成取消全选。</summary>
     public string SelectAllText => IsAllSelected ? L.T("c001-013") : L.T("c001-012");
@@ -1281,9 +1281,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("c001-026"),
+                L.T("c001-025"),
                 L.T("l004-020").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("c001-019"),
+                L.T("c001-018"),
                 destructive: true);
 
             if (!ok) return;
@@ -1516,7 +1516,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (!_engine.Start())
         {
             EngineStatus = L.T("c002-009");
-            StatusDetail = L.T("c002-023");
+            StatusDetail = L.T("c002-022");
             ShowToast(L.T("t010-003"), ToastKind.Error);
 
             return;
@@ -1529,7 +1529,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (!ready)
         {
             EngineStatus = L.T("c002-008");
-            StatusDetail = L.T("c002-022");
+            StatusDetail = L.T("c002-021");
             ShowToast(L.T("t010-003"), ToastKind.Error);
 
             return;
@@ -1564,7 +1564,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         IsEngineRunning = false;
         EngineStatus = L.T("c002-007");
-        StatusDetail = L.T("c002-025");
+        StatusDetail = L.T("c002-024");
 
         _metricsCts?.Cancel();
         _metricsCts = null;
@@ -1591,14 +1591,14 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             {
                 IsEngineRunning = false;
                 EngineStatus = L.T("c002-007");
-                StatusDetail = L.T("c002-025");
+                StatusDetail = L.T("c002-024");
 
                 return;
             }
 
             IsEngineRunning = false;
             EngineStatus = L.T("c002-011");
-            StatusDetail = L.T("c002-026");
+            StatusDetail = L.T("c002-025");
 
             _ = RestartEngineAsync();
         });
@@ -1670,8 +1670,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         int enabled = Targets.Count(item => item.Enabled);
 
         StatusDetail = enabled == 0
-            ? L.T("c002-027")
-            : L.T("c002-018") + enabled + L.T("c002-019");
+            ? L.T("c002-026")
+            : L.T("c002-018").Replace("{n}", enabled.ToString());
     }
 
     // ====== 指标轮询 ======
@@ -2375,8 +2375,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
 
         StatusDetail = ok
-            ? L.T("c002-020") + total + L.T("c002-019")
-            : L.T("c002-028");
+            ? L.T("c002-019").Replace("{n}", total.ToString())
+            : L.T("c002-027");
     }
 
     // ====== 变更防抖 ======
@@ -2542,8 +2542,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public string IngestHint
         => _cfg.Engine.Ingest switch
         {
-            "srt" when !_cfg.Protocols.Srt => L.T("c002-029"),
-            "rtsp" when !_cfg.Protocols.Rtsp => L.T("c002-030"),
+            "srt" when !_cfg.Protocols.Srt => L.T("c002-028"),
+            "rtsp" when !_cfg.Protocols.Rtsp => L.T("c002-029"),
             _ => "",
         };
 

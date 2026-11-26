@@ -26,7 +26,7 @@ public sealed partial class MainViewModel
         => Inputs.Count > 0 && SelectedInputCount == Inputs.Count;
 
     public string InputSelectionText
-        => SelectedInputCount == 0 ? L.T("c001-014") : L.T("c001-015") + SelectedInputCount + L.T("c001-016");
+        => SelectedInputCount == 0 ? L.T("c001-014") : L.T("c001-015").Replace("{n}", SelectedInputCount.ToString());
 
     public string SelectAllInputsText
         => IsAllInputsSelected ? L.T("c001-013") : L.T("c001-012");
@@ -220,9 +220,9 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("c001-026"),
+                L.T("c001-025"),
                 L.T("l003-015").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("c001-019"),
+                L.T("c001-018"),
                 destructive: true);
 
             if (!ok) return;

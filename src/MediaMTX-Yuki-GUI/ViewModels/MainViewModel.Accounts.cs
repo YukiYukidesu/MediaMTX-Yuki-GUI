@@ -40,7 +40,7 @@ public sealed partial class MainViewModel
 
     /// <summary>工具栏那句「未选择 / 已选 N 项」，与两个列表页共用同一套词。</summary>
     public string AccountSelectionText
-        => SelectedAccountCount == 0 ? L.T("c001-014") : L.T("c001-015") + SelectedAccountCount + L.T("c001-016");
+        => SelectedAccountCount == 0 ? L.T("c001-014") : L.T("c001-015").Replace("{n}", SelectedAccountCount.ToString());
 
     public string SelectAllAccountsText
         => IsAllAccountsSelected ? L.T("c001-013") : L.T("c001-012");
@@ -175,9 +175,9 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("c001-026"),
+                L.T("c001-025"),
                 L.T("l005-007").Replace("{n}", count),
-                L.T("c001-019"),
+                L.T("c001-018"),
                 destructive: true);
 
             if (!ok) return;

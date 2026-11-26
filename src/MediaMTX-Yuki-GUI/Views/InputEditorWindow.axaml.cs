@@ -121,7 +121,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
         => _isNew ? L.T("c003-022") : L.T("c003-031");
 
     public string ConfirmText
-        => _isNew ? L.T("c001-022") : L.T("c001-023");
+        => _isNew ? L.T("c001-021") : L.T("c001-022");
 
     /// <summary>「允许推流的账号」每一行的勾选状态。</summary>
     public ObservableCollection<PublishAccountCheck> AccountChecks { get; } = [];
@@ -417,7 +417,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>端口框里的灰字：不填就用协议默认端口。</summary>
     public string PortPlaceholder
-        => L.T("c003-035") + " " + InputProtocols.DefaultPort(Protocol);
+        => L.T("c003-035").Replace("{port}", InputProtocols.DefaultPort(Protocol).ToString());
 
     public string PortWarning
     {

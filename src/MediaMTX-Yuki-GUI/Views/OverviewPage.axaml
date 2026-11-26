@@ -133,7 +133,7 @@
             <TextBlock Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
                        HorizontalAlignment="Center"
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-            <TextBlock Text="{loc:Loc c002-021}" Classes="empty-title" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc c002-020}" Classes="empty-title" HorizontalAlignment="Center" />
             <TextBlock Text="{loc:Loc l002-005}" Classes="hint" HorizontalAlignment="Center" />
           </StackPanel>
 

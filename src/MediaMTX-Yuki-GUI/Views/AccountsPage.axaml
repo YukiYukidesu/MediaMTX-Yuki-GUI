@@ -31,7 +31,7 @@
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc c001-020}" Command="{Binding RemoveSelectedAccountsCommand}" />
+                Content="{loc:Loc c001-019}" Command="{Binding RemoveSelectedAccountsCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
                 Content="{loc:Loc c005-005}" Command="{Binding AddAccountCommand}" />
       </StackPanel>
@@ -50,7 +50,7 @@
           <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c005-001}" HorizontalAlignment="Left" />
           <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c005-002}" HorizontalAlignment="Left" />
           <TextBlock Grid.Column="3" Classes="column-header" Text="{loc:Loc c005-003}" HorizontalAlignment="Center" />
-          <TextBlock Grid.Column="4" Classes="column-header" Text="{loc:Loc c001-017}" HorizontalAlignment="Left" Margin="8,0,0,0" />
+          <TextBlock Grid.Column="4" Classes="column-header" Text="{loc:Loc c001-016}" HorizontalAlignment="Left" Margin="8,0,0,0" />
         </Grid>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -95,13 +95,13 @@
                                 HorizontalAlignment="Left"
                                 Margin="8,0,0,0">
                       <Button Classes="icon-square"
-                              ToolTip.Tip="{loc:Loc c001-018}"
+                              ToolTip.Tip="{loc:Loc c001-017}"
                               Command="{Binding $parent[Window].DataContext.EditAccountCommand}"
                               CommandParameter="{Binding}">
                         <TextBlock Classes="glyph" Text="&#xE70F;" />
                       </Button>
                       <Button Classes="icon-square danger"
-                              ToolTip.Tip="{loc:Loc c001-019}"
+                              ToolTip.Tip="{loc:Loc c001-018}"
                               Click="OnRemoveAccountClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>
