@@ -122,7 +122,8 @@ public sealed partial class MainViewModel
             }
         }
 
-        MapLinks = links;
+        // 内容没变就别赋值：每次赋值都会让连线控件整张重绘，两秒一次很显眼
+        if (!links.SequenceEqual(MapLinks)) MapLinks = links;
     }
 
     private void RebuildMap()

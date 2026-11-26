@@ -1762,14 +1762,28 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             await FillForwardErrorsAsync(input, rows, ct);
         }
 
+        long t1 = Environment.TickCount64;
+
         await RefreshPathsAsync(now, ct);
 
+        long t2 = Environment.TickCount64;
+
         await RefreshRecordSizesAsync();
+
+        long t3 = Environment.TickCount64;
 
         RefreshStats();
 
         // 关系图的圆点与连线跟着这一轮指标一起变，不必等下一次配置变化
         RefreshMapStates();
+
+        long t4 = Environment.TickCount64;
+
+        // 定位「每两秒卡一下」用：哪一段慢一眼能看出来，超过 150ms 才记
+        if (t4 - t1 > 150)
+        {
+            Services.AppLog.Write($"[METRICS] paths={t2 - t1} records={t3 - t2} stats={t4 - t3}");
+        }
     }
 
     /// <summary>
