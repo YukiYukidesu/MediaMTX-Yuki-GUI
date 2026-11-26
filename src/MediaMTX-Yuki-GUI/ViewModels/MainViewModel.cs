@@ -100,6 +100,14 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         nameof(InputItemViewModel.RuntimeDisabled),
         nameof(TargetItemViewModel.RuntimeDisabled),
 
+        // 指标轮询每秒回填的统计字段：不挡的话推流一开就每秒写一次盘 + 推一遍 forward
+        nameof(InputItemViewModel.InboundSpeedText),
+        nameof(InputItemViewModel.RecordSizeText),
+        nameof(InputItemViewModel.LiveText),
+        nameof(InputItemViewModel.IsRecording),
+        nameof(TargetItemViewModel.StateText),
+        nameof(TargetItemViewModel.IsStreaming),
+
         // 设置页换了默认代理档，列表里「默认：X」要跟着变，但这不是用户改了这一行，
         // 不能触发落盘与重推
         nameof(TargetItemViewModel.DefaultProxyMode),
