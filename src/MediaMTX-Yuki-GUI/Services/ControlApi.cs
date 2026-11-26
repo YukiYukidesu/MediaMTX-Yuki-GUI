@@ -222,8 +222,9 @@ public sealed class ControlApi : IDisposable
 
         try
         {
-            // 只要转发目标的字节数：整份 metrics 有几千万字节，拉全量光是解析就要近一秒
-        return await meter.GetStringAsync("/metrics?name[]=forward_dests_outbound_bytes", ct);
+            // 只要转发目标的字节数。MediaMTX 的 metrics 端点支持 type 过滤（internal/metrics/metrics.go:78
+        // 的 metricsTypeForwardDests = "forward_dests"），拉全量是几千万字节、光解析就要零点几秒
+        return await meter.GetStringAsync("/metrics?type=forward_dests", ct);
         }
         catch (HttpRequestException)
         {
