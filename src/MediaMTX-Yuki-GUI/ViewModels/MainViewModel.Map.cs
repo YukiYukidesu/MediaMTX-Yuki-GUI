@@ -142,7 +142,15 @@ public sealed partial class MainViewModel
 
             sourceWidths[index] = source is null ? 0 : EstimateNodeWidth(source.DisplayName);
             targetWidths[index] = widest;
-            clusterWidths[index] = source is null ? widest : sourceWidths[index] + MapClusterGap + widest;
+            // 一个目标都没有的簇只需要「源 + 一截断头线」那么宽，多给就是空白
+            if (targets.Count == 0)
+            {
+                clusterWidths[index] = sourceWidths[index] + MapLinkStub;
+            }
+            else
+            {
+                clusterWidths[index] = source is null ? widest : sourceWidths[index] + MapClusterGap + widest;
+            }
             blockHeights[index] = ClusterHeight(targets.Count);
         }
 
@@ -179,7 +187,8 @@ public sealed partial class MainViewModel
             double clusterY = top + placement.Y;
             double clusterWidth = clusterWidths[placement.Id];
             double sourceRight = clusterX + sourceWidths[placement.Id];
-            double targetX = sourceRight + MapClusterGap;
+            // 孤儿目标没有源，左边不留簇内间距，否则就是一块空白
+            double targetX = source is null ? clusterX : sourceRight + MapClusterGap;
             double blockHeight = blockHeights[placement.Id];
             double sourceY = clusterY + (blockHeight - MapNodeHeight) / 2;
 
@@ -226,6 +235,17 @@ public sealed partial class MainViewModel
                     alive);
 
                 FillTargetNode(targetNode, target, engineRunning, source is null);
+
+                // 没绑源的孤儿目标：左边也伸一小截断头虚线，和孤儿源对称
+                if (source is null)
+                {
+                    links.Add(new RelationLinkShape(
+                        targetX - MapLinkStub,
+                        targetY + MapNodeHeight / 2,
+                        targetX,
+                        targetY + MapNodeHeight / 2,
+                        MapLinkState.Off));
+                }
 
                 if (source is not null)
                 {
