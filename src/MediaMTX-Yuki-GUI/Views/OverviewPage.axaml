@@ -67,10 +67,10 @@
                    IsVisible="{Binding IngestHintVisible}" />
 
         <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-          <Button Classes="primary" Content="{loc:Loc c002-014}"
+          <Button Classes="primary" Content="{loc:Loc c002-013}"
                   Command="{Binding ToggleEngineCommand}"
                   IsVisible="{Binding IsEngineStopped}" />
-          <Button Classes="danger-solid" Content="{loc:Loc c002-015}"
+          <Button Classes="danger-solid" Content="{loc:Loc c002-014}"
                   Command="{Binding ToggleEngineCommand}"
                   IsVisible="{Binding IsEngineRunning}" />
         </StackPanel>
@@ -82,7 +82,7 @@
          底框占第 2 行（星号），一个节点都没有时它也照样占着那一块 -->
     <Grid Grid.Row="2" RowDefinitions="Auto,*">
       <StackPanel Grid.Row="0" Margin="{StaticResource DsCardGap}">
-        <TextBlock Text="{loc:Loc c002-016}" FontSize="15" FontWeight="SemiBold" />
+        <TextBlock Text="{loc:Loc c002-015}" FontSize="15" FontWeight="SemiBold" />
         <TextBlock Text="{loc:Loc l002-003}" Classes="hint" TextWrapping="Wrap" />
       </StackPanel>
 
@@ -133,7 +133,7 @@
             <TextBlock Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
                        HorizontalAlignment="Center"
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-            <TextBlock Text="{loc:Loc c002-022}" Classes="empty-title" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc c002-021}" Classes="empty-title" HorizontalAlignment="Center" />
             <TextBlock Text="{loc:Loc l002-005}" Classes="hint" HorizontalAlignment="Center" />
           </StackPanel>
 

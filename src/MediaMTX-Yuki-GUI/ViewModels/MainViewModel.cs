@@ -616,7 +616,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private string _localPushUrl = "rtmp://127.0.0.1:1935/live";
 
     [ObservableProperty]
-    private string _statusDetail = L.T("c002-025");
+    private string _statusDetail = L.T("c002-024");
 
     // ====== 数据 ======
 
@@ -1506,7 +1506,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private async Task StartEngineAsync()
     {
         EngineStatus = L.T("c002-004");
-        StatusDetail = L.T("c002-005");
+        StatusDetail = string.Empty;
 
         // 先把中转站开起来：runtime.yml 里的本地地址要带真实端口
         _proxyServer.Start();
@@ -1515,8 +1515,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (!_engine.Start())
         {
-            EngineStatus = L.T("c002-010");
-            StatusDetail = L.T("c002-024");
+            EngineStatus = L.T("c002-009");
+            StatusDetail = L.T("c002-023");
             ShowToast(L.T("t010-003"), ToastKind.Error);
 
             return;
@@ -1528,15 +1528,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (!ready)
         {
-            EngineStatus = L.T("c002-009");
-            StatusDetail = L.T("c002-023");
+            EngineStatus = L.T("c002-008");
+            StatusDetail = L.T("c002-022");
             ShowToast(L.T("t010-003"), ToastKind.Error);
 
             return;
         }
 
         IsEngineRunning = true;
-        EngineStatus = L.T("c002-006");
+        EngineStatus = L.T("c002-005");
         RefreshStatusDetail();
         ShowToast(L.T("t010-001"), ToastKind.Success);
 
@@ -1548,7 +1548,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     private async Task StopEngineAsync()
     {
-        EngineStatus = L.T("c002-007");
+        EngineStatus = L.T("c002-006");
 
         // 用户主动停：把还挂在退避里的重起取消掉，否则它会几秒后自己爬起来
         _restartAttempts = 0;
@@ -1563,8 +1563,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         _proxyServer.Stop();
 
         IsEngineRunning = false;
-        EngineStatus = L.T("c002-008");
-        StatusDetail = L.T("c002-026");
+        EngineStatus = L.T("c002-007");
+        StatusDetail = L.T("c002-025");
 
         _metricsCts?.Cancel();
         _metricsCts = null;
@@ -1590,15 +1590,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             if (!_cfg.Engine.AutoRestart)
             {
                 IsEngineRunning = false;
-                EngineStatus = L.T("c002-008");
-                StatusDetail = L.T("c002-026");
+                EngineStatus = L.T("c002-007");
+                StatusDetail = L.T("c002-025");
 
                 return;
             }
 
             IsEngineRunning = false;
-            EngineStatus = L.T("c002-012");
-            StatusDetail = L.T("c002-027");
+            EngineStatus = L.T("c002-011");
+            StatusDetail = L.T("c002-026");
 
             _ = RestartEngineAsync();
         });
@@ -1648,7 +1648,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
                 if (_restartAttempts >= MaxRestartAttempts)
                 {
                     // 已经在 UI 线程上（本方法由 OnEngineExited 在 UI 线程启动），直接写
-                    EngineStatus = L.T("c002-011");
+                    EngineStatus = L.T("c002-010");
                     StatusDetail = L.T("l002-002");
                     ShowToast(L.T("t010-004"), ToastKind.Error);
 
@@ -1670,8 +1670,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         int enabled = Targets.Count(item => item.Enabled);
 
         StatusDetail = enabled == 0
-            ? L.T("c002-028")
-            : L.T("c002-019") + enabled + L.T("c002-020");
+            ? L.T("c002-027")
+            : L.T("c002-018") + enabled + L.T("c002-019");
     }
 
     // ====== 指标轮询 ======
@@ -1954,7 +1954,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (info is null || !info.Online)
         {
             input.InboundSpeedText = "—";
-            return L.T("c002-017");
+            return L.T("c002-016");
         }
 
         List<string> parts = [];
@@ -1972,7 +1972,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         int readers = info.Readers?.Count ?? 0;
 
-        parts.Add(L.T("c002-018").Replace("{n}", readers.ToString()));
+        parts.Add(L.T("c002-017").Replace("{n}", readers.ToString()));
 
         return string.Join(" · ", parts);
     }
@@ -2228,7 +2228,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
         catch
         {
-            return L.T("c002-013");
+            return L.T("c002-012");
         }
     }
 
@@ -2375,8 +2375,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
 
         StatusDetail = ok
-            ? L.T("c002-021") + total + L.T("c002-020")
-            : L.T("c002-029");
+            ? L.T("c002-020") + total + L.T("c002-019")
+            : L.T("c002-028");
     }
 
     // ====== 变更防抖 ======
@@ -2542,8 +2542,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public string IngestHint
         => _cfg.Engine.Ingest switch
         {
-            "srt" when !_cfg.Protocols.Srt => L.T("c002-030"),
-            "rtsp" when !_cfg.Protocols.Rtsp => L.T("c002-031"),
+            "srt" when !_cfg.Protocols.Srt => L.T("c002-029"),
+            "rtsp" when !_cfg.Protocols.Rtsp => L.T("c002-030"),
             _ => "",
         };
 
