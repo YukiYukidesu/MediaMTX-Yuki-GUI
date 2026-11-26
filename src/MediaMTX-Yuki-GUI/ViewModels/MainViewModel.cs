@@ -1761,9 +1761,19 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         // 每条输入源在引擎里是一条独立路径，各有自己的 forward 数组与 pos 编号，
         // 所以先按路径名分组、再在组内按序号回填。跨路径按 pos 取下标，会把目标串到别人身上。
         // 整份 metrics 有几千万字节，解析要近一秒；放到线程池里做，别把 UI 线程堵住
-        Dictionary<string, List<ForwardDestMetrics>> byPath = await Task.Run(
-            () => GroupByPath(MetricsParser.ParseForwardDests(text)),
-            ct);
+        long tp0 = Environment.TickCount64;
+
+        Dictionary<string, List<ForwardDestMetrics>> byPath = await Task.Run(() =>
+        {
+            long inner = Environment.TickCount64;
+            IReadOnlyList<ForwardDestMetrics> parsed = MetricsParser.ParseForwardDests(text);
+
+            Services.AppLog.Write($"[PARSE] inner={Environment.TickCount64 - inner}");
+
+            return GroupByPath(parsed);
+        }, ct);
+
+        Services.AppLog.Write($"[PARSE] wait={Environment.TickCount64 - tp0}");
 
         // 转发错误是每条源一次 HTTP 查询，条数一多就把两秒一轮撑成秒级卡顿；
         // 错误文案不需要那么灵，五轮（约十秒）查一次就够
