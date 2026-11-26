@@ -26,10 +26,10 @@
   "b001-010": "", // not manually reviewed
   "b001-011": "", // not manually reviewed
   "b001-012": "", // not manually reviewed
-  "b001-013": "",
-  "b001-014": "",
+  "b001-013": "", // not manually reviewed
+  "b001-014": "", // not manually reviewed
   "b001-015": "", // not manually reviewed
-  "b001-016": "",
+  "b001-016": "", // not manually reviewed
   "b001-017": "", // not manually reviewed
   "b001-018": "", // not manually reviewed
   "l001-001": "", // not manually reviewed
@@ -322,75 +322,42 @@
   "l008-010": "", // not manually reviewed
   "t008-001": "", // not manually reviewed
   // ===== G09 录像窗 =====
+  // ===== s00 =====
+  // ===== s01 =====
+  // ===== s02 =====
+  // ===== s03 =====
+  // ===== s04 =====
+  // ===== s05 =====
+  // ===== s06 =====
+  // ===== s07 =====
+  // ===== s08 =====
+  // ===== s09 =====
+  // ===== s10 =====
+  // ===== s11 =====
+  // ===== s12 =====
+  // ===== s13 =====
   "c009-001": "", // not manually reviewed
   "c009-002": "", // not manually reviewed
   "c009-003": "", // not manually reviewed
   "c009-004": "", // not manually reviewed
   "c009-005": "", // not manually reviewed
   "c009-006": "", // not manually reviewed
-  "l009-001": "", // not manually reviewed
-  "l009-002": "", // not manually reviewed
-  "l009-003": "", // not manually reviewed
-  "l009-004": "", // not manually reviewed
-  "l009-005": "", // not manually reviewed
-  "l009-006": "", // not manually reviewed
-  "l009-007": "", // not manually reviewed
-  "l009-008": "", // not manually reviewed
-  // ===== s00 =====
   "cs00-001": "", // not manually reviewed
-  "ls00-001": "", // not manually reviewed
-  "ls00-002": "", // not manually reviewed
-  "ls00-003": "", // not manually reviewed
-  // ===== s01 =====
   "cs01-001": "", // not manually reviewed
   "cs01-002": "", // not manually reviewed
   "cs01-003": "", // not manually reviewed
   "cs01-004": "", // not manually reviewed
   "cs01-005": "", // not manually reviewed
-  "bs01-001": "", // not manually reviewed
-  "bs01-002": "", // not manually reviewed
-  "bs01-003": "", // not manually reviewed
-  "bs01-004": "", // not manually reviewed
-  "bs01-005": "", // not manually reviewed
-  "bs01-006": "", // not manually reviewed
-  "ls01-001": "", // not manually reviewed
-  "ls01-002": "", // not manually reviewed
-  "ls01-003": "", // not manually reviewed
-  "ls01-004": "", // not manually reviewed
-  "ls01-005": "", // not manually reviewed
-  // ===== s02 =====
   "cs02-001": "", // not manually reviewed
   "cs02-002": "", // not manually reviewed
   "cs02-003": "", // not manually reviewed
   "cs02-004": "", // not manually reviewed
-  "bs02-001": "", // not manually reviewed
-  "bs02-002": "", // not manually reviewed
-  "bs02-003": "", // not manually reviewed
-  "bs02-004": "", // not manually reviewed
-  "bs02-005": "", // not manually reviewed
-  "bs02-006": "", // not manually reviewed
-  "ls02-001": "", // not manually reviewed
-  "ls02-002": "", // not manually reviewed
-  "ls02-003": "", // not manually reviewed
-  "ls02-004": "", // not manually reviewed
-  // ===== s03 =====
   "cs03-001": "", // not manually reviewed
   "cs03-002": "", // not manually reviewed
   "cs03-003": "", // not manually reviewed
   "cs03-004": "", // not manually reviewed
   "cs03-005": "", // not manually reviewed
   "cs03-006": "", // not manually reviewed
-  "bs03-001": "", // not manually reviewed
-  "bs03-002": "", // not manually reviewed
-  "bs03-003": "", // not manually reviewed
-  "bs03-004": "", // not manually reviewed
-  "ls03-001": "", // not manually reviewed
-  "ls03-002": "", // not manually reviewed
-  "ls03-003": "", // not manually reviewed
-  "ls03-004": "", // not manually reviewed
-  "ls03-005": "", // not manually reviewed
-  "ls03-006": "", // not manually reviewed
-  // ===== s04 =====
   "cs04-001": "", // not manually reviewed
   "cs04-002": "", // not manually reviewed
   "cs04-003": "", // not manually reviewed
@@ -398,6 +365,63 @@
   "cs04-005": "", // not manually reviewed
   "cs04-006": "", // not manually reviewed
   "cs04-007": "", // not manually reviewed
+  "cs05-001": "", // not manually reviewed
+  "cs05-002": "", // not manually reviewed
+  "cs05-003": "", // not manually reviewed
+  "cs05-004": "", // not manually reviewed
+  "cs05-005": "", // not manually reviewed
+  "cs05-006": "", // not manually reviewed
+  "cs05-007": "", // not manually reviewed
+  "cs06-001": "", // not manually reviewed
+  "cs06-002": "", // not manually reviewed
+  "cs06-003": "", // not manually reviewed
+  "cs07-001": "", // not manually reviewed
+  "cs07-002": "", // not manually reviewed
+  "cs08-001": "", // not manually reviewed
+  "cs08-002": "", // not manually reviewed
+  "cs08-003": "", // not manually reviewed
+  "cs08-004": "", // not manually reviewed
+  "cs09-001": "", // not manually reviewed
+  "cs09-002": "", // not manually reviewed
+  "cs09-003": "", // not manually reviewed
+  "cs09-004": "", // not manually reviewed
+  "cs09-005": "", // not manually reviewed
+  "cs09-006": "", // not manually reviewed
+  "cs10-001": "", // not manually reviewed
+  "cs10-002": "", // not manually reviewed
+  "cs10-003": "", // not manually reviewed
+  "cs10-004": "", // not manually reviewed
+  "cs11-001": "", // not manually reviewed
+  "cs11-002": "", // not manually reviewed
+  "cs11-003": "", // not manually reviewed
+  "cs11-004": "", // not manually reviewed
+  "cs11-005": "", // not manually reviewed
+  "cs11-006": "", // not manually reviewed
+  "cs12-001": "", // not manually reviewed
+  "cs12-002": "", // not manually reviewed
+  "cs12-003": "", // not manually reviewed
+  "cs12-004": "", // not manually reviewed
+  "cs13-001": "", // not manually reviewed
+  "cs13-002": "", // not manually reviewed
+  "cs13-003": "", // not manually reviewed
+  "cs13-004": "", // not manually reviewed
+  "cs13-005": "", // not manually reviewed
+  "bs01-001": "", // not manually reviewed
+  "bs01-002": "", // not manually reviewed
+  "bs01-003": "", // not manually reviewed
+  "bs01-004": "", // not manually reviewed
+  "bs01-005": "", // not manually reviewed
+  "bs01-006": "", // not manually reviewed
+  "bs02-001": "", // not manually reviewed
+  "bs02-002": "", // not manually reviewed
+  "bs02-003": "", // not manually reviewed
+  "bs02-004": "", // not manually reviewed
+  "bs02-005": "", // not manually reviewed
+  "bs02-006": "", // not manually reviewed
+  "bs03-001": "", // not manually reviewed
+  "bs03-002": "", // not manually reviewed
+  "bs03-003": "", // not manually reviewed
+  "bs03-004": "", // not manually reviewed
   "bs04-001": "", // not manually reviewed
   "bs04-002": "", // not manually reviewed
   "bs04-003": "", // not manually reviewed
@@ -407,21 +431,22 @@
   "bs04-007": "", // not manually reviewed
   "bs04-008": "", // not manually reviewed
   "bs04-009": "", // not manually reviewed
-  "ls04-001": "", // not manually reviewed
-  "ls04-002": "", // not manually reviewed
-  "ls04-003": "", // not manually reviewed
-  "ls04-004": "", // not manually reviewed
-  "ls04-005": "", // not manually reviewed
-  "ls04-006": "", // not manually reviewed
-  "ls04-007": "", // not manually reviewed
-  "ls04-008": "", // not manually reviewed
-  "ls04-009": "", // not manually reviewed
-  "ls04-010": "", // not manually reviewed
-  "ls04-011": "", // not manually reviewed
-  "ls04-012": "", // not manually reviewed
-  "ls04-013": "", // not manually reviewed
-  "ls04-014": "", // not manually reviewed
-  "ls04-015": "", // not manually reviewed
+  "bs13-001": "", // not manually reviewed
+  "ls00-001": "", // not manually reviewed
+  "ls00-002": "", // not manually reviewed
+  "ls01-003": "", // not manually reviewed
+  "ls01-004": "", // not manually reviewed
+  "ls01-005": "", // not manually reviewed
+  "ls02-006": "", // not manually reviewed
+  "ls02-007": "", // not manually reviewed
+  "ls02-008": "", // not manually reviewed
+  "ls02-009": "", // not manually reviewed
+  "ls03-010": "", // not manually reviewed
+  "ls03-011": "", // not manually reviewed
+  "ls03-012": "", // not manually reviewed
+  "ls03-013": "", // not manually reviewed
+  "ls03-014": "", // not manually reviewed
+  "ls03-015": "", // not manually reviewed
   "ls04-016": "", // not manually reviewed
   "ls04-017": "", // not manually reviewed
   "ls04-018": "", // not manually reviewed
@@ -434,100 +459,75 @@
   "ls04-025": "", // not manually reviewed
   "ls04-026": "", // not manually reviewed
   "ls04-027": "", // not manually reviewed
-  "ls04-028": "", // not manually reviewed
-  "ls04-029": "", // not manually reviewed
-  "ls04-030": "", // not manually reviewed
-  "ls04-031": "", // not manually reviewed
-  "ls04-032": "", // not manually reviewed
-  // ===== s05 =====
-  "cs05-001": "", // not manually reviewed
-  "cs05-002": "", // not manually reviewed
-  "cs05-003": "", // not manually reviewed
-  "cs05-004": "", // not manually reviewed
-  "cs05-005": "", // not manually reviewed
-  "cs05-006": "", // not manually reviewed
-  "cs05-007": "", // not manually reviewed
-  "ls05-001": "", // not manually reviewed
-  "ls05-002": "", // not manually reviewed
-  "ls05-003": "", // not manually reviewed
-  "ls05-004": "", // not manually reviewed
-  "ls05-005": "", // not manually reviewed
-  "ls05-006": "", // not manually reviewed
-  "ls05-007": "", // not manually reviewed
-  // ===== s06 =====
-  "cs06-001": "", // not manually reviewed
-  "cs06-002": "", // not manually reviewed
-  "cs06-003": "", // not manually reviewed
-  "ls06-001": "", // not manually reviewed
-  "ls06-002": "", // not manually reviewed
-  "ls06-003": "", // not manually reviewed
-  "ls06-004": "", // not manually reviewed
-  "ls06-005": "", // not manually reviewed
-  // ===== s07 =====
-  "cs07-001": "", // not manually reviewed
-  "cs07-002": "", // not manually reviewed
-  "ls07-001": "", // not manually reviewed
-  "ls07-002": "", // not manually reviewed
-  // ===== s08 =====
-  "cs08-001": "", // not manually reviewed
-  "cs08-002": "", // not manually reviewed
-  "cs08-003": "", // not manually reviewed
-  "cs08-004": "", // not manually reviewed
-  "ls08-001": "", // not manually reviewed
-  "ls08-002": "", // not manually reviewed
-  "ls08-003": "", // not manually reviewed
-  "ls08-004": "", // not manually reviewed
-  // ===== s09 =====
-  "cs09-001": "", // not manually reviewed
-  "cs09-002": "", // not manually reviewed
-  "cs09-003": "", // not manually reviewed
-  "cs09-004": "", // not manually reviewed
-  "cs09-005": "", // not manually reviewed
-  "cs09-006": "", // not manually reviewed
-  "ls09-001": "", // not manually reviewed
-  "ls09-002": "", // not manually reviewed
-  "ls09-003": "", // not manually reviewed
-  "ls09-004": "", // not manually reviewed
-  "ls09-005": "", // not manually reviewed
-  "ls09-006": "", // not manually reviewed
-  // ===== s10 =====
-  "cs10-001": "", // not manually reviewed
-  "cs10-002": "", // not manually reviewed
-  "cs10-003": "", // not manually reviewed
-  "cs10-004": "", // not manually reviewed
-  "ls10-001": "", // not manually reviewed
-  "ls10-002": "", // not manually reviewed
-  "ls10-003": "", // not manually reviewed
-  "ls10-004": "", // not manually reviewed
-  // ===== s11 =====
-  "cs11-001": "", // not manually reviewed
-  "cs11-002": "", // not manually reviewed
-  "cs11-003": "", // not manually reviewed
-  "cs11-004": "", // not manually reviewed
-  "cs11-005": "", // not manually reviewed
-  "cs11-006": "", // not manually reviewed
-  "ls11-001": "", // not manually reviewed
-  "ls11-002": "", // not manually reviewed
-  "ls11-003": "", // not manually reviewed
-  "ls11-004": "", // not manually reviewed
-  "ls11-005": "", // not manually reviewed
-  "ls11-006": "", // not manually reviewed
-  // ===== s12 =====
-  "cs12-001": "", // not manually reviewed
-  "cs12-002": "", // not manually reviewed
-  "cs12-003": "", // not manually reviewed
-  "cs12-004": "", // not manually reviewed
+  "ls05-028": "", // not manually reviewed
+  "ls05-029": "", // not manually reviewed
+  "ls05-030": "", // not manually reviewed
+  "ls05-031": "", // not manually reviewed
+  "ls05-032": "", // not manually reviewed
+  "ls05-033": "", // not manually reviewed
+  "ls05-034": "", // not manually reviewed
+  "ls06-035": "", // not manually reviewed
+  "ls06-036": "", // not manually reviewed
+  "ls06-037": "", // not manually reviewed
+  "ls06-038": "", // not manually reviewed
+  "ls06-039": "", // not manually reviewed
+  "ls07-040": "", // not manually reviewed
+  "ls07-041": "", // not manually reviewed
+  "ls08-042": "", // not manually reviewed
+  "ls08-043": "", // not manually reviewed
+  "ls08-044": "", // not manually reviewed
+  "ls08-045": "", // not manually reviewed
+  "ls09-046": "", // not manually reviewed
+  "ls09-047": "", // not manually reviewed
+  "ls09-048": "", // not manually reviewed
+  "ls09-049": "", // not manually reviewed
+  "ls09-050": "", // not manually reviewed
+  "ls09-051": "", // not manually reviewed
+  "ls10-052": "", // not manually reviewed
+  "ls10-053": "", // not manually reviewed
+  "ls10-054": "", // not manually reviewed
+  "ls00-055": "", // not manually reviewed
+  "ls10-056": "", // not manually reviewed
+  "ls11-057": "", // not manually reviewed
+  "ls11-058": "", // not manually reviewed
+  "ls11-059": "", // not manually reviewed
+  "ls11-060": "", // not manually reviewed
+  "ls11-061": "", // not manually reviewed
+  "ls11-062": "", // not manually reviewed
+  "ls13-063": "", // not manually reviewed
+  "ls13-064": "", // not manually reviewed
+  "ls13-065": "", // not manually reviewed
+  "l009-066": "", // not manually reviewed
+  "l009-067": "", // not manually reviewed
+  "l009-068": "", // not manually reviewed
+  "l009-069": "", // not manually reviewed
+  "l009-070": "", // not manually reviewed
+  "l009-071": "", // not manually reviewed
+  "l009-072": "", // not manually reviewed
+  "l009-073": "", // not manually reviewed
+  "ls04-074": "", // not manually reviewed
+  "ls04-075": "", // not manually reviewed
+  "ls04-076": "", // not manually reviewed
+  "ls04-077": "", // not manually reviewed
+  "ls04-078": "", // not manually reviewed
+  "ls01-079": "", // not manually reviewed
+  "ls04-080": "", // not manually reviewed
+  "ls04-081": "", // not manually reviewed
+  "ls04-082": "", // not manually reviewed
+  "ls04-083": "", // not manually reviewed
+  "ls04-084": "", // not manually reviewed
+  "ls04-085": "", // not manually reviewed
+  "ls04-086": "", // not manually reviewed
+  "ls04-087": "", // not manually reviewed
+  "ls04-088": "", // not manually reviewed
+  "ls04-089": "", // not manually reviewed
+  "ls04-090": "", // not manually reviewed
+  "ls04-091": "", // not manually reviewed
+  "ls04-092": "", // not manually reviewed
+  "ls04-093": "", // not manually reviewed
+  "ls01-094": "", // not manually reviewed
+  "ls04-095": "", // not manually reviewed
   "ts12-001": "", // not manually reviewed
-  // ===== s13 =====
-  "cs13-001": "", // not manually reviewed
-  "cs13-002": "", // not manually reviewed
-  "cs13-003": "", // not manually reviewed
-  "cs13-004": "", // not manually reviewed
-  "cs13-005": "", // not manually reviewed
-  "bs13-001": "", // not manually reviewed
-  "ls13-001": "", // not manually reviewed
-  "ls13-002": "", // not manually reviewed
-  "ls13-003": "", // not manually reviewed
   // ===== G02 概览页 =====
   "t010-001": "", // not manually reviewed
   "t010-002": "", // not manually reviewed

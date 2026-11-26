@@ -323,12 +323,12 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     public string PageSubtitle => SelectedPage switch
     {
-        0 => L.T("l002-005"),
-        1 => L.T("l003-026"),
-        2 => L.T("l004-022"),
+        0 => L.T("l002-001"),
+        1 => L.T("l003-001"),
+        2 => L.T("l004-001"),
         3 => L.T("l007-001"),
-        6 => L.T("l008-005"),
-        7 => L.T("l005-006"),
+        6 => L.T("l008-001"),
+        7 => L.T("l005-001"),
         _ => L.T("ls00-001"),
     };
 
@@ -351,7 +351,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private string _engineVersion = string.Empty;
 
     public string EngineVersionText
-        => string.IsNullOrEmpty(EngineVersion) ? L.T("l002-004") : L.T("l002-006").Replace("{version}", EngineVersion);
+        => string.IsNullOrEmpty(EngineVersion) ? L.T("l002-005") : L.T("l002-006").Replace("{version}", EngineVersion);
 
     /// <summary>
     /// 版本号是后到的：启动时先查更新、再问引擎要版本，推荐通道又不联网，
@@ -463,7 +463,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     // ====== 引擎状态 ======
 
     [ObservableProperty]
-    private string _engineStatus = L.T("l002-008");
+    private string _engineStatus = L.T("l002-007");
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEngineStopped))]
@@ -616,7 +616,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private string _localPushUrl = "rtmp://127.0.0.1:1935/live";
 
     [ObservableProperty]
-    private string _statusDetail = L.T("l002-024");
+    private string _statusDetail = L.T("l002-008");
 
     // ====== 数据 ======
 
@@ -823,15 +823,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (HasAppUpdate)
         {
-            AppUpdateStatus = FormatNote("ls04-016", _latestAppTag, VersionText);
+            AppUpdateStatus = FormatNote("ls04-082", _latestAppTag, VersionText);
             return;
         }
 
         // 连版本号都没拿到，多半是网络或源的问题，别骗用户说已是最新。
         // 正式版通道还多一种可能：仓库里压根没发过正式版（本程序现在只有预览版）。
         AppUpdateStatus = string.IsNullOrWhiteSpace(_latestAppTag)
-            ? L.T(IsStableAppChannel ? "ls04-023" : "ls04-029")
-            : L.T("ls04-025");
+            ? L.T(IsStableAppChannel ? "ls04-083" : "ls04-084")
+            : L.T("ls04-085");
     }
 
     /// <summary>引擎那条状态行。</summary>
@@ -848,7 +848,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         // 引擎没装时「有新版本」是废话，单独给一句「去装」
         if (!IsEngineInstalled)
         {
-            EngineUpdateStatus = L.T("ls04-030");
+            EngineUpdateStatus = L.T("ls04-086");
             return;
         }
 
@@ -858,19 +858,19 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (IsRecommendedEngineChannel)
         {
             EngineUpdateStatus = HasEngineUpdate
-                ? FormatNote("ls04-022", target, EngineVersion)
-                : FormatNote("ls04-032", target, null);
+                ? FormatNote("ls04-087", target, EngineVersion)
+                : FormatNote("ls04-088", target, null);
 
             return;
         }
 
         if (HasEngineUpdate)
         {
-            EngineUpdateStatus = FormatNote("ls04-018", target, EngineVersion);
+            EngineUpdateStatus = FormatNote("ls04-089", target, EngineVersion);
             return;
         }
 
-        EngineUpdateStatus = string.IsNullOrWhiteSpace(target) ? L.T("ls04-029") : L.T("ls04-025");
+        EngineUpdateStatus = string.IsNullOrWhiteSpace(target) ? L.T("ls04-084") : L.T("ls04-085");
     }
 
     /// <summary>把语言包里的 {latest} / {current} 换成真实版本号。</summary>
@@ -907,7 +907,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         if (IsUpdating) return;
 
-        AppUpdateStatus = L.T("ls04-024");
+        AppUpdateStatus = L.T("ls04-090");
 
         await CheckAppUpdateAsync(force: true);
 
@@ -922,7 +922,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         if (IsUpdating) return;
 
-        EngineUpdateStatus = L.T("ls04-024");
+        EngineUpdateStatus = L.T("ls04-090");
 
         await CheckEngineUpdateAsync(force: true);
 
@@ -942,7 +942,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (string.IsNullOrWhiteSpace(_latestAppTag))
         {
-            AppUpdateStatus = L.T("ls04-029");
+            AppUpdateStatus = L.T("ls04-084");
             return;
         }
 
@@ -955,20 +955,20 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             // 引擎先停掉：新进程一起来还会抢那几个端口，旧引擎还占着就会互相踩
             if (IsEngineRunning) await StopEngineAsync();
 
-            AppUpdateStatus = L.T("ls04-026");
+            AppUpdateStatus = L.T("ls04-091");
 
             AppUpdater.Package package = await _appUpdater.DownloadAsync(
                 tag,
                 _cfg.Update.AppSource,
                 _cfg.Update.AppRepoOrDefault,
-                L.T("ls04-026"),
+                L.T("ls04-091"),
                 text => PostStatus(value => AppUpdateStatus = value, text));
 
             string? error = AppUpdater.Prepare(package);
 
             if (error is not null)
             {
-                AppUpdateStatus = L.T("ls04-028") + error;
+                AppUpdateStatus = L.T("ls04-092") + error;
 
                 ShowToast(L.T("t011-004"), ToastKind.Error);
 
@@ -977,7 +977,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
                 return;
             }
 
-            AppUpdateStatus = FormatNote("ls04-027", tag, null);
+            AppUpdateStatus = FormatNote("ls04-093", tag, null);
 
             ShowToast(L.T("t011-005").Replace("{tag}", tag), ToastKind.Success);
 
@@ -989,7 +989,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
         catch (Exception ex)
         {
-            AppUpdateStatus = L.T("ls04-028") + EngineUpdater.DescribeError(ex);
+            AppUpdateStatus = L.T("ls04-092") + EngineUpdater.DescribeError(ex);
 
             ShowToast(L.T("t011-004"), ToastKind.Error);
 
@@ -1012,7 +1012,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (string.IsNullOrWhiteSpace(tag))
         {
-            EngineUpdateStatus = L.T("ls04-029");
+            EngineUpdateStatus = L.T("ls04-084");
             return;
         }
 
@@ -1024,7 +1024,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         {
             if (wasRunning) await StopEngineAsync();
 
-            EngineUpdateStatus = L.T("ls04-026");
+            EngineUpdateStatus = L.T("ls04-091");
 
             EngineUpdater.Package package = await _engineUpdater.DownloadAsync(
                 tag,
@@ -1036,7 +1036,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
             if (error is not null)
             {
-                EngineUpdateStatus = L.T("ls04-028") + error;
+                EngineUpdateStatus = L.T("ls04-092") + error;
 
                 ShowToast(L.T("t011-004"), ToastKind.Error);
 
@@ -1051,13 +1051,13 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             // 装上了就别再举着那张「没检测到引擎」的卡片了
             RefreshTip();
 
-            EngineUpdateStatus = FormatNote("ls04-027", tag, null);
+            EngineUpdateStatus = FormatNote("ls04-093", tag, null);
 
             ShowToast(L.T("t011-003").Replace("{tag}", tag), ToastKind.Success);
         }
         catch (Exception ex)
         {
-            EngineUpdateStatus = L.T("ls04-028") + EngineUpdater.DescribeError(ex);
+            EngineUpdateStatus = L.T("ls04-092") + EngineUpdater.DescribeError(ex);
 
             ShowToast(L.T("t011-004"), ToastKind.Error);
         }
@@ -1315,7 +1315,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         {
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
-                L.T("l004-036").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                L.T("l004-054").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
                 L.T("b001-008"),
                 destructive: true);
 
@@ -1548,8 +1548,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (!_engine.Start())
         {
-            EngineStatus = L.T("l002-014");
-            StatusDetail = L.T("l002-023");
+            EngineStatus = L.T("l002-010");
+            StatusDetail = L.T("l002-011");
             ShowToast(L.T("t010-003"), ToastKind.Error);
 
             return;
@@ -1561,15 +1561,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (!ready)
         {
-            EngineStatus = L.T("l002-013");
-            StatusDetail = L.T("l002-022");
+            EngineStatus = L.T("l002-012");
+            StatusDetail = L.T("l002-013");
             ShowToast(L.T("t010-003"), ToastKind.Error);
 
             return;
         }
 
         IsEngineRunning = true;
-        EngineStatus = L.T("l002-010");
+        EngineStatus = L.T("l002-014");
         RefreshStatusDetail();
         ShowToast(L.T("t010-001"), ToastKind.Success);
 
@@ -1581,7 +1581,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     private async Task StopEngineAsync()
     {
-        EngineStatus = L.T("l002-011");
+        EngineStatus = L.T("l002-015");
 
         // 用户主动停：把还挂在退避里的重起取消掉，否则它会几秒后自己爬起来
         _restartAttempts = 0;
@@ -1596,8 +1596,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         _proxyServer.Stop();
 
         IsEngineRunning = false;
-        EngineStatus = L.T("l002-012");
-        StatusDetail = L.T("l002-025");
+        EngineStatus = L.T("l002-016");
+        StatusDetail = L.T("l002-017");
 
         _metricsCts?.Cancel();
         _metricsCts = null;
@@ -1623,15 +1623,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             if (!_cfg.Engine.AutoRestart)
             {
                 IsEngineRunning = false;
-                EngineStatus = L.T("l002-012");
-                StatusDetail = L.T("l002-025");
+                EngineStatus = L.T("l002-016");
+                StatusDetail = L.T("l002-017");
 
                 return;
             }
 
             IsEngineRunning = false;
-            EngineStatus = L.T("l002-016");
-            StatusDetail = L.T("l002-026");
+            EngineStatus = L.T("l002-018");
+            StatusDetail = L.T("l002-019");
 
             _ = RestartEngineAsync();
         });
@@ -1681,8 +1681,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
                 if (_restartAttempts >= MaxRestartAttempts)
                 {
                     // 已经在 UI 线程上（本方法由 OnEngineExited 在 UI 线程启动），直接写
-                    EngineStatus = L.T("l002-015");
-                    StatusDetail = L.T("l002-007");
+                    EngineStatus = L.T("l002-020");
+                    StatusDetail = L.T("l002-021");
                     ShowToast(L.T("t010-004"), ToastKind.Error);
 
                     return;
@@ -1703,8 +1703,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         int enabled = Targets.Count(item => item.Enabled);
 
         StatusDetail = enabled == 0
-            ? L.T("l002-027")
-            : L.T("l002-020").Replace("{n}", enabled.ToString());
+            ? L.T("l002-022")
+            : L.T("l002-023").Replace("{n}", enabled.ToString());
     }
 
     // ====== 指标轮询 ======
@@ -1987,7 +1987,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (info is null || !info.Online)
         {
             input.InboundSpeedText = "—";
-            return L.T("l002-018");
+            return L.T("l002-024");
         }
 
         List<string> parts = [];
@@ -2005,7 +2005,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         int readers = info.Readers?.Count ?? 0;
 
-        parts.Add(L.T("l002-019").Replace("{n}", readers.ToString()));
+        parts.Add(L.T("l002-025").Replace("{n}", readers.ToString()));
 
         return string.Join(" · ", parts);
     }
@@ -2261,7 +2261,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
         catch
         {
-            return L.T("l002-017");
+            return L.T("l002-026");
         }
     }
 
@@ -2305,7 +2305,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             Targets.Select(item => item.Name).Where(name => !string.IsNullOrWhiteSpace(name)),
             StringComparer.Ordinal);
 
-        string baseName = L.T("l004-047");
+        string baseName = L.T("l004-055");
 
         if (!used.Contains(baseName)) return baseName;
 
@@ -2410,7 +2410,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
 
         StatusDetail = ok
-            ? L.T("l002-021").Replace("{n}", total.ToString())
+            ? L.T("l002-027").Replace("{n}", total.ToString())
             : L.T("l002-028");
     }
 
@@ -2661,7 +2661,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         if (names.Count == 0) return;
 
-        OnEngineLog(L.T("ls04-020").Replace("{names}", signature));
+        OnEngineLog(L.T("ls04-095").Replace("{names}", signature));
     }
 
     /// <summary>中转站按 Id 找回目标配置。</summary>

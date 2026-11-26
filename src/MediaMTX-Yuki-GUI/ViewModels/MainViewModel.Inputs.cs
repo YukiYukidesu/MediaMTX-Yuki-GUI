@@ -43,7 +43,7 @@ public sealed partial class MainViewModel
     /// 显示成「短 id:备注」——两条输入的备注可能一样，靠 Id 才能分出是哪一条。
     /// </summary>
     public IReadOnlyList<InputChoice> InputChoices
-        => new[] { new InputChoice(string.Empty, L.T("l004-041")) }
+        => new[] { new InputChoice(string.Empty, L.T("l004-034")) }
             .Concat(Inputs.Select(input => new InputChoice(input.Id, input.ShortId + " : " + input.DisplayName)))
             .ToList();
 
@@ -65,7 +65,7 @@ public sealed partial class MainViewModel
             InputItemViewModel? owner = Inputs.FirstOrDefault(i => i.Id == target.InputSourceId);
 
             target.InputSourceName = owner == null
-                ? L.T("l004-041")
+                ? L.T("l004-034")
                 : owner.ShortId + " : " + owner.DisplayName;
         }
 
@@ -221,7 +221,7 @@ public sealed partial class MainViewModel
         {
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
-                L.T("l003-033").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                L.T("l003-035").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
                 L.T("b001-008"),
                 destructive: true);
 
@@ -438,7 +438,7 @@ public sealed partial class MainViewModel
             Inputs.Select(item => item.Name).Where(name => !string.IsNullOrWhiteSpace(name)),
             StringComparer.Ordinal);
 
-        string baseName = L.T("l003-036");
+        string baseName = L.T("l003-041");
 
         if (!used.Contains(baseName)) return baseName;
 

@@ -18,7 +18,7 @@
     <TextBlock Grid.Row="0"
                Margin="0,0,0,20"
                Classes="page-subtitle"
-               Text="{loc:Loc l005-001}" />
+               Text="{loc:Loc l005-005}" />
 
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
       <StackPanel>
@@ -44,7 +44,7 @@
         <TextBlock Margin="0,6,0,0"
                    Classes="hint"
                    TextWrapping="Wrap"
-                   Text="{loc:Loc l005-002}" />
+                   Text="{loc:Loc l005-007}" />
 
       </StackPanel>
     </ScrollViewer>

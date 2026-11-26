@@ -175,7 +175,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
             if (name.Length == 0) return string.Empty;
 
             return _otherNames.Contains(name, StringComparer.Ordinal)
-                ? L.T("l003-025").Replace("{name}", name)
+                ? L.T("l003-024").Replace("{name}", name)
                 : string.Empty;
         }
     }
@@ -196,15 +196,15 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (path.Length == 0)
             {
-                return L.T("l003-041");
+                return L.T("l003-030");
             }
 
             if (!IsValidPathName(path))
             {
-                return L.T("l003-042");
+                return L.T("l003-031");
             }
 
-            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("l003-043") : string.Empty;
+            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("l003-032") : string.Empty;
         }
     }
 
@@ -390,7 +390,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>来源方式下面那行小字。</summary>
     public string SourceKindHint
-        => IsPulling ? L.T("l003-008") : L.T("l003-007");
+        => IsPulling ? L.T("l003-018") : L.T("l003-012");
 
     public string Port
     {
@@ -449,7 +449,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>端口框里的灰字：不填就用协议默认端口。</summary>
     public string PortPlaceholder
-        => L.T("l003-040").Replace("{port}", InputProtocols.DefaultPort(Protocol).ToString());
+        => L.T("l003-042").Replace("{port}", InputProtocols.DefaultPort(Protocol).ToString());
 
     public string PortWarning
     {
@@ -459,10 +459,10 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (port <= 0)
             {
-                return L.T("l003-044");
+                return L.T("l003-043");
             }
 
-            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("l003-045");
+            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("l003-044");
         }
     }
 

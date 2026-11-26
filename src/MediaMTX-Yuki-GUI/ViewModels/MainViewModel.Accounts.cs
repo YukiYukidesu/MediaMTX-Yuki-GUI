@@ -27,7 +27,7 @@ public sealed partial class MainViewModel
 
     /// <summary>表格里那个「允许推流的源数」统计，给页面副标题用。</summary>
     public string AccountsSummary
-        => L.T("l005-011").Replace("{n}", Accounts.Count.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        => L.T("l005-006").Replace("{n}", Accounts.Count.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
     public int SelectedAccountCount
         => Accounts.Count(item => item.IsSelected);
@@ -176,7 +176,7 @@ public sealed partial class MainViewModel
         {
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
-                L.T("l005-009").Replace("{n}", count),
+                L.T("l005-011").Replace("{n}", count),
                 L.T("b001-008"),
                 destructive: true);
 

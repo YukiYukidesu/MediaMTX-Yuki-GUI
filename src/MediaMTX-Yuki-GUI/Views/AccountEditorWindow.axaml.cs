@@ -76,7 +76,7 @@ public sealed partial class AccountEditorWindow : FAAppWindow, INotifyPropertyCh
             foreach (string other in _otherUsers)
             {
                 if (string.Equals(other, trimmed, StringComparison.OrdinalIgnoreCase))
-                    return L.T("l005-005").Replace("{name}", trimmed);
+                    return L.T("l005-010").Replace("{name}", trimmed);
             }
 
             return "";

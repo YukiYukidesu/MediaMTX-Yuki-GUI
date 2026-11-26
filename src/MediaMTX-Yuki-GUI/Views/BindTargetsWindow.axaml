@@ -24,7 +24,7 @@
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>
-      <TextBlock x:Name="EmptyHint" Margin="0,6,0,0" Classes="hint" Text="{loc:Loc l004-010}" />
+      <TextBlock x:Name="EmptyHint" Margin="0,6,0,0" Classes="hint" Text="{loc:Loc l004-011}" />
     </StackPanel>
 
     <StackPanel Grid.Row="1" Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
