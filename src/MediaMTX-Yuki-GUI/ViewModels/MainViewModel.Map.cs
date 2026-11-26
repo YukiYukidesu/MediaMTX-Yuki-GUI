@@ -23,8 +23,8 @@ public sealed partial class MainViewModel
     // 胶囊宽度的估算：字号 12，中文按整字、拉丁按半个字，再加图标、间距、两侧内边距与一点余量
     private const double MapNodeFontSize = 12;
     private const double MapNodeChrome = 36;
-    /// <summary>胶囊最少容下 8 个汉字：8 × 12px × 1.09（CJK 字宽系数）+ 36（内部留白与图标）。</summary>
-    private const double MapMinNodeWidth = 140;
+    /// <summary>胶囊的最小宽度：只防「A」这种一个字被压成一条缝，不设上限（长名字靠名字自己撑宽）。</summary>
+    private const double MapMinNodeWidth = 64;
 
     /// <summary>胶囊的最大宽度：名字再长也只到这里，多出来的用省略号截掉。</summary>
     private const double MapMaxNodeWidth = 240;
