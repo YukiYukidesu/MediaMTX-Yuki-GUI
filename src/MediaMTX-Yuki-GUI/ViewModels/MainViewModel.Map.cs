@@ -120,6 +120,9 @@ public sealed partial class MainViewModel
 
         // 列数与簇宽由面板宽度反算：铺满面板、每簇等宽，节点名字太长就靠省略号截断
         double viewportWidth = _mapViewportWidth >= 200 ? _mapViewportWidth : 1200;
+        // 摆法只服务缩放比：按簇高降序排，高的集中在一行，行高更齐、行数更少
+        List<int> order = [.. Enumerable.Range(0, clusters.Count).OrderByDescending(index => ClusterHeight(clusters[index].Targets.Count))];
+
         double viewportHeight = _mapViewportHeight >= 120 ? _mapViewportHeight : 640;
         int maxColumns = Math.Clamp((int)Math.Floor(viewportWidth / MapMinClusterWidth), 1, 6);
         int columns = 1;
@@ -134,11 +137,11 @@ public sealed partial class MainViewModel
             double[] heights = new double[rows];
             double totalHeight = 0;
 
-            for (int index = 0; index < clusters.Count; index++)
+            for (int position = 0; position < order.Count; position++)
             {
-                int row = index / candidate;
+                int row = position / candidate;
 
-                heights[row] = Math.Max(heights[row], ClusterHeight(clusters[index].Targets.Count));
+                heights[row] = Math.Max(heights[row], ClusterHeight(clusters[order[position]].Targets.Count));
             }
 
             for (int row = 0; row < rows; row++)
@@ -170,18 +173,18 @@ public sealed partial class MainViewModel
         int rowCount = (clusters.Count + columns - 1) / columns;
         double[] rowHeights = new double[rowCount];
 
-        for (int index = 0; index < clusters.Count; index++)
+        for (int position = 0; position < order.Count; position++)
         {
-            int row = index / columns;
+            int row = position / columns;
 
-            rowHeights[row] = Math.Max(rowHeights[row], ClusterHeight(clusters[index].Targets.Count));
+            rowHeights[row] = Math.Max(rowHeights[row], ClusterHeight(clusters[order[position]].Targets.Count));
         }
 
         List<PackPlacement> placements = [];
 
-        for (int index = 0; index < clusters.Count; index++)
+        for (int position = 0; position < order.Count; position++)
         {
-            int row = index / columns;
+            int row = position / columns;
             double rowY = 0;
 
             for (int above = 0; above < row; above++)
@@ -189,7 +192,7 @@ public sealed partial class MainViewModel
                 rowY += rowHeights[above] + MapGridGap;
             }
 
-            placements.Add(new PackPlacement(index, (index % columns) * (clusterWidth + MapGridGap), rowY));
+            placements.Add(new PackPlacement(order[position], (position % columns) * (clusterWidth + MapGridGap), rowY));
         }
 
         double contentWidth = clusters.Count == 0 ? 0 : columns * clusterWidth + (columns - 1) * MapGridGap;
