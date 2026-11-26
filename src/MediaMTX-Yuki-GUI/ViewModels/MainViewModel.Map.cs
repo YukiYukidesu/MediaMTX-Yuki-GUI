@@ -531,7 +531,10 @@ public sealed partial class MainViewModel
     /// <summary>一条链路的状态：两端都通才算通，一端停用就算断。</summary>
     private static MapLinkState LinkState(InputItemViewModel source, TargetItemViewModel target, bool engineRunning)
     {
-        if (!source.EffectiveEnabled || !target.EffectiveEnabled) return MapLinkState.Off;
+        // 源停用、目标停用，这条线就是断的。这里同时看 Enabled 与 EffectiveEnabled：
+        // 两边的 EffectiveEnabled 语义并不完全一致（源端不含配置开关），只信它会把停用源画成蓝线
+        if (!source.Enabled || !source.EffectiveEnabled) return MapLinkState.Off;
+        if (!target.Enabled || !target.EffectiveEnabled) return MapLinkState.Off;
 
         if (engineRunning && target.IsErrored) return MapLinkState.Error;
 
