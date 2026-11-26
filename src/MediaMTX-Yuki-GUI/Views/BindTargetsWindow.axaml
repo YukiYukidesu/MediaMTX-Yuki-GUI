@@ -3,7 +3,7 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:ui="using:FluentAvalonia.UI.Windowing"
                 xmlns:loc="using:MediaMTX_Yuki_GUI"
-                Title="{loc:Loc c004-064}"
+                Title="{loc:Loc c004-060}"
                 Width="460"
                 SizeToContent="Height"
                 CanResize="False"
@@ -28,9 +28,9 @@
     </StackPanel>
 
     <StackPanel Grid.Row="1" Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
-      <Button MinWidth="88" Content="{loc:Loc c001-020}" Click="OnCancelClick" IsCancel="True" />
+      <Button MinWidth="88" Content="{loc:Loc c001-022}" Click="OnCancelClick" IsCancel="True" />
       <Button x:Name="ConfirmButton" Margin="8,0,0,0" MinWidth="88" Classes="primary"
-              Content="{loc:Loc c001-026}" Click="OnConfirmClick" IsDefault="True" />
+              Content="{loc:Loc c001-021}" Click="OnConfirmClick" IsDefault="True" />
     </StackPanel>
   </Grid>
 </ui:FAAppWindow>

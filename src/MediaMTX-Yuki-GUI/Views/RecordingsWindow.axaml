@@ -94,8 +94,8 @@
       <!-- 两颗并排就得一样宽：字数是「刷新」两字对「关闭」两字，本身一样，
            但「关闭」设了 MinWidth 而「刷新」没有，实际宽度就差一截。同排同义的按钮一律写同一个 MinWidth -->
       <StackPanel Grid.Column="1" Orientation="Horizontal">
-        <Button MinWidth="88" Content="{loc:Loc c001-023}" Command="{Binding RefreshCommand}" />
-        <Button Margin="8,0,0,0" MinWidth="88" Content="{loc:Loc c001-024}" Command="{Binding CloseCommand}" IsCancel="True" />
+        <Button MinWidth="88" Content="{loc:Loc c001-025}" Command="{Binding RefreshCommand}" />
+        <Button Margin="8,0,0,0" MinWidth="88" Content="{loc:Loc c001-026}" Command="{Binding CloseCommand}" IsCancel="True" />
       </StackPanel>
     </Grid>
 

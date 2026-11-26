@@ -130,76 +130,92 @@
 
           <TextBlock Classes="field-label" Text="{loc:Loc c003-043}" />
 
-          <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding SelectedAccounts}">
-            <ItemsControl.ItemsPanel>
-              <ItemsPanelTemplate>
-                <WrapPanel Orientation="Horizontal" />
-              </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+          <!-- 账号盒子：有账号时放标签和加号；一个账号都没有时它就是一块空框，
+               免得让人以为这里根本配不了 -->
+          <Border Margin="0,6,0,0"
+                  MinHeight="62"
+                  Padding="10"
+                  Background="{DynamicResource DsWellBrush}"
+                  BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                  BorderThickness="1"
+                  CornerRadius="{StaticResource DsRadiusMd}">
+            <Panel>
+              <StackPanel IsVisible="{Binding HasAccounts}">
+                <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding SelectedAccounts}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-              <DataTemplate>
-                <Border Classes="account-chip" Margin="0,0,6,6">
-                  <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Text="{Binding User}" />
-                    <Button Margin="2,0,0,0"
-                            Classes="chip-close"
-                            Click="OnRemoveAccountClick"
-                            Content="&#x00D7;"
-                            ToolTip.Tip="{loc:Loc c003-055}" />
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Border Classes="account-chip" Margin="0,0,6,6">
+                        <StackPanel Orientation="Horizontal">
+                          <TextBlock VerticalAlignment="Center" Text="{Binding User}" />
+                          <Button Margin="2,0,0,0"
+                                  Classes="chip-close"
+                                  Click="OnRemoveAccountClick"
+                                  Content="&#x00D7;"
+                                  ToolTip.Tip="{loc:Loc c003-049}" />
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Button x:Name="AddAccountButton"
+                        Margin="0,2,0,0"
+                        HorizontalAlignment="Left"
+                        IsVisible="{Binding HasAccounts}">
+                  <StackPanel Orientation="Horizontal" Spacing="3">
+                    <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="+" />
+                    <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-048}" />
                   </StackPanel>
-                </Border>
-              </DataTemplate>
-            </ItemsControl.ItemTemplate>
-          </ItemsControl>
+                  <Button.Flyout>
+                    <Flyout Placement="BottomEdgeAlignedLeft"
+                            ShowMode="Transient"
+                            FlyoutPresenterClasses="bare">
+                      <Border Padding="6"
+                              Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                              BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                              BorderThickness="1"
+                              BoxShadow="0 8 24 0 #33000000"
+                              CornerRadius="{StaticResource DsRadiusMd}">
+                        <ScrollViewer MaxHeight="240"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+                          <StackPanel>
+                            <TextBlock Margin="4,2,4,4"
+                                       Classes="hint"
+                                       IsVisible="{Binding !HasSelectableAccounts}"
+                                       Text="{loc:Loc l003-017}" />
+                            <ItemsControl ItemsSource="{Binding SelectableAccounts}">
+                              <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                  <Button Classes="account-option"
+                                          Click="OnPickAccountClick"
+                                          Content="{Binding User}" />
+                                </DataTemplate>
+                              </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                          </StackPanel>
+                        </ScrollViewer>
+                      </Border>
+                    </Flyout>
+                  </Button.Flyout>
+                </Button>
+              </StackPanel>
 
-          <Button x:Name="AddAccountButton"
-                  Margin="0,2,0,0"
-                  HorizontalAlignment="Left"
-                  IsVisible="{Binding HasAccounts}">
-            <StackPanel Orientation="Horizontal" Spacing="3">
-              <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="+" />
-              <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-054}" />
-            </StackPanel>
-            <Button.Flyout>
-              <Flyout Placement="BottomEdgeAlignedLeft"
-                      ShowMode="Transient"
-                      FlyoutPresenterClasses="bare">
-                <Border Padding="6"
-                        Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
-                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                        BorderThickness="1"
-                        BoxShadow="0 8 24 0 #33000000"
-                        CornerRadius="{StaticResource DsRadiusMd}">
-                  <ScrollViewer MaxHeight="240"
-                                HorizontalScrollBarVisibility="Disabled"
-                                VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                      <TextBlock Margin="4,2,4,4"
-                                 Classes="hint"
-                                 IsVisible="{Binding !HasSelectableAccounts}"
-                                 Text="{loc:Loc l003-017}" />
-                      <ItemsControl ItemsSource="{Binding SelectableAccounts}">
-                        <ItemsControl.ItemTemplate>
-                          <DataTemplate>
-                            <Button Classes="account-option"
-                                    Click="OnPickAccountClick"
-                                    Content="{Binding User}" />
-                          </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                      </ItemsControl>
-                    </StackPanel>
-                  </ScrollViewer>
-                </Border>
-              </Flyout>
-            </Button.Flyout>
-          </Button>
-
-          <TextBlock Margin="0,4,0,0"
-                     Classes="hint"
-                     TextWrapping="Wrap"
-                     IsVisible="{Binding IsAccountListEmpty}"
-                     Text="{loc:Loc l003-016}" />
+              <TextBlock HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Classes="hint"
+                         TextAlignment="Center"
+                         TextWrapping="Wrap"
+                         IsVisible="{Binding IsAccountListEmpty}"
+                         Text="{loc:Loc l003-016}" />
+            </Panel>
+          </Border>
 
           <TextBlock Margin="0,2,0,0"
                      Classes="hint"
@@ -233,7 +249,7 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
       <Button MinWidth="88"
-              Content="{loc:Loc c001-020}"
+              Content="{loc:Loc c001-022}"
               Command="{Binding CancelCommand}"
               IsCancel="True" />
       <Button Margin="8,0,0,0" MinWidth="88" Classes="primary" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" />

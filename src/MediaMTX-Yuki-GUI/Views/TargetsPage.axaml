@@ -39,7 +39,7 @@
         <Button Classes="batch-green" Content="{loc:Loc c004-031}" Command="{Binding StartSelectedCommand}" />
         <Button Classes="batch-red" Content="{loc:Loc c004-032}" Command="{Binding StopSelectedCommand}" />
         <Button Classes="batch-blue"
-                Content="{loc:Loc c004-064}"
+                Content="{loc:Loc c004-060}"
                 Click="OnBindTargetsClick"
                 IsEnabled="{Binding HasSelection}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
