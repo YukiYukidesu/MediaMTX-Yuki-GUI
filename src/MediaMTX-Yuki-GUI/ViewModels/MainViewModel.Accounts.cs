@@ -175,7 +175,7 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("c001-025"),
+                L.T("c001-020"),
                 L.T("l005-007").Replace("{n}", count),
                 L.T("c001-018"),
                 destructive: true);

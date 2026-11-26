@@ -24,9 +24,9 @@ public partial class TargetsPage : UserControl
 
         Popconfirm.Show(
             (Control)sender,
-            L.T("c004-063").Replace("{name}", item.DisplayName),
+            L.T("c004-059").Replace("{name}", item.DisplayName),
             L.T("c001-018"),
-            L.T("c001-020"),
+            L.T("c001-022"),
             () => viewModel.RemoveTargetCommand.Execute(item));
     }
 

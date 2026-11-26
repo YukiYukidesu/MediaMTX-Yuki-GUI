@@ -127,7 +127,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
         => _isNew ? L.T("c003-022") : L.T("c003-031");
 
     public string ConfirmText
-        => _isNew ? L.T("c001-021") : L.T("c001-022");
+        => _isNew ? L.T("c001-023") : L.T("c001-024");
 
     /// <summary>「允许推流的账号」里已经加进来的那些，显示成一颗颗带叉的标签。</summary>
     public ObservableCollection<AccountChip> SelectedAccounts { get; } = [];

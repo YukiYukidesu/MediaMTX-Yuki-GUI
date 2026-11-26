@@ -27,7 +27,7 @@ public partial class AccountsPage : UserControl
             (Control)sender,
             L.T("l005-006").Replace("{name}", item.User),
             L.T("c001-018"),
-            L.T("c001-020"),
+            L.T("c001-022"),
             () => viewModel.RemoveAccountCommand.Execute(item));
     }
 }

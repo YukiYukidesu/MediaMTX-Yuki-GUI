@@ -1314,7 +1314,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("c001-025"),
+                L.T("c001-020"),
                 L.T("l004-020").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
                 L.T("c001-018"),
                 destructive: true);

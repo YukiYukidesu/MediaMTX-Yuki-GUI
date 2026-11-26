@@ -199,7 +199,7 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
             button,
             L.T("l009-003"),
             L.T("c001-018"),
-            L.T("c001-020"),
+            L.T("c001-022"),
             () => _ = DeleteSegmentAsync(row));
     }
 
