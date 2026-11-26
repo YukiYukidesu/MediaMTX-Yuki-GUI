@@ -1751,6 +1751,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         Dictionary<string, List<ForwardDestMetrics>> byPath = GroupByPath(
             MetricsParser.ParseForwardDests(text));
 
+        // 转发错误是每条源一次 HTTP 查询，条数一多就把两秒一轮撑成秒级卡顿；
+        // 错误文案不需要那么灵，五轮（约十秒）查一次就够
+        bool checkErrors = (_metricsRound++ % 5) == 0;
+
         foreach (InputItemViewModel input in Inputs)
         {
             List<TargetItemViewModel> rows = ForwardRowsOf(input);
@@ -1759,7 +1763,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
             ApplyForwardMetrics(rows, found, now);
 
-            await FillForwardErrorsAsync(input, rows, ct);
+            if (checkErrors) await FillForwardErrorsAsync(input, rows, ct);
         }
 
         long t1 = Environment.TickCount64;
@@ -2717,6 +2721,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private long _logBurstStart = Environment.TickCount64;
     private readonly List<string> _pendingLogs = [];
     private string _lastApplied = string.Empty;
+    private int _metricsRound;
     private int _logFlushPosted;
 
     private void OnEngineLog(string line)
