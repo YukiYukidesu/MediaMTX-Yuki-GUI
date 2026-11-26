@@ -1744,6 +1744,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         if (_api is null || !IsEngineRunning) return;
 
+        // 指标只在看得到它的三个页面（概览 0 / 输入源 1 / 输出目标 2）才拉：
+        // 整份 metrics 有几千万字节，解析加写行要 0.7~1 秒，别的页面上没必要陪跑
+        if (SelectedPage is not (0 or 1 or 2)) return;
+
         long t0 = Environment.TickCount64;
 
         string? text = await _api.GetMetricsAsync(ct, _cfg.Engine.MetricsPort);
@@ -1777,6 +1781,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             ApplyForwardMetrics(rows, found, now, commitRows);
         }
 
+        long t05 = Environment.TickCount64;
+
         // 报错查询并发做：串行时每条源一次 HTTP，几条源就能把一轮拖到几百毫秒
         if (checkErrors)
         {
@@ -1802,7 +1808,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         long t4 = Environment.TickCount64;
 
         // 定位卡顿用：每轮都记，哪一段慢一眼能看出来
-        Services.AppLog.Write($"[METRICS] http={t00 - t0} parse={t1 - t00} paths={t2 - t1} records={t3 - t2} stats={t4 - t3} total={t4 - t0}");
+        Services.AppLog.Write($"[METRICS] http={t00 - t0} parse={t05 - t00} rows={t1 - t05} paths={t2 - t1} records={t3 - t2} stats={t4 - t3} total={t4 - t0}");
     }
 
     /// <summary>
