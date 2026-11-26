@@ -56,6 +56,10 @@ public sealed class EngineManager : IDisposable
     {
         if (IsRunning) return true;
 
+        // 上一次是意外退出：旧 Process 还攥着 OS 句柄与事件订阅，换新对象前先释放
+        _process?.Dispose();
+        _process = null;
+
         // 新一轮启动：之前那次「是我们要停的」作废，之后任何退出都算意外
         _stopRequested = false;
 
