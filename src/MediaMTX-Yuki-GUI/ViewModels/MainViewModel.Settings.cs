@@ -128,11 +128,11 @@ public sealed partial class MainViewModel
 
     /// <summary>横幅正文：按「只有引擎要重启还是整个程序要重启」挑一句。</summary>
     public string RestartBarText
-        => NeedsAppRestart ? L.T("t001-017") : L.T("t001-015");
+        => NeedsAppRestart ? L.T("t001-014") : L.T("t001-012");
 
     /// <summary>横幅右侧那颗按钮的字。</summary>
     public string RestartBarActionText
-        => L.T(NeedsAppRestart ? "t001-018" : "t001-016");
+        => L.T(NeedsAppRestart ? "t001-015" : "t001-013");
 
     /// <summary>true 表示这条横幅只跟引擎有关——重启按钮走「重起引擎」而不是「重开程序」。</summary>
     public bool RestartBarEngineOnly
@@ -150,7 +150,7 @@ public sealed partial class MainViewModel
     {
         if (IsUpdating)
         {
-            ShowToast(L.T("t001-019"), ToastKind.Warn);
+            ShowToast(L.T("t001-016"), ToastKind.Warn);
 
             return;
         }
@@ -160,9 +160,9 @@ public sealed partial class MainViewModel
         if (restartApp && AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("t001-020"),
-                L.T("t001-021"),
-                L.T("t001-018"));
+                L.T("t001-017"),
+                L.T("t001-018"),
+                L.T("t001-015"));
 
             if (!ok) return;
         }
@@ -623,7 +623,7 @@ public sealed partial class MainViewModel
     /// 不写出来用户没法判断该不该升。
     /// </summary>
     public string EngineUpdateCaution
-        => L.T("ls04-014").Replace("{version}", Services.ProgramVersion.RecommendedEngineVersion);
+        => L.T("ls04-019").Replace("{version}", Services.ProgramVersion.RecommendedEngineVersion);
 
     /// <summary>关于页里那行「推荐引擎版本」。</summary>
     public string RecommendedEngineVersionText => Services.ProgramVersion.RecommendedEngineVersion;
@@ -721,7 +721,7 @@ public sealed partial class MainViewModel
     /// 「留空会怎样」，而不是像编辑窗那样只说「不能为空」。
     /// </summary>
     public string StreamProxyWarning
-        => IsStreamProxyManual && string.IsNullOrWhiteSpace(_cfg.Proxy.Url) ? L.T("cs04-031") : string.Empty;
+        => IsStreamProxyManual && string.IsNullOrWhiteSpace(_cfg.Proxy.Url) ? L.T("ls04-031") : string.Empty;
 
     /// <summary>手动档这个档位下，地址框要标红星并可能亮红框。</summary>
     public bool StreamProxyRequired => IsStreamProxyManual;
@@ -770,7 +770,7 @@ public sealed partial class MainViewModel
 
     /// <summary>更新下载代理那一行的红字：手动档却没填地址时才出现，说法同推流代理。</summary>
     public string UpdateProxyWarning
-        => IsUpdateProxyManual && string.IsNullOrWhiteSpace(_cfg.Update.Proxy.Url) ? L.T("cs04-031") : string.Empty;
+        => IsUpdateProxyManual && string.IsNullOrWhiteSpace(_cfg.Update.Proxy.Url) ? L.T("ls04-031") : string.Empty;
 
     /// <summary>手动档这个档位下，地址框要标红星并可能亮红框。</summary>
     public bool UpdateProxyRequired => IsUpdateProxyManual;
@@ -864,9 +864,9 @@ public sealed partial class MainViewModel
         bool toAdvanced = string.Equals(mode, Models.UiOptions.AdvancedMode, StringComparison.Ordinal);
 
         bool ok = await AppHost.ConfirmAsync(
-            L.T(toAdvanced ? "c008-006" : "c008-007"),
-            L.T(toAdvanced ? "l008-006" : "l008-007"),
-            L.T("c008-005"));
+            L.T(toAdvanced ? "l008-007" : "l008-009"),
+            L.T(toAdvanced ? "l008-008" : "l008-010"),
+            L.T("l008-005"));
 
         if (!ok) return;
 
@@ -1042,7 +1042,7 @@ public sealed partial class MainViewModel
     public string MissingText
         => Services.Localization.Instance.MissingCount == 0
             ? string.Empty
-            : L.T("cs01-014").Replace("{n}", Services.Localization.Instance.MissingCount.ToString());
+            : L.T("ls01-005").Replace("{n}", Services.Localization.Instance.MissingCount.ToString());
 
     public bool HasMissing
         => Services.Localization.Instance.MissingCount > 0;

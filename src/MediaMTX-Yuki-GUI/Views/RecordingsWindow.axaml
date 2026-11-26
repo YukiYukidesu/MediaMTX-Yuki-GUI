@@ -28,7 +28,7 @@
             IsVisible="{Binding HasRows}">
         <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c009-001}" />
         <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c009-002}" HorizontalAlignment="Center" />
-        <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c001-016}" HorizontalAlignment="Center" />
+        <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c001-011}" HorizontalAlignment="Center" />
       </Grid>
 
       <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -83,7 +83,7 @@
       </StackPanel>
 
       <TextBlock Grid.Row="1" IsVisible="{Binding IsLoading}" Classes="hint"
-                 Text="{loc:Loc c009-007}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Text="{loc:Loc l009-005}" HorizontalAlignment="Center" VerticalAlignment="Center"
                  IsHitTestVisible="False" />
 
     </Grid>
@@ -94,8 +94,8 @@
       <!-- 两颗并排就得一样宽：字数是「刷新」两字对「关闭」两字，本身一样，
            但「关闭」设了 MinWidth 而「刷新」没有，实际宽度就差一截。同排同义的按钮一律写同一个 MinWidth -->
       <StackPanel Grid.Column="1" Orientation="Horizontal">
-        <Button MinWidth="88" Content="{loc:Loc c001-025}" Command="{Binding RefreshCommand}" />
-        <Button Margin="8,0,0,0" MinWidth="88" Content="{loc:Loc c001-026}" Command="{Binding CloseCommand}" IsCancel="True" />
+        <Button MinWidth="88" Content="{loc:Loc b001-011}" Command="{Binding RefreshCommand}" />
+        <Button Margin="8,0,0,0" MinWidth="88" Content="{loc:Loc b001-012}" Command="{Binding CloseCommand}" IsCancel="True" />
       </StackPanel>
     </Grid>
 

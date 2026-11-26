@@ -124,10 +124,10 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
     private IReadOnlyCollection<int> OwnPorts { get; }
 
     public string WindowTitle
-        => _isNew ? L.T("c003-022") : L.T("c003-031");
+        => _isNew ? L.T("b003-003") : L.T("c003-012");
 
     public string ConfirmText
-        => _isNew ? L.T("c001-023") : L.T("c001-024");
+        => _isNew ? L.T("b001-009") : L.T("b001-010");
 
     /// <summary>「允许推流的账号」里已经加进来的那些，显示成一颗颗带叉的标签。</summary>
     public ObservableCollection<AccountChip> SelectedAccounts { get; } = [];
@@ -196,15 +196,15 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (path.Length == 0)
             {
-                return L.T("c003-038");
+                return L.T("l003-036");
             }
 
             if (!IsValidPathName(path))
             {
-                return L.T("c003-040");
+                return L.T("l003-038");
             }
 
-            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("c003-041") : string.Empty;
+            return _otherPaths.Contains(path, StringComparer.Ordinal) ? L.T("l003-039") : string.Empty;
         }
     }
 
@@ -390,7 +390,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>来源方式下面那行小字。</summary>
     public string SourceKindHint
-        => IsPulling ? L.T("l003-010") : L.T("l003-009");
+        => IsPulling ? L.T("l003-013") : L.T("l003-011");
 
     public string Port
     {
@@ -449,7 +449,7 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
     /// <summary>端口框里的灰字：不填就用协议默认端口。</summary>
     public string PortPlaceholder
-        => L.T("c003-035").Replace("{port}", InputProtocols.DefaultPort(Protocol).ToString());
+        => L.T("l003-035").Replace("{port}", InputProtocols.DefaultPort(Protocol).ToString());
 
     public string PortWarning
     {
@@ -459,10 +459,10 @@ public sealed partial class InputEditorWindow : FAAppWindow, INotifyPropertyChan
 
             if (port <= 0)
             {
-                return L.T("c003-045");
+                return L.T("l003-042");
             }
 
-            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("c003-046");
+            return PortProbe.IsFree(port, OwnPorts) ? "" : L.T("l003-043");
         }
     }
 

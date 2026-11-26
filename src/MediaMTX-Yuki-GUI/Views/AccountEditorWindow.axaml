@@ -44,7 +44,7 @@
         <TextBlock Margin="0,6,0,0"
                    Classes="hint"
                    TextWrapping="Wrap"
-                   Text="{loc:Loc l005-004}" />
+                   Text="{loc:Loc l005-005}" />
 
       </StackPanel>
     </ScrollViewer>
@@ -55,7 +55,7 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
       <Button MinWidth="88"
-              Content="{loc:Loc c001-022}"
+              Content="{loc:Loc b001-008}"
               Command="{Binding CancelCommand}"
               IsCancel="True" />
       <Button Margin="8,0,0,0" MinWidth="88" Classes="primary" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" />

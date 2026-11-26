@@ -67,10 +67,10 @@
                    IsVisible="{Binding IngestHintVisible}" />
 
         <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-          <Button Classes="primary" Content="{loc:Loc c002-013}"
+          <Button Classes="primary" Content="{loc:Loc b002-001}"
                   Command="{Binding ToggleEngineCommand}"
                   IsVisible="{Binding IsEngineStopped}" />
-          <Button Classes="danger-solid" Content="{loc:Loc c002-014}"
+          <Button Classes="danger-solid" Content="{loc:Loc b002-002}"
                   Command="{Binding ToggleEngineCommand}"
                   IsVisible="{Binding IsEngineRunning}" />
         </StackPanel>
@@ -82,8 +82,8 @@
          底框占第 2 行（星号），一个节点都没有时它也照样占着那一块 -->
     <Grid Grid.Row="2" RowDefinitions="Auto,*">
       <StackPanel Grid.Row="0" Margin="{StaticResource DsCardGap}">
-        <TextBlock Text="{loc:Loc c002-015}" FontSize="15" FontWeight="SemiBold" />
-        <TextBlock Text="{loc:Loc l002-003}" Classes="hint" TextWrapping="Wrap" />
+        <TextBlock Text="{loc:Loc c002-001}" FontSize="15" FontWeight="SemiBold" />
+        <TextBlock Text="{loc:Loc l002-006}" Classes="hint" TextWrapping="Wrap" />
       </StackPanel>
 
       <Border Grid.Row="1" Classes="well" Padding="12">
@@ -133,12 +133,12 @@
             <TextBlock Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
                        HorizontalAlignment="Center"
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-            <TextBlock Text="{loc:Loc c002-020}" Classes="empty-title" HorizontalAlignment="Center" />
-            <TextBlock Text="{loc:Loc l002-005}" Classes="hint" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc c002-002}" Classes="empty-title" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc l002-010}" Classes="hint" HorizontalAlignment="Center" />
           </StackPanel>
 
           <!-- 孤儿目标现在图上看得见，这条提示仍然有用：它在说这些目标不会被推流 -->
-          <TextBlock Grid.Row="1" Text="{loc:Loc l002-004}" FontSize="11.5" Foreground="#D9822B"
+          <TextBlock Grid.Row="1" Text="{loc:Loc l002-008}" FontSize="11.5" Foreground="#D9822B"
                      Margin="0,8,0,0" TextWrapping="Wrap"
                      IsVisible="{Binding HasUnboundTargets}" />
 

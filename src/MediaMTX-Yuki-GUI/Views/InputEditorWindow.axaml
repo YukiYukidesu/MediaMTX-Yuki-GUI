@@ -35,7 +35,7 @@
         <!-- 来源方式：接收推流 / 主动拉流。两者互斥，MediaMTX 的 source 一次只能填一个值。
              摆成两张并排的小卡片而不是下拉：拢共就两种，摊开一眼能看清，少点一次多一层菜单。
              简洁模式下只给「接收推流」一张，第二张整块收起来。 -->
-        <TextBlock Classes="field-label" Text="{loc:Loc c003-032}" />
+        <TextBlock Classes="field-label" Text="{loc:Loc c003-013}" />
         <Grid Margin="0,4,0,4" ColumnDefinitions="*,10,*">
           <Border Grid.Column="0"
                   Grid.ColumnSpan="{Binding PushCardSpan}"
@@ -43,8 +43,8 @@
                   Classes.on="{Binding IsPushKind}"
                   PointerPressed="OnPushKindPressed">
             <StackPanel>
-              <TextBlock Classes="kind-title" Text="{loc:Loc c003-019}" />
-              <TextBlock Classes="kind-note" Text="{loc:Loc l003-009}" />
+              <TextBlock Classes="kind-title" Text="{loc:Loc l003-030}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l003-011}" />
             </StackPanel>
           </Border>
 
@@ -54,8 +54,8 @@
                   IsVisible="{Binding ShowPullCard}"
                   PointerPressed="OnPullKindPressed">
             <StackPanel>
-              <TextBlock Classes="kind-title" Text="{loc:Loc c003-018}" />
-              <TextBlock Classes="kind-note" Text="{loc:Loc l003-010}" />
+              <TextBlock Classes="kind-title" Text="{loc:Loc l003-028}" />
+              <TextBlock Classes="kind-note" Text="{loc:Loc l003-013}" />
             </StackPanel>
           </Border>
         </Grid>
@@ -64,7 +64,7 @@
         <Grid Margin="0,0,0,16" ColumnDefinitions="*,16,140"
               IsVisible="{Binding !IsPulling}">
           <StackPanel Grid.Column="0">
-            <TextBlock Classes="field-label" Text="{loc:Loc c003-033}" />
+            <TextBlock Classes="field-label" Text="{loc:Loc c003-014}" />
             <ComboBox Margin="0,4,0,0"
                       HorizontalAlignment="Stretch"
                       ItemsSource="{Binding ProtocolChoices}"
@@ -78,7 +78,7 @@
           </StackPanel>
 
           <StackPanel Grid.Column="2">
-            <TextBlock Classes="field-label" Text="{loc:Loc c003-034}" />
+            <TextBlock Classes="field-label" Text="{loc:Loc c003-015}" />
             <TextBox Margin="0,4,0,0"
                      TextAlignment="Right"
                      PlaceholderText="{Binding PortPlaceholder}"
@@ -87,7 +87,7 @@
         </Grid>
 
         <StackPanel Orientation="Horizontal" Spacing="4">
-          <TextBlock Classes="field-label" Text="{loc:Loc c003-036}" />
+          <TextBlock Classes="field-label" Text="{loc:Loc c003-016}" />
           <TextBlock Text="*" Classes="required-mark" />
         </StackPanel>
         <TextBox Margin="0,4,0,4"
@@ -103,7 +103,7 @@
         <!-- 主动拉流时才显示；留空则是接收推流 -->
         <StackPanel Margin="0,16,0,0" IsVisible="{Binding IsPulling}">
           <StackPanel Orientation="Horizontal" Spacing="4">
-            <TextBlock Classes="field-label" Text="{loc:Loc c003-037}" />
+            <TextBlock Classes="field-label" Text="{loc:Loc c003-017}" />
             <TextBlock Text="*" Classes="required-mark" />
           </StackPanel>
           <TextBox Margin="0,4,0,4"
@@ -115,7 +115,7 @@
                      Classes="danger-hint"
                      IsVisible="{Binding PullUrlInvalid}"
                      Text="{loc:Loc l003-001}" />
-          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{loc:Loc l003-008}" />
+          <TextBlock Classes="hint" TextWrapping="Wrap" Text="{loc:Loc l003-009}" />
         </StackPanel>
 
         <TextBlock Margin="0,4,0,0"
@@ -132,14 +132,14 @@
           <Grid ColumnDefinitions="*,Auto">
             <TextBlock VerticalAlignment="Center"
                        Classes="field-label"
-                       Text="{loc:Loc c003-043}" />
+                       Text="{loc:Loc c003-018}" />
 
             <Button x:Name="AddAccountButton"
                     Grid.Column="1"
                     IsVisible="{Binding HasAccounts}">
               <StackPanel Orientation="Horizontal" Spacing="3">
                 <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="+" />
-                <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-048}" />
+                <TextBlock VerticalAlignment="Center" Text="{loc:Loc l003-044}" />
               </StackPanel>
               <Button.Flyout>
                 <Flyout Placement="BottomEdgeAlignedRight"
@@ -158,7 +158,7 @@
                         <TextBlock Margin="4,2,4,4"
                                    Classes="hint"
                                    IsVisible="{Binding !HasSelectableAccounts}"
-                                   Text="{loc:Loc l003-017}" />
+                                   Text="{loc:Loc l003-027}" />
                         <ItemsControl ItemsSource="{Binding SelectableAccounts}">
                           <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -212,7 +212,7 @@
                                   Classes="chip-close"
                                   Click="OnRemoveAccountClick"
                                   Content="&#x00D7;"
-                                  ToolTip.Tip="{loc:Loc c003-049}" />
+                                  ToolTip.Tip="{loc:Loc l003-045}" />
                         </StackPanel>
                       </Border>
                     </DataTemplate>
@@ -226,7 +226,7 @@
                          TextAlignment="Center"
                          TextWrapping="Wrap"
                          IsVisible="{Binding IsAccountListEmpty}"
-                         Text="{loc:Loc l003-016}" />
+                         Text="{loc:Loc l003-025}" />
 
               <TextBlock HorizontalAlignment="Center"
                          VerticalAlignment="Center"
@@ -234,7 +234,7 @@
                          TextAlignment="Center"
                          TextWrapping="Wrap"
                          IsVisible="{Binding ShowPickHint}"
-                         Text="{loc:Loc l003-018}" />
+                         Text="{loc:Loc l003-029}" />
             </Grid>
           </Border>
 
@@ -242,20 +242,20 @@
                      Classes="hint"
                      TextWrapping="Wrap"
                      IsVisible="{Binding HasAccounts}"
-                     Text="{loc:Loc l003-014}" />
+                     Text="{loc:Loc l003-021}" />
         </StackPanel>
 
         <!-- 两个开关并排在最后一行：先启用，才谈得上录制，所以录制的开关跟着前一个走 -->
         <StackPanel Margin="0,20,0,0"
                     Orientation="Horizontal"
                     Spacing="10">
-          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-039}" />
+          <TextBlock VerticalAlignment="Center" Text="{loc:Loc l003-037}" />
           <ToggleSwitch VerticalAlignment="Center" IsChecked="{Binding Enabled, Mode=TwoWay}" />
           <StackPanel Margin="24,0,0,0"
                       Orientation="Horizontal"
                       Spacing="10"
                       IsVisible="{Binding IsAdvancedMode}">
-            <TextBlock VerticalAlignment="Center" Text="{loc:Loc c003-042}" />
+            <TextBlock VerticalAlignment="Center" Text="{loc:Loc l003-040}" />
             <ToggleSwitch VerticalAlignment="Center"
                           IsChecked="{Binding RecordShown, Mode=TwoWay}"
                           IsEnabled="{Binding Enabled}" />
@@ -270,7 +270,7 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
       <Button MinWidth="88"
-              Content="{loc:Loc c001-022}"
+              Content="{loc:Loc b001-008}"
               Command="{Binding CancelCommand}"
               IsCancel="True" />
       <Button Margin="8,0,0,0" MinWidth="88" Classes="primary" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" />

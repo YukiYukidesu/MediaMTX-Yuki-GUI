@@ -3,7 +3,7 @@
                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                 xmlns:ui="using:FluentAvalonia.UI.Windowing"
                 xmlns:loc="using:MediaMTX_Yuki_GUI"
-                Title="{loc:Loc c004-060}"
+                Title="{loc:Loc b004-008}"
                 Width="460"
                 SizeToContent="Height"
                 CanResize="False"
@@ -16,7 +16,7 @@
     <StackPanel Grid.Row="0">
       <TextBlock x:Name="HeadlineText" Classes="page-subtitle" TextWrapping="Wrap" />
 
-      <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-049}" />
+      <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-017}" />
       <ComboBox x:Name="InputBox" Margin="0,4,0,0" HorizontalAlignment="Stretch">
         <ComboBox.ItemTemplate>
           <DataTemplate>
@@ -24,13 +24,13 @@
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>
-      <TextBlock x:Name="EmptyHint" Margin="0,6,0,0" Classes="hint" Text="{loc:Loc l004-021}" />
+      <TextBlock x:Name="EmptyHint" Margin="0,6,0,0" Classes="hint" Text="{loc:Loc l004-032}" />
     </StackPanel>
 
     <StackPanel Grid.Row="1" Margin="0,20,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
-      <Button MinWidth="88" Content="{loc:Loc c001-022}" Click="OnCancelClick" IsCancel="True" />
+      <Button MinWidth="88" Content="{loc:Loc b001-008}" Click="OnCancelClick" IsCancel="True" />
       <Button x:Name="ConfirmButton" Margin="8,0,0,0" MinWidth="88" Classes="primary"
-              Content="{loc:Loc c001-021}" Click="OnConfirmClick" IsDefault="True" />
+              Content="{loc:Loc b001-007}" Click="OnConfirmClick" IsDefault="True" />
     </StackPanel>
   </Grid>
 </ui:FAAppWindow>

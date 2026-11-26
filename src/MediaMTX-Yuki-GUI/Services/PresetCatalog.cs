@@ -20,29 +20,29 @@ public static class PresetCatalog
 
     public static readonly IReadOnlyList<PlatformPreset> All = new List<PlatformPreset>
     {
-        new("bilibili", L.T("c004-040"), "rtmp://live-push.bilivideo.com/live-bvc/",
+        new("bilibili", L.T("l004-044"), "rtmp://live-push.bilivideo.com/live-bvc/",
             L.T("l004-008")),
 
-        new("douyin", L.T("c004-041"), "rtmp://push-rtmp-l6-c.douyincdn.com/stage/",
+        new("douyin", L.T("l004-045"), "rtmp://push-rtmp-l6-c.douyincdn.com/stage/",
             L.T("l004-009")),
 
-        new("kuaishou", L.T("c004-042"), "",
+        new("kuaishou", L.T("l004-046"), "",
             L.T("l004-010")),
 
         new("youtube", "YouTube", "rtmps://a.rtmps.youtube.com/live2",
             L.T("l004-001")),
 
         new("twitch", "Twitch", "rtmp://live.twitch.tv/app/",
-            L.T("c004-043")),
+            L.T("l004-047")),
 
-        new("huya", L.T("c004-044"), "",
-            L.T("l004-011")),
-
-        new("douyu", L.T("c004-045"), "",
+        new("huya", L.T("l004-048"), "",
             L.T("l004-012")),
 
-        new(CustomId, L.T("c004-046"), "",
-            L.T("l004-013")),
+        new("douyu", L.T("l004-049"), "",
+            L.T("l004-014")),
+
+        new(CustomId, L.T("l004-050"), "",
+            L.T("l004-016")),
     };
 
     /// <summary>按 id 找模板，找不到时回退到「自定义」。</summary>

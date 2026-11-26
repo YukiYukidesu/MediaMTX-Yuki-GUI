@@ -55,10 +55,10 @@ public sealed partial class AccountEditorWindow : FAAppWindow, INotifyPropertyCh
     public new event PropertyChangedEventHandler? PropertyChanged;
 
     public string WindowTitle
-        => _isNew ? L.T("c005-005") : L.T("c005-007");
+        => _isNew ? L.T("l005-006") : L.T("c005-005");
 
     public string ConfirmText
-        => _isNew ? L.T("c001-023") : L.T("c001-024");
+        => _isNew ? L.T("b001-009") : L.T("b001-010");
 
     public IRelayCommand ConfirmCommand { get; }
 

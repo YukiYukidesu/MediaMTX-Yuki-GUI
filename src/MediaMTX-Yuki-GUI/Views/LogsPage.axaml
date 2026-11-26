@@ -16,17 +16,17 @@
       <StackPanel Orientation="Horizontal" Spacing="8"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
         <Button Padding="12,4" FontSize="12"
-                Content="{loc:Loc c007-003}"
+                Content="{loc:Loc b007-002}"
                 IsEnabled="{Binding HasLogs}"
-                ToolTip.Tip="{loc:Loc c007-005}"
+                ToolTip.Tip="{loc:Loc l007-003}"
                 Command="{Binding CopyLogsCommand}" />
         <Button Padding="12,4" FontSize="12"
-                Content="{loc:Loc c007-004}"
+                Content="{loc:Loc b007-003}"
                 IsEnabled="{Binding HasLogs}"
-                ToolTip.Tip="{loc:Loc c007-006}"
+                ToolTip.Tip="{loc:Loc l007-004}"
                 Command="{Binding ExportLogsCommand}" />
         <Button Padding="12,4" FontSize="12"
-                Content="{loc:Loc c007-001}"
+                Content="{loc:Loc b007-001}"
                 IsEnabled="{Binding HasLogs}"
                 Command="{Binding ClearLogsCommand}" />
       </StackPanel>

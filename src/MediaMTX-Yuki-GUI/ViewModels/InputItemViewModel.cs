@@ -182,9 +182,9 @@ public partial class InputItemViewModel : ObservableObject
     /// 没开录制是灰的，开了但整路停着是红的（这时录制键根本不写进 runtime.yml），真在录才是黄的。
     /// </summary>
     public string RecordStateText
-        => !Record ? L.T("c003-030")
-           : !EffectiveEnabled ? L.T("c003-014")
-           : L.T("c003-029");
+        => !Record ? L.T("l003-034")
+           : !EffectiveEnabled ? L.T("l003-020")
+           : L.T("l003-033");
 
     public PillVariant RecordStateVariant
         => !Record ? PillVariant.Plain
@@ -193,8 +193,8 @@ public partial class InputItemViewModel : ObservableObject
 
     /// <summary>列表里的状态文案：程序禁用说明原因，否则看用户开关。</summary>
     public string StatusText
-        => RuntimeDisabled ? L.T("c003-015")
-           : Enabled ? L.T("c003-013") : L.T("c003-014");
+        => RuntimeDisabled ? L.T("l003-022")
+           : Enabled ? L.T("l003-018") : L.T("l003-020");
 
     // ====== 胶囊标签（列表每行把各字段摆成一颗胶囊） ======
 
@@ -214,9 +214,9 @@ public partial class InputItemViewModel : ObservableObject
 
     /// <summary>推流状态胶囊的文案：被强制禁用说明原因，否则在线说在推流、关掉说已停止。</summary>
     public string LiveText
-        => RuntimeDisabled ? L.T("c003-015")
-           : !Enabled ? L.T("c003-014")
-           : IsOnline ? L.T("c003-017") : L.T("c003-016");
+        => RuntimeDisabled ? L.T("l003-022")
+           : !Enabled ? L.T("l003-020")
+           : IsOnline ? L.T("l003-026") : L.T("l003-024");
 
     /// <summary>推流状态胶囊的配色，与文案同步：在线取绿，关掉取红，禁用与闲置取中性。</summary>
     public PillVariant LiveVariant
@@ -226,7 +226,7 @@ public partial class InputItemViewModel : ObservableObject
 
     /// <summary>来源胶囊的文案：主动去拉，还是接收推流。</summary>
     public string SourceText
-        => IsPulling ? L.T("c003-018") : L.T("c003-019");
+        => IsPulling ? L.T("l003-028") : L.T("l003-030");
 
     /// <summary>来源胶囊的配色：主动拉流与接收推流各占一色，跟代理那几档不混用。</summary>
     public PillVariant SourceVariant

@@ -16,7 +16,7 @@
     <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
       <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
         <Button Padding="10,4" FontSize="12" Content="{Binding SelectAllInputsText}"
-                ToolTip.Tip="{loc:Loc c001-011}"
+                ToolTip.Tip="{loc:Loc l001-001}"
                 Command="{Binding ToggleSelectAllInputsCommand}" />
         <TextBlock Text="{Binding InputSelectionText}" Classes="hint" VerticalAlignment="Center" />
       </StackPanel>
@@ -26,8 +26,8 @@
         <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
                   ItemsSource="{Binding InputSortChoices}"
                   SelectedIndex="{Binding InputSortIndex}"
-                  ToolTip.Tip="{loc:Loc c003-008}" />
-        <TextBlock Text="{loc:Loc c003-009}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+                  ToolTip.Tip="{loc:Loc l003-008}" />
+        <TextBlock Text="{loc:Loc l003-010}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding InputEnabledFirst}"
@@ -36,12 +36,12 @@
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
-        <Button Classes="batch-green" Content="{loc:Loc c003-020}" Command="{Binding StartSelectedInputsCommand}" />
-        <Button Classes="batch-red" Content="{loc:Loc c003-021}" Command="{Binding StopSelectedInputsCommand}" />
+        <Button Classes="batch-green" Content="{loc:Loc b003-001}" Command="{Binding StartSelectedInputsCommand}" />
+        <Button Classes="batch-red" Content="{loc:Loc b003-002}" Command="{Binding StopSelectedInputsCommand}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc c001-019}" Command="{Binding RemoveSelectedInputsCommand}" />
+                Content="{loc:Loc b001-006}" Command="{Binding RemoveSelectedInputsCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
-                Content="{loc:Loc c003-022}" Command="{Binding AddInputCommand}" />
+                Content="{loc:Loc b003-003}" Command="{Binding AddInputCommand}" />
       </StackPanel>
     </Grid>
 
@@ -100,12 +100,12 @@
               <TextBlock Grid.Column="5" Classes="column-header"
                          Text="{loc:Loc c003-007}" HorizontalAlignment="Center" />
               <TextBlock Grid.Column="6" Classes="column-header"
-                         Text="{loc:Loc c003-026}" HorizontalAlignment="Center" />
+                         Text="{loc:Loc c003-009}" HorizontalAlignment="Center" />
               <TextBlock Grid.Column="7" Classes="column-header"
-                         Text="{loc:Loc c003-027}" HorizontalAlignment="Center"
+                         Text="{loc:Loc c003-010}" HorizontalAlignment="Center"
                          IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
               <TextBlock Grid.Column="8" Classes="column-header"
-                         Text="{loc:Loc c003-028}" HorizontalAlignment="Center"
+                         Text="{loc:Loc c003-011}" HorizontalAlignment="Center"
                          IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
             </Grid>
           </ScrollViewer>
@@ -113,7 +113,7 @@
           <!-- 操作列的文字与行内按钮都靠左：按钮数量会随模式变（简洁模式少两颗），
                靠右对齐的话第一个按钮的位置会跟着跳，跟分界线的间距就不固定了 -->
           <TextBlock Grid.Column="2" Classes="column-header" Margin="4,0,0,0"
-                     Text="{loc:Loc c001-016}" HorizontalAlignment="Left" />
+                     Text="{loc:Loc c001-011}" HorizontalAlignment="Left" />
         </Grid>
 
         <!-- 行数超出底框就在框内纵向滚动：底框高度固定，行多也不会把整页撑长 -->
@@ -248,7 +248,7 @@
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
                               IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc c003-010}"
+                              ToolTip.Tip="{loc:Loc l003-012}"
                               Command="{Binding $parent[Window].DataContext.ToggleInputEnabledCommand}"
                               CommandParameter="{Binding}">
                         <Panel>
@@ -258,7 +258,7 @@
                         </Panel>
                       </Button>
 
-                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc c001-017}"
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc l001-004}"
                               IsVisible="{Binding !RuntimeDisabled}"
                               Command="{Binding $parent[Window].DataContext.OpenInputCommand}"
                               CommandParameter="{Binding}">
@@ -277,7 +277,7 @@
                                 Classes.on="{Binding IsRecording}"
                                 IsVisible="{Binding !RuntimeDisabled}"
                                 IsEnabled="{Binding EffectiveEnabled}"
-                                ToolTip.Tip="{loc:Loc c003-011}"
+                                ToolTip.Tip="{loc:Loc l003-014}"
                                 Command="{Binding $parent[Window].DataContext.ToggleInputRecordCommand}"
                                 CommandParameter="{Binding}">
                           <TextBlock Classes="glyph" Text="&#xE7C8;" />
@@ -286,14 +286,14 @@
                         <!-- 录像：关掉录制之后历史片段还在，所以不跟录制开关联动 -->
                         <Button Classes="icon-square"
                                 IsVisible="{Binding !RuntimeDisabled}"
-                                ToolTip.Tip="{loc:Loc c003-012}"
+                                ToolTip.Tip="{loc:Loc l003-016}"
                                 Command="{Binding $parent[Window].DataContext.ShowRecordingsCommand}"
                                 CommandParameter="{Binding}">
                           <TextBlock Classes="glyph" Text="&#xE81C;" />
                         </Button>
                       </StackPanel>
 
-                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c001-018}"
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc l001-005}"
                               Click="OnRemoveInputClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>
@@ -303,7 +303,7 @@
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
                               IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc c003-044}">
+                              ToolTip.Tip="{loc:Loc l003-041}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -326,7 +326,7 @@
           <TextBlock Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-          <TextBlock Text="{loc:Loc c003-023}" Classes="empty-title" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc c003-008}" Classes="empty-title" HorizontalAlignment="Center" />
           <TextBlock Text="{loc:Loc l003-005}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 

@@ -26,10 +26,10 @@ public sealed partial class MainViewModel
         => Inputs.Count > 0 && SelectedInputCount == Inputs.Count;
 
     public string InputSelectionText
-        => SelectedInputCount == 0 ? L.T("c001-014") : L.T("c001-015").Replace("{n}", SelectedInputCount.ToString());
+        => SelectedInputCount == 0 ? L.T("l001-002") : L.T("l001-003").Replace("{n}", SelectedInputCount.ToString());
 
     public string SelectAllInputsText
-        => IsAllInputsSelected ? L.T("c001-013") : L.T("c001-012");
+        => IsAllInputsSelected ? L.T("b001-005") : L.T("b001-004");
 
     public bool IsInputsEmpty
         => Inputs.Count == 0;
@@ -43,7 +43,7 @@ public sealed partial class MainViewModel
     /// 显示成「短 id:备注」——两条输入的备注可能一样，靠 Id 才能分出是哪一条。
     /// </summary>
     public IReadOnlyList<InputChoice> InputChoices
-        => new[] { new InputChoice(string.Empty, L.T("c004-024")) }
+        => new[] { new InputChoice(string.Empty, L.T("l004-036")) }
             .Concat(Inputs.Select(input => new InputChoice(input.Id, input.ShortId + " : " + input.DisplayName)))
             .ToList();
 
@@ -65,7 +65,7 @@ public sealed partial class MainViewModel
             InputItemViewModel? owner = Inputs.FirstOrDefault(i => i.Id == target.InputSourceId);
 
             target.InputSourceName = owner == null
-                ? L.T("c004-024")
+                ? L.T("l004-036")
                 : owner.ShortId + " : " + owner.DisplayName;
         }
 
@@ -220,9 +220,9 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("c001-020"),
-                L.T("l003-015").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("c001-018"),
+                L.T("c001-012"),
+                L.T("l003-023").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                L.T("l001-005"),
                 destructive: true);
 
             if (!ok) return;
@@ -438,7 +438,7 @@ public sealed partial class MainViewModel
             Inputs.Select(item => item.Name).Where(name => !string.IsNullOrWhiteSpace(name)),
             StringComparer.Ordinal);
 
-        string baseName = L.T("c003-024");
+        string baseName = L.T("l003-031");
 
         if (!used.Contains(baseName)) return baseName;
 

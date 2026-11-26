@@ -30,7 +30,7 @@
                          FontWeight="SemiBold"
                          VerticalAlignment="Center" />
               <c:PillBadge Variant="On"
-                           Text="{loc:Loc c008-003}"
+                           Text="{loc:Loc b008-001}"
                            VerticalAlignment="Center"
                            Margin="4,0,0,0"
                            IsVisible="{Binding IsSimpleMode}" />
@@ -41,12 +41,12 @@
             <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
             <TextBlock Text="{loc:Loc l008-003}" TextWrapping="Wrap" LineHeight="22" />
 
-            <Button Content="{loc:Loc c008-004}"
+            <Button Content="{loc:Loc b008-002}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsAdvancedMode}"
                     Command="{Binding SwitchModeCommand}"
                     CommandParameter="{x:Static models:UiOptions.SimpleMode}" />
-            <Button Content="{loc:Loc c008-003}"
+            <Button Content="{loc:Loc b008-001}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsSimpleMode}"
                     IsEnabled="False" />
@@ -69,7 +69,7 @@
                          FontWeight="SemiBold"
                          VerticalAlignment="Center" />
               <c:PillBadge Variant="On"
-                           Text="{loc:Loc c008-003}"
+                           Text="{loc:Loc b008-001}"
                            VerticalAlignment="Center"
                            Margin="4,0,0,0"
                            IsVisible="{Binding IsAdvancedMode}" />
@@ -78,15 +78,15 @@
             <TextBlock Text="{loc:Loc l008-004}" Classes="hint" TextWrapping="Wrap" />
 
             <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
-            <TextBlock Text="{loc:Loc l008-005}" TextWrapping="Wrap" LineHeight="22" />
+            <TextBlock Text="{loc:Loc l008-006}" TextWrapping="Wrap" LineHeight="22" />
 
             <Button Classes="primary"
-                    Content="{loc:Loc c008-004}"
+                    Content="{loc:Loc b008-002}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsSimpleMode}"
                     Command="{Binding SwitchModeCommand}"
                     CommandParameter="{x:Static models:UiOptions.AdvancedMode}" />
-            <Button Content="{loc:Loc c008-003}"
+            <Button Content="{loc:Loc b008-001}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsAdvancedMode}"
                     IsEnabled="False" />

@@ -374,10 +374,10 @@ public static class AppShell
     /// <summary>托盘菜单：叫回主窗口、退出程序。</summary>
     private static NativeMenu BuildTrayMenu()
     {
-        NativeMenuItem show = new() { Header = Localization.T("cs02-009") };
+        NativeMenuItem show = new() { Header = Localization.T("bs02-005") };
         show.Click += (_, _) => ShowWindow();
 
-        NativeMenuItem exit = new() { Header = Localization.T("cs02-010") };
+        NativeMenuItem exit = new() { Header = Localization.T("bs02-006") };
         exit.Click += (_, _) => Exit();
 
         NativeMenu menu = new();

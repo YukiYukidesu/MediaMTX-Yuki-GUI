@@ -172,7 +172,7 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
 
             EmptyTitle = L.T("c009-005");
             EmptyText = L.T("l009-002");
-            StatusText = Rows.Count == 0 ? "" : L.T("c009-008").Replace("{n}", Rows.Count.ToString(CultureInfo.InvariantCulture));
+            StatusText = Rows.Count == 0 ? "" : L.T("l009-006").Replace("{n}", Rows.Count.ToString(CultureInfo.InvariantCulture));
         }
         catch (OperationCanceledException)
         {
@@ -198,8 +198,8 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
         Popconfirm.Show(
             button,
             L.T("l009-003"),
-            L.T("c001-018"),
-            L.T("c001-022"),
+            L.T("l001-005"),
+            L.T("b001-008"),
             () => _ = DeleteSegmentAsync(row));
     }
 
@@ -212,14 +212,14 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
         if (ok)
         {
             Rows.Remove(row);
-            StatusText = L.T("c009-009");
+            StatusText = L.T("l009-007");
             Raise(nameof(IsEmpty));
             Raise(nameof(HasRows));
 
             return;
         }
 
-        StatusText = L.T("c009-010");
+        StatusText = L.T("l009-008");
     }
 
     // ====== 通知 ======

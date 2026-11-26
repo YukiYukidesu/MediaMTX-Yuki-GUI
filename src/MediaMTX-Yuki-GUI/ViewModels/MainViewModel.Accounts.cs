@@ -27,7 +27,7 @@ public sealed partial class MainViewModel
 
     /// <summary>表格里那个「允许推流的源数」统计，给页面副标题用。</summary>
     public string AccountsSummary
-        => L.T("c005-009").Replace("{n}", Accounts.Count.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        => L.T("l005-011").Replace("{n}", Accounts.Count.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
     public int SelectedAccountCount
         => Accounts.Count(item => item.IsSelected);
@@ -40,10 +40,10 @@ public sealed partial class MainViewModel
 
     /// <summary>工具栏那句「未选择 / 已选 N 项」，与两个列表页共用同一套词。</summary>
     public string AccountSelectionText
-        => SelectedAccountCount == 0 ? L.T("c001-014") : L.T("c001-015").Replace("{n}", SelectedAccountCount.ToString());
+        => SelectedAccountCount == 0 ? L.T("l001-002") : L.T("l001-003").Replace("{n}", SelectedAccountCount.ToString());
 
     public string SelectAllAccountsText
-        => IsAllAccountsSelected ? L.T("c001-013") : L.T("c001-012");
+        => IsAllAccountsSelected ? L.T("b001-005") : L.T("b001-004");
 
     /// <summary>把配置里的账号搬进列表。启动与切页都会调，重复调是安全的。</summary>
     private void RefreshAccounts()
@@ -175,9 +175,9 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("c001-020"),
-                L.T("l005-007").Replace("{n}", count),
-                L.T("c001-018"),
+                L.T("c001-012"),
+                L.T("l005-009").Replace("{n}", count),
+                L.T("l001-005"),
                 destructive: true);
 
             if (!ok) return;

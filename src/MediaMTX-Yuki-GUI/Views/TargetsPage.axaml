@@ -16,7 +16,7 @@
     <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
       <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
         <Button Padding="10,4" FontSize="12" Content="{Binding SelectAllText}"
-                ToolTip.Tip="{loc:Loc c001-011}"
+                ToolTip.Tip="{loc:Loc l001-001}"
                 Command="{Binding ToggleSelectAllCommand}" />
         <TextBlock Text="{Binding SelectionText}" Classes="hint" VerticalAlignment="Center" />
       </StackPanel>
@@ -26,8 +26,8 @@
         <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
                   ItemsSource="{Binding TargetSortChoices}"
                   SelectedIndex="{Binding TargetSortIndex}"
-                  ToolTip.Tip="{loc:Loc c004-011}" />
-        <TextBlock Text="{loc:Loc c004-012}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+                  ToolTip.Tip="{loc:Loc l004-011}" />
+        <TextBlock Text="{loc:Loc l004-013}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding TargetEnabledFirst}"
@@ -36,16 +36,16 @@
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
-        <Button Classes="batch-green" Content="{loc:Loc c004-031}" Command="{Binding StartSelectedCommand}" />
-        <Button Classes="batch-red" Content="{loc:Loc c004-032}" Command="{Binding StopSelectedCommand}" />
+        <Button Classes="batch-green" Content="{loc:Loc b004-002}" Command="{Binding StartSelectedCommand}" />
+        <Button Classes="batch-red" Content="{loc:Loc b004-003}" Command="{Binding StopSelectedCommand}" />
         <Button Classes="batch-blue"
-                Content="{loc:Loc c004-060}"
+                Content="{loc:Loc b004-008}"
                 Click="OnBindTargetsClick"
                 IsEnabled="{Binding HasSelection}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc c001-019}" Command="{Binding RemoveSelectedCommand}" />
+                Content="{loc:Loc b001-006}" Command="{Binding RemoveSelectedCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
-                Content="{loc:Loc c004-033}" Command="{Binding AddTargetCommand}" />
+                Content="{loc:Loc b004-004}" Command="{Binding AddTargetCommand}" />
       </StackPanel>
     </Grid>
 
@@ -95,7 +95,7 @@
               <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c004-002}" />
               <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c004-003}"
                          HorizontalAlignment="Center" />
-              <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c004-037}" />
+              <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c004-012}" />
               <TextBlock Grid.Column="3" Classes="column-header" Text="{loc:Loc c004-006}"
                          HorizontalAlignment="Center" />
               <TextBlock Grid.Column="4" Classes="column-header" Text="{loc:Loc c004-005}"
@@ -115,7 +115,7 @@
           <!-- 操作列的文字与行内按钮都靠左：按钮数量会随模式变，靠右会让第一个按钮的位置
                跟着数量横跳，跟分界线的间距就不固定了 -->
           <TextBlock Grid.Column="2" Classes="column-header" Margin="4,0,0,0"
-                     Text="{loc:Loc c001-016}" HorizontalAlignment="Left" />
+                     Text="{loc:Loc c001-011}" HorizontalAlignment="Left" />
         </Grid>
 
         <!-- 行数超出底框就在框内纵向滚动：底框高度固定，行多也不会把整页撑长 -->
@@ -206,7 +206,7 @@
                                      Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
                                      CommandParameter="{Binding Server}" />
                         <c:PillBadge Grid.Column="6" Text="{Binding ProxyText}" Variant="{Binding ProxyVariant}"
-                                     ToolTip.Tip="{loc:Loc c004-057}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc l004-054}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="7" Text="{Binding ResponseText}" Variant="Metric"
                                      ToolTip.Tip="{loc:Loc l004-006}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="8" Text="{Binding SpeedText}" Variant="Metric"
@@ -254,7 +254,7 @@
                                 HorizontalAlignment="Left" VerticalAlignment="Center">
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
-                              ToolTip.Tip="{loc:Loc c004-013}"
+                              ToolTip.Tip="{loc:Loc l004-015}"
                               Command="{Binding $parent[Window].DataContext.ToggleTargetEnabledCommand}"
                               CommandParameter="{Binding}">
                         <Panel>
@@ -264,14 +264,14 @@
                         </Panel>
                       </Button>
 
-                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc c001-017}"
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc l001-004}"
                               IsEnabled="{Binding !RuntimeDisabled}"
                               Command="{Binding $parent[Window].DataContext.OpenTargetCommand}"
                               CommandParameter="{Binding}">
                         <TextBlock Classes="glyph" Text="&#xE70F;" />
                       </Button>
 
-                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c001-018}"
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc l001-005}"
                               Click="OnRemoveTargetClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>
@@ -280,7 +280,7 @@
                               Background="Transparent" Cursor="SizeAll"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
-                              ToolTip.Tip="{loc:Loc c004-056}">
+                              ToolTip.Tip="{loc:Loc l004-053}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -303,7 +303,7 @@
           <TextBlock Text="&#xE8FD;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-          <TextBlock Text="{loc:Loc c004-034}" Classes="empty-title" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc c004-011}" Classes="empty-title" HorizontalAlignment="Center" />
           <TextBlock Text="{loc:Loc l004-005}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
