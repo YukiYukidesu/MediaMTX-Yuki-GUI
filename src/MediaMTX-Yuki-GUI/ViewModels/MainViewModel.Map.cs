@@ -24,8 +24,8 @@ public sealed partial class MainViewModel
     private const double MapPadding = 4;
 
     // 胶囊宽度的估算：字号 12，中文按整字、拉丁按半个字，再加图标、间距、两侧内边距与一点余量
-    private const double MapNodeFontSize = 12;
-    private const double MapNodeChrome = 30;
+    private const double MapNodeFontSize = 11;
+    private const double MapNodeChrome = 27;
     /// <summary>胶囊的最小宽度：只防「A」这种一个字被压成一条缝，不设上限（长名字靠名字自己撑宽）。</summary>
     private const double MapMinNodeWidth = 32;
 
@@ -470,7 +470,14 @@ public sealed partial class MainViewModel
         node.IsIdle = state is NodeState.Idle;
         node.IsError = state is NodeState.Error;
         node.IsOff = state is NodeState.Off;
-        node.Glyph = state is NodeState.Off or NodeState.Plain ? "✕" : "●";
+        node.Variant = state switch
+        {
+            NodeState.On => PillVariant.On,
+            NodeState.Off => PillVariant.Off,
+            NodeState.Error => PillVariant.Error,
+            NodeState.Idle => PillVariant.Rtmp,
+            _ => PillVariant.Plain,
+        };
     }
 
     /// <summary>一条链路的状态：两端都通才算通，一端停用就算断。</summary>

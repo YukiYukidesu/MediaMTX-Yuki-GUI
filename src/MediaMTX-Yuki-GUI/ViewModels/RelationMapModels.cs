@@ -54,9 +54,9 @@ public sealed partial class RelationNode : ObservableObject, IMapNode
     [ObservableProperty]
     private string _title = string.Empty;
 
-    /// <summary>名字前面那个图标：启用是圆点，未启用是叉。</summary>
+    /// <summary>胶囊用哪一档语义色：直接交给 PillBadge，和列表页那颗胶囊完全同一套。</summary>
     [ObservableProperty]
-    private string _glyph = "●";
+    private PillVariant _variant = PillVariant.Plain;
 
     /// <summary>启用且就绪：绿底绿字。</summary>
     [ObservableProperty]

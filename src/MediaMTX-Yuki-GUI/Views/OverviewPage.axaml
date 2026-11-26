@@ -8,23 +8,10 @@
         后面是名字。底色与文字色由 ViewModel 给的状态开关决定，模板这里只负责认四个类名 -->
   <UserControl.Resources>
     <DataTemplate x:Key="MapNodeTemplate">
-      <Border Classes="map-node"
-              Classes.on="{Binding IsOn}"
-              Classes.idle="{Binding IsIdle}"
-              Classes.error="{Binding IsError}"
-              Classes.off="{Binding IsOff}"
-              ClipToBounds="True"
-              ToolTip.Tip="{Binding Tip}">
-        <!-- 图标与名字放在 DockPanel 里：图标先占左侧固定宽度，名字只拿剩下的，
-             估宽有偏差时也只会把名字截断，不会把胶囊撑出画布 -->
-        <DockPanel LastChildFill="True">
-          <!-- 行高对齐：字形（● / ✕）与名字用同一个行高，圆点才会落在名字的中线上 -->
-          <TextBlock DockPanel.Dock="Left" Text="{Binding Glyph}" FontSize="9" LineHeight="16" Margin="0,0,5,0"
-                     VerticalAlignment="Center" />
-          <TextBlock Text="{Binding Title}" FontSize="12" LineHeight="16" TextTrimming="CharacterEllipsis"
-                     VerticalAlignment="Center" />
-        </DockPanel>
-      </Border>
+      <c:PillBadge Text="{Binding Title}"
+                   Variant="{Binding Variant}"
+                   ShowDot="True"
+                   ToolTip.Tip="{Binding Tip}" />
     </DataTemplate>
   </UserControl.Resources>
 
