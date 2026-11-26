@@ -30,7 +30,6 @@ public sealed partial class MainViewModel
     private const double MapMinNodeWidth = 32;
 
     /// <summary>胶囊的最大宽度：名字再长也只到这里，多出来的用省略号截掉。</summary>
-    private const double MapMaxNodeWidth = 240;
 
     /// <summary>一个簇最窄能到多少：低于这个宽度就不再多分一列，宁可少放一簇。</summary>
     private const double MapMinClusterWidth = 320;
