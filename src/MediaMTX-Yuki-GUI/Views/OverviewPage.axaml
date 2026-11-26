@@ -87,17 +87,20 @@
       </StackPanel>
 
       <Border Grid.Row="1" Classes="well" Padding="12">
-        <Grid RowDefinitions="*,Auto">
+        <Grid x:Name="MapHost" RowDefinitions="*,Auto" SizeChanged="OnMapHostSizeChanged">
 
           <!-- 关系图：左列输入源、右列输出目标，中间用贝塞尔连线把绑定关系画出来。
                画布宽度跟着这块面板走（源列贴左、目标列贴右），节点少也铺满整块；
                节点多到一屏放不下就纵向滚动，不再整体缩小——缩到一半字就看不清了。
                横向不出滚动条：画布宽度按可用宽度算，窄到装不下时才靠最小宽度兜底 -->
-      <ScrollViewer Grid.Row="0" x:Name="MapHost"
-                    VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Disabled"
-                    SizeChanged="OnMapHostSizeChanged">
+      <Viewbox Grid.Row="0"
+               Stretch="Uniform" StretchDirection="DownOnly"
+               HorizontalAlignment="Center" VerticalAlignment="Center">
             <Canvas Width="{Binding MapWidth}" Height="{Binding MapHeight}">
+
+              <!-- 每簇一圈淡边，方便看出装箱边界 -->
+              <c:RelationBoxes Boxes="{Binding MapBoxes}"
+                               Width="{Binding MapWidth}" Height="{Binding MapHeight}" />
 
               <!-- 连线垫在最底层，节点卡片盖在上面 -->
               <c:RelationLinks Links="{Binding MapLinks}"
@@ -124,7 +127,7 @@
               </ItemsControl>
 
             </Canvas>
-      </ScrollViewer>
+      </Viewbox>
 
           <!-- 空状态浮在关系图那块的正中：底框照样占着那一块，只有这坨字挪到中间 -->
           <StackPanel Grid.Row="0" IsVisible="{Binding IsMapEmpty}"

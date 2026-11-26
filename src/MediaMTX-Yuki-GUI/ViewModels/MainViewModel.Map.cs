@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Avalonia;
 using MediaMTX_Yuki_GUI.Controls;
 using MediaMTX_Yuki_GUI.Services;
 
@@ -23,6 +24,12 @@ public sealed partial class MainViewModel
     private const double MapNodeFontSize = 12;
     private const double MapNodeChrome = 36;
     private const double MapMinNodeWidth = 96;
+
+    /// <summary>胶囊的最大宽度：名字再长也只到这里，多出来的用省略号截掉。</summary>
+    private const double MapMaxNodeWidth = 240;
+
+    /// <summary>一个簇最窄能到多少：低于这个宽度就不再多分一列，宁可少放一簇。</summary>
+    private const double MapMinClusterWidth = 300;
 
     // 孤儿源右边那截断头虚线：够看出「它没接东西」，又不会让人以为连到了远处
     private const double MapLinkStub = 28;
@@ -59,6 +66,10 @@ public sealed partial class MainViewModel
     /// <summary>布局版本号：坐标有变化就加一，通知画布重新排布。</summary>
     [ObservableProperty]
     private int _mapVersion;
+
+    /// <summary>每簇一圈淡边的矩形，只用来观察布局边界。</summary>
+    [ObservableProperty]
+    private IReadOnlyList<Rect> _mapBoxes = [];
 
     /// <summary>图里一个节点都没有：页面显示空状态。</summary>
     public bool IsMapEmpty => MapSources.Count == 0 && MapTargets.Count == 0;
@@ -107,21 +118,11 @@ public sealed partial class MainViewModel
             clusters.Add((null, [target]));
         }
 
-        // 列宽取所有簇里最宽的那个源、最宽的那个目标：簇宽统一，装箱出来的矩形才整齐
-        double sourceWidth = MapMinNodeWidth;
-        double targetWidth = MapMinNodeWidth;
-
-        foreach ((InputItemViewModel? source, List<TargetItemViewModel> targets) in clusters)
-        {
-            if (source is not null) sourceWidth = Math.Max(sourceWidth, EstimateNodeWidth(source.DisplayName));
-
-            foreach (TargetItemViewModel target in targets)
-            {
-                targetWidth = Math.Max(targetWidth, EstimateNodeWidth(target.DisplayName));
-            }
-        }
-
-        double clusterWidth = sourceWidth + MapClusterGap + targetWidth;
+        // 列数与簇宽由面板宽度反算：铺满面板、每簇等宽，节点名字太长就靠省略号截断
+        double viewportWidth = _mapViewportWidth >= 200 ? _mapViewportWidth : 1200;
+        int columns = Math.Clamp((int)Math.Floor(viewportWidth / MapMinClusterWidth), 1, 4);
+        double clusterWidth = (viewportWidth - MapPadding * 2 - (columns - 1) * MapGridGap) / columns;
+        double nodeWidth = Math.Clamp((clusterWidth - MapClusterGap) / 2, MapMinNodeWidth, MapMaxNodeWidth);
 
         // 每簇当成一个矩形交给装箱器：宽度统一，高度随目标数量变
         List<PackItem> blocks = [];
@@ -131,7 +132,7 @@ public sealed partial class MainViewModel
             blocks.Add(new PackItem(index, clusterWidth, ClusterHeight(clusters[index].Targets.Count)));
         }
 
-        // 高度给足：装箱只负责「按列铺开」，永远放得下；多出来的高度由滚动条兜着
+        // 高度给足：装箱只负责横向铺满，永远放得下；画布尺寸随内容走，由外层 Viewbox 等比缩到一屏
         double stackHeight = 0;
 
         foreach (PackItem block in blocks)
@@ -140,8 +141,8 @@ public sealed partial class MainViewModel
         }
 
         PackResult packed = PackSolver.Solve(
-            Math.Max(1, _mapViewportWidth - MapPadding * 2),
-            Math.Max(1, Math.Max(stackHeight, _mapViewportHeight - MapPadding * 2)),
+            Math.Max(1, viewportWidth - MapPadding * 2),
+            Math.Max(1, Math.Max(stackHeight, 640 - MapPadding * 2)),
             blocks,
             MapGridGap);
 
@@ -171,12 +172,13 @@ public sealed partial class MainViewModel
             contentHeight = Math.Max(contentHeight, placement.Y + item.Height);
         }
 
-        // 画布至少和面板一样大：内容多就往下长（纵向滚动），内容少就居中
-        double mapWidth = Math.Max(contentWidth + MapPadding * 2, _mapViewportWidth);
-        double mapHeight = Math.Max(contentHeight + MapPadding * 2, _mapViewportHeight);
-        double left = Math.Max(MapPadding, (mapWidth - contentWidth) / 2);
-        double top = Math.Max(MapPadding, (mapHeight - contentHeight) / 2);
+        // 画布只包住内容：外层 Viewbox 负责等比缩放与居中，永远不滚动
+        double mapWidth = contentWidth + MapPadding * 2;
+        double mapHeight = contentHeight + MapPadding * 2;
+        double left = MapPadding;
+        double top = MapPadding;
 
+        List<Rect> boxes = [];
         List<RelationLinkShape> links = [];
         HashSet<string> alive = new(StringComparer.Ordinal);
 
@@ -186,15 +188,15 @@ public sealed partial class MainViewModel
 
             double clusterX = left + placement.X;
             double clusterY = top + placement.Y;
-            double sourceRight = clusterX + sourceWidth;
+            double sourceRight = clusterX + nodeWidth;
             double targetX = sourceRight + MapClusterGap;
             double blockHeight = ClusterHeight(targets.Count);
             double sourceY = clusterY + (blockHeight - MapNodeHeight) / 2;
 
+            boxes.Add(new Rect(clusterX - MapPadding, clusterY - MapPadding, clusterWidth, blockHeight));
+
             if (source is not null)
             {
-                double nodeWidth = EstimateNodeWidth(source.DisplayName);
-
                 RelationNode sourceNode = UpsertNode("s:" + source.Id, true, sourceRight - nodeWidth, sourceY, nodeWidth, alive);
                 FillSourceNode(sourceNode, source, engineRunning);
 
@@ -219,7 +221,7 @@ public sealed partial class MainViewModel
                     false,
                     targetX,
                     targetY,
-                    EstimateNodeWidth(target.DisplayName),
+                    nodeWidth,
                     alive);
 
                 FillTargetNode(targetNode, target, engineRunning, source is null);
@@ -242,6 +244,7 @@ public sealed partial class MainViewModel
         SyncNodeColumns();
 
         MapLinks = links;
+        MapBoxes = boxes;
         MapWidth = mapWidth;
         MapHeight = mapHeight;
 
@@ -273,7 +276,7 @@ public sealed partial class MainViewModel
             textWidth += ch > 0x2E7F ? MapNodeFontSize * 1.09 : MapNodeFontSize * 0.61;
         }
 
-        return Math.Max(MapMinNodeWidth, Math.Ceiling(textWidth) + MapNodeChrome);
+        return Math.Clamp(Math.Ceiling(textWidth) + MapNodeChrome, MapMinNodeWidth, MapMaxNodeWidth);
     }
 
     /// <summary>取一个节点：没有就新建并入列，有就把坐标挪过去；位置变了记一笔脏。</summary>

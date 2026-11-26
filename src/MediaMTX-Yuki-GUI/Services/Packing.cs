@@ -133,6 +133,7 @@ public static class PackSolver
 
         List<PackPlacement>? best = null;
         double bestScale = 0;
+        double bestHeight = double.MaxValue;
 
         foreach (List<PackItem> order in new[] { areaOrder, heightOrder, widthOrder })
         {
@@ -155,9 +156,15 @@ public static class PackSolver
 
             double scale = Math.Min(canvasWidth / contentWidth, canvasHeight / contentHeight);
 
-            if (scale <= bestScale) continue;
+            // 缩放比打平时选更矮的那种：同样的可读字号下，矮而宽的排布更省纵向空间
+            bool better = best is null
+                || scale > bestScale + 1e-9
+                || (Math.Abs(scale - bestScale) <= 1e-9 && contentHeight < bestHeight);
+
+            if (!better) continue;
 
             bestScale = scale;
+            bestHeight = contentHeight;
             best = placed;
         }
 
