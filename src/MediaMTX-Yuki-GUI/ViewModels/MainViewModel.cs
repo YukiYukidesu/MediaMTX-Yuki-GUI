@@ -2680,17 +2680,55 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         File.WriteAllText(AppPaths.RuntimeYml, RuntimeYmlBuilder.Build(_cfg, ResolveDest));
     }
 
+    private int _logBurst;
+    private long _logBurstStart = Environment.TickCount64;
+    private readonly List<string> _pendingLogs = [];
+    private int _logFlushPosted;
+
     private void OnEngineLog(string line)
     {
+        // 诊断用：推流失败时引擎会连着重试并刷日志，这里按秒记录密度，方便定位卡顿
+        int burst = Interlocked.Increment(ref _logBurst);
+        long now = Environment.TickCount64;
+
+        if (now - _logBurstStart >= 1000)
+        {
+            Services.AppLog.Write($"[LOG] {burst} 行 / {now - _logBurstStart} ms");
+            Interlocked.Exchange(ref _logBurst, 0);
+            _logBurstStart = now;
+        }
+
         Action<Action>? post = Post;
 
         if (post is null) return;
 
+        // 合并成一批再上界面：推流失败时引擎一秒能吐几十行，
+        // 逐行 Post 会把 UI 线程的调度队列塞满，表现为整个窗口无响应
+        lock (_pendingLogs)
+        {
+            _pendingLogs.Add(line);
+        }
+
+        if (Interlocked.Exchange(ref _logFlushPosted, 1) == 1) return;
+
         post(() =>
         {
-            Logs.Add(line);
+            List<string> batch;
+
+            lock (_pendingLogs)
+            {
+                batch = [.. _pendingLogs];
+                _pendingLogs.Clear();
+            }
+
+            foreach (string item in batch)
+            {
+                Logs.Add(item);
+            }
 
             while (Logs.Count > 500) Logs.RemoveAt(0);
+
+            Volatile.Write(ref _logFlushPosted, 0);
         });
     }
 
