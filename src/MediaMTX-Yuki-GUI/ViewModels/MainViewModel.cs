@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -2392,6 +2393,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         _cfg.Inputs = Inputs.Select(i => i.ToModel()).ToList();
         _cfg.Targets = Targets.Select(t => t.ToModel()).ToList();
+
+        // 内容没变就不写盘、不推 forward：指标轮询会不停碰这些行属性，
+        // 只靠属性白名单挡容易漏一个，这里按最终内容兜底
+        string snapshot = JsonSerializer.Serialize(_cfg.Inputs) + JsonSerializer.Serialize(_cfg.Targets);
+
+        if (snapshot == _lastApplied) return;
+
+        _lastApplied = snapshot;
+
         _store.Save(_cfg);
         WriteRuntimeYml();
         SyncDefaultProxyMode();
@@ -2691,6 +2701,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private int _logBurst;
     private long _logBurstStart = Environment.TickCount64;
     private readonly List<string> _pendingLogs = [];
+    private string _lastApplied = string.Empty;
     private int _logFlushPosted;
 
     private void OnEngineLog(string line)
