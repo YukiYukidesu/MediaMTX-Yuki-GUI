@@ -12,10 +12,7 @@ public sealed record ForwardDestMetrics(int Position, string Path, string State,
 /// <summary>把 Prometheus 文本格式的 metrics 文本解析成结构化数据。</summary>
 public static class MetricsParser
 {
-    /// <summary>一条 <c>forward_dests_outbound_bytes{...} 12345</c> 记录。</summary>
-    private static readonly Regex LinePattern = new(
-        "^forward_dests_outbound_bytes\\{(?<labels>[^}]*)\\}\\s+(?<value>[0-9]+)$",
-        RegexOptions.Multiline | RegexOptions.Compiled);
+    private const string MetricPrefix = "forward_dests_outbound_bytes{";
 
     /// <summary>一个 <c>key="value"</c> 形式的标签。</summary>
     private static readonly Regex LabelPattern = new(
@@ -29,20 +26,40 @@ public static class MetricsParser
 
         if (string.IsNullOrEmpty(text)) return result;
 
-        foreach (Match match in LinePattern.Matches(text))
+        // 整份 metrics 有几千万字节：按 Span 逐段扫描，不 Split、不为每行建字符串，
+        // 否则光是拆分就会产生上百万个小对象，一轮一次 Gen2 回收就能把界面停住近一秒
+        ReadOnlySpan<char> span = text.AsSpan();
+        int cursor = 0;
+
+        while (cursor < span.Length)
         {
-            Dictionary<string, string> labels = ParseLabels(match.Groups["labels"].Value);
+            int start = span[cursor..].IndexOf(MetricPrefix, StringComparison.Ordinal);
 
-            string posText = labels.GetValueOrDefault("pos", string.Empty);
-            string valueText = match.Groups["value"].Value;
+            if (start < 0) break;
 
-            if (!int.TryParse(posText, out int position)) continue;
-            if (!long.TryParse(valueText, out long bytes)) continue;
+            start += cursor;
+
+            int end = span[start..].IndexOf('\n');
+
+            if (end < 0) end = span.Length - start;
+
+            ReadOnlySpan<char> line = span.Slice(start, end);
+            cursor = start + end + 1;
+
+            int close = line.IndexOf('}');
+
+            if (close < 0) continue;
+
+            ReadOnlySpan<char> labels = line[..close];
+            ReadOnlySpan<char> tail = line[(close + 1)..].Trim();
+
+            if (!int.TryParse(ReadLabel(labels, "pos"), out int position)) continue;
+            if (!long.TryParse(tail, out long bytes)) continue;
 
             result.Add(new ForwardDestMetrics(
                 position,
-                labels.GetValueOrDefault("path", string.Empty),
-                labels.GetValueOrDefault("state", string.Empty),
+                ReadLabel(labels, "path").ToString(),
+                ReadLabel(labels, "state").ToString(),
                 bytes));
         }
 
@@ -56,16 +73,17 @@ public static class MetricsParser
         return result;
     }
 
-    /// <summary>把标签串拆成字典。</summary>
-    private static Dictionary<string, string> ParseLabels(string raw)
+    /// <summary>从标签串里取一个值，取不到给空串。</summary>
+    private static ReadOnlySpan<char> ReadLabel(ReadOnlySpan<char> labels, string key)
     {
-        Dictionary<string, string> labels = [];
+        string needle = key + "=\"";
+        int at = labels.IndexOf(needle.AsSpan(), StringComparison.Ordinal);
 
-        foreach (Match match in LabelPattern.Matches(raw))
-        {
-            labels[match.Groups["key"].Value] = match.Groups["value"].Value;
-        }
+        if (at < 0) return default;
 
-        return labels;
+        ReadOnlySpan<char> tail = labels[(at + needle.Length)..];
+        int close = tail.IndexOf('"');
+
+        return close < 0 ? default : tail[..close];
     }
 }

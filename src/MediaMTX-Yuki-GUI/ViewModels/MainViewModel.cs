@@ -1744,16 +1744,22 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         if (_api is null || !IsEngineRunning) return;
 
+        long t0 = Environment.TickCount64;
+
         string? text = await _api.GetMetricsAsync(ct, _cfg.Engine.MetricsPort);
 
         if (text is null) return;
+
+        long t00 = Environment.TickCount64;
 
         DateTime now = DateTime.UtcNow;
 
         // 每条输入源在引擎里是一条独立路径，各有自己的 forward 数组与 pos 编号，
         // 所以先按路径名分组、再在组内按序号回填。跨路径按 pos 取下标，会把目标串到别人身上。
-        Dictionary<string, List<ForwardDestMetrics>> byPath = GroupByPath(
-            MetricsParser.ParseForwardDests(text));
+        // 整份 metrics 有几千万字节，解析要近一秒；放到线程池里做，别把 UI 线程堵住
+        Dictionary<string, List<ForwardDestMetrics>> byPath = await Task.Run(
+            () => GroupByPath(MetricsParser.ParseForwardDests(text)),
+            ct);
 
         // 转发错误是每条源一次 HTTP 查询，条数一多就把两秒一轮撑成秒级卡顿；
         // 错误文案不需要那么灵，五轮（约十秒）查一次就够
@@ -1795,11 +1801,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         long t4 = Environment.TickCount64;
 
-        // 定位「每两秒卡一下」用：哪一段慢一眼能看出来，超过 150ms 才记
-        if (t4 - t1 > 150)
-        {
-            Services.AppLog.Write($"[METRICS] paths={t2 - t1} records={t3 - t2} stats={t4 - t3}");
-        }
+        // 定位卡顿用：每轮都记，哪一段慢一眼能看出来
+        Services.AppLog.Write($"[METRICS] http={t00 - t0} parse={t1 - t00} paths={t2 - t1} records={t3 - t2} stats={t4 - t3} total={t4 - t0}");
     }
 
     /// <summary>

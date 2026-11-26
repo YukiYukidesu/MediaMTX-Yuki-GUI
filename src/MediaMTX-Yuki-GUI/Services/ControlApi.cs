@@ -222,7 +222,8 @@ public sealed class ControlApi : IDisposable
 
         try
         {
-            return await meter.GetStringAsync("/metrics", ct);
+            // 只要转发目标的字节数：整份 metrics 有几千万字节，拉全量光是解析就要近一秒
+        return await meter.GetStringAsync("/metrics?name[]=forward_dests_outbound_bytes", ct);
         }
         catch (HttpRequestException)
         {
