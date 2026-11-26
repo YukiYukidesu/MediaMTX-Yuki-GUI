@@ -57,7 +57,9 @@
              底框本身留着（占住那块高度），空状态才有可能落在正中 -->
         <!-- 左边距 32 而不是 16：行卡片的 Border 自己有 Padding="16,10"，卡片内容比这一层再往里缩 16。
              表头要跟卡片内容对齐，就得把这一层也缩进 16，否则表头文字与行内文字差一截。 -->
+        <!-- 右段宽度按按钮数算，与输入源页共用同一套公式，见 MainViewModel.Settings.cs -->
         <Grid Grid.Row="0" ColumnDefinitions="104,*,128" Margin="16,0,16,6"
+              c:ColumnScroll.TailWidth="{Binding $parent[Window].DataContext.TargetActionColumnWidth}"
               IsVisible="{Binding IsTargetsVisible}">
           <!-- 左对齐、跟行里那颗勾选框的左缘齐 -->
           <TextBlock Grid.Column="0" Classes="column-header"
@@ -126,7 +128,8 @@
                   <!-- 这一层不写 VerticalAlignment：要让它吃满卡片的 Padding 区，
                        分界线和阴影才能靠上下各探 10（即 Padding 的上下值）盖住整张卡的高度。
                        内容各自居中，不受影响。 -->
-                  <Grid ColumnDefinitions="104,*,128">
+                  <Grid ColumnDefinitions="104,*,128"
+                        c:ColumnScroll.TailWidth="{Binding $parent[Window].DataContext.TargetActionColumnWidth}">
 
                     <!-- 左段：勾选与转发状态，固定不动 -->
                     <!-- 勾选框贴左、状态胶囊在余下那截里居中。

@@ -56,7 +56,9 @@
 
         <!-- 一条源都没有时，列头与横向拖动条都没有可表的对象，一起收起来；
              底框本身留着（占住那块高度），空状态才有可能落在正中 -->
+        <!-- 右段宽度跟着模式走（简洁模式少两颗按钮），见 ColumnScroll.TailWidth -->
         <Grid Grid.Row="0" ColumnDefinitions="104,*,192" Margin="16,0,16,6"
+              c:ColumnScroll.TailWidth="{Binding $parent[Window].DataContext.InputActionColumnWidth}"
               IsVisible="{Binding IsInputsVisible}">
           <!-- 左对齐、跟行里那颗勾选框的左缘齐：居中会让四个字落在胶囊右边一截，
                看着比下面那行还靠右 -->
@@ -128,7 +130,8 @@
                   <!-- 这一层不写 VerticalAlignment：要让它吃满卡片的 Padding 区，
                        分界线和阴影才能靠上下各探 10（即 Padding 的上下值）盖住整张卡的高度。
                        内容各自居中，不受影响。 -->
-                  <Grid ColumnDefinitions="104,*,192">
+                  <Grid ColumnDefinitions="104,*,192"
+                        c:ColumnScroll.TailWidth="{Binding $parent[Window].DataContext.InputActionColumnWidth}">
 
                     <!-- 左段：勾选与启停状态，固定不动。
                          被程序锁住的行（简洁模式下的拉流源）连勾选框都不给：那一行只剩删除这一个动作，
@@ -262,25 +265,33 @@
                         <TextBlock Classes="glyph" Text="&#xE70F;" />
                       </Button>
 
-                      <!-- 录制：只在高级模式出现，正在录时亮黄底 -->
-                      <Button Classes="icon-square record"
-                              Classes.on="{Binding IsRecording}"
-                              IsVisible="{Binding !RuntimeDisabled}"
-                              IsEnabled="{Binding EffectiveEnabled}"
-                              ToolTip.Tip="{loc:Loc c003-022}"
-                              Command="{Binding $parent[Window].DataContext.ToggleInputRecordCommand}"
-                              CommandParameter="{Binding}">
-                        <TextBlock Classes="glyph" Text="&#xE7C8;" />
-                      </Button>
+                      <!-- 录制与录像：只在高级模式出现。
+                           模式判断挂在外面这层上、按钮自己只管 RuntimeDisabled —— 一个元素只能写一个 IsVisible，
+                           两个条件叠在一起就得走 MultiBinding；包一层比引一个转换器省事。
+                           内层 Spacing 必须跟外层一样是 6，否则这两颗与相邻按钮的缝会跟别处不等宽。 -->
+                      <StackPanel Orientation="Horizontal" Spacing="6"
+                                  IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}">
 
-                      <!-- 录像：只在高级模式出现。关掉录制之后历史片段还在，所以不跟录制开关联动 -->
-                      <Button Classes="icon-square"
-                              IsVisible="{Binding !RuntimeDisabled}"
-                              ToolTip.Tip="{loc:Loc c003-023}"
-                              Command="{Binding $parent[Window].DataContext.ShowRecordingsCommand}"
-                              CommandParameter="{Binding}">
-                        <TextBlock Classes="glyph" Text="&#xE81C;" />
-                      </Button>
+                        <!-- 录制：正在录时亮黄底 -->
+                        <Button Classes="icon-square record"
+                                Classes.on="{Binding IsRecording}"
+                                IsVisible="{Binding !RuntimeDisabled}"
+                                IsEnabled="{Binding EffectiveEnabled}"
+                                ToolTip.Tip="{loc:Loc c003-022}"
+                                Command="{Binding $parent[Window].DataContext.ToggleInputRecordCommand}"
+                                CommandParameter="{Binding}">
+                          <TextBlock Classes="glyph" Text="&#xE7C8;" />
+                        </Button>
+
+                        <!-- 录像：关掉录制之后历史片段还在，所以不跟录制开关联动 -->
+                        <Button Classes="icon-square"
+                                IsVisible="{Binding !RuntimeDisabled}"
+                                ToolTip.Tip="{loc:Loc c003-023}"
+                                Command="{Binding $parent[Window].DataContext.ShowRecordingsCommand}"
+                                CommandParameter="{Binding}">
+                          <TextBlock Classes="glyph" Text="&#xE81C;" />
+                        </Button>
+                      </StackPanel>
 
                       <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c003-020}"
                               Click="OnRemoveInputClick">

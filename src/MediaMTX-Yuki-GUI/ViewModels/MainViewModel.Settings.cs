@@ -628,6 +628,12 @@ public sealed partial class MainViewModel
     /// <summary>关于页里那行「推荐引擎版本」。</summary>
     public string RecommendedEngineVersionText => Services.ProgramVersion.RecommendedEngineVersion;
 
+    /// <summary>本程序的项目主页，关于页那颗「项目地址」按钮跳这里。</summary>
+    public string AppRepoText => "https://github.com/" + _cfg.Update.AppRepoOrDefault.Trim().Trim('/');
+
+    /// <summary>引擎的项目主页（bluenviron/mediamtx）。</summary>
+    public string EngineRepoText => "https://github.com/" + _cfg.Update.EngineRepo.Trim().Trim('/');
+
     /// <summary>下拉框里能选的更新源，顺序与 SourceCatalog.All 严格一致。</summary>
     public IReadOnlyList<string> UpdateSourceNames
         => Services.SourceCatalog.All.Select(source => L.T(source.NameKey)).ToList();
@@ -801,6 +807,39 @@ public sealed partial class MainViewModel
 
     public bool IsSimpleMode => !IsAdvancedMode;
 
+    /// <summary>行内那颗方块图标按钮的边长，与 <c>Button.icon-square</c> 的 Width 一致。</summary>
+    private const double ActionButtonSize = 26d;
+
+    /// <summary>右段按钮之间的缝，与那一层 StackPanel 的 Spacing 一致。</summary>
+    private const double ActionButtonGap = 6d;
+
+    /// <summary>拖拽手柄的宽度与它自己左边那段留白。</summary>
+    private const double ActionHandleWidth = 24d;
+    private const double ActionHandleGap = 4d;
+
+    /// <summary>右段 StackPanel 整体距中段分界线的留白。</summary>
+    private const double ActionTailGap = 4d;
+
+    /// <summary>
+    /// 输入源页右段的列宽（DIP）：按当前模式实际有几颗按钮估出来，不写死。
+    /// 简洁模式少录制与录像两颗，宽度自然收 64；写死一个值的话切换模式就会空出一截。
+    /// 宽度按「该模式下最多几颗」算而不是按每行实际可见的算——被 RuntimeDisabled 藏起来的按钮不该让整列抖动。
+    /// </summary>
+    public double InputActionColumnWidth => ActionColumnWidthFor(IsAdvancedMode ? 5 : 3);
+
+    /// <summary>输出目标页右段的列宽（DIP）：三颗按钮，不随模式变，但同样按公式来，别和输入源页各写一份。</summary>
+    public double TargetActionColumnWidth => ActionColumnWidthFor(3);
+
+    /// <summary>
+    /// 右段宽度：若干颗 26 的方块按钮 + 之间 6 的缝 + 拖拽手柄（24 宽、左边留 4）+ 距分界线 4。
+    /// 加手柄之前要再补一道缝，因为手柄也是 StackPanel 的子元素。
+    /// </summary>
+    private static double ActionColumnWidthFor(int buttons)
+        => buttons * ActionButtonSize
+           + (buttons - 1) * ActionButtonGap
+           + ActionButtonGap + ActionHandleGap + ActionHandleWidth
+           + ActionTailGap;
+
     /// <summary>侧栏那颗图标随模式换：简洁是一张网格，高级是调节杆。</summary>
     public string ModeIcon => IsAdvancedMode ? "\uE9E9" : "\uE8A9";
 
@@ -854,6 +893,7 @@ public sealed partial class MainViewModel
     {
         OnPropertyChanged(nameof(IsAdvancedMode));
         OnPropertyChanged(nameof(IsSimpleMode));
+        OnPropertyChanged(nameof(InputActionColumnWidth));
         OnPropertyChanged(nameof(ModeIcon));
         OnPropertyChanged(nameof(ModeNavText));
         OnPropertyChanged(nameof(IsPullGroupShown));

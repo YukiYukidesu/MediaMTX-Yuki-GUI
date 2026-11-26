@@ -763,7 +763,16 @@
                      IsVisible="{Binding HasAppUpdate}" />
           </StackPanel>
 
-          <TextBlock Grid.Column="1" Text="{Binding VersionText}" Classes="hint" />
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="{Binding VersionText}" Classes="hint" VerticalAlignment="Center" />
+            <Button Padding="10,2"
+                    FontSize="11"
+                    VerticalAlignment="Center"
+                    Content="{loc:Loc c026-011}"
+                    ToolTip.Tip="{Binding AppRepoText}"
+                    Command="{Binding OpenProjectPageCommand}"
+                    CommandParameter="app" />
+          </StackPanel>
         </Grid>
 
         <Grid ColumnDefinitions="200,*" Margin="0,8,0,0">
@@ -775,7 +784,16 @@
                      IsVisible="{Binding HasEngineUpdate}" />
           </StackPanel>
 
-          <TextBlock Grid.Column="1" Text="{Binding EngineVersion}" Classes="hint" />
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+            <TextBlock Text="{Binding EngineVersion}" Classes="hint" VerticalAlignment="Center" />
+            <Button Padding="10,2"
+                    FontSize="11"
+                    VerticalAlignment="Center"
+                    Content="{loc:Loc c026-011}"
+                    ToolTip.Tip="{Binding EngineRepoText}"
+                    Command="{Binding OpenProjectPageCommand}"
+                    CommandParameter="engine" />
+          </StackPanel>
         </Grid>
 
         <!-- 推荐适配的引擎版本：跟软件版本号放一起看，用户才知道「适配到哪一版」 -->

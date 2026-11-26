@@ -48,6 +48,14 @@ public static class ColumnScroll
     public static readonly AttachedProperty<bool> AdvancedProperty =
         AvaloniaProperty.RegisterAttached<ScrollViewer, bool>("Advanced", typeof(ColumnScroll));
 
+    /// <summary>
+    /// 挂在那一层「冻结段 / 中段 / 右段」的 Grid 上：右段（最后一列）要多宽，单位 DIP；NaN 表示不管。
+    /// 右段按钮数随模式变（简洁少两颗），列宽也得跟着收，不然按钮按设计左对齐、右边空出一截。
+    /// 不在 XAML 里直接绑 <c>ColumnDefinition.Width</c>：那是 <c>GridLength</c>，绑 double 过不去类型转换。
+    /// </summary>
+    public static readonly AttachedProperty<double> TailWidthProperty =
+        AvaloniaProperty.RegisterAttached<Grid, double>("TailWidth", typeof(ColumnScroll), double.NaN);
+
     /// <summary>拖动超过这个距离才算平移，否则视作点击，避免破坏 ToolTip 与胶囊的悬停。</summary>
     private const double DragThreshold = 4;
 
@@ -75,6 +83,7 @@ public static class ColumnScroll
         AdvancedColumnsProperty.Changed.AddClassHandler<ScrollViewer>((viewer, args) => ApplyAdvancedColumns(viewer));
         AdvancedProperty.Changed.AddClassHandler<ScrollViewer>((viewer, args) => ApplyAdvancedColumns(viewer));
         FillViewportProperty.Changed.AddClassHandler<ScrollViewer>((viewer, args) => SyncFillWidth(viewer));
+        TailWidthProperty.Changed.AddClassHandler<Grid>((grid, args) => ApplyTailWidth(grid));
     }
 
     public static string? GetSyncGroup(ScrollViewer viewer)
@@ -100,6 +109,12 @@ public static class ColumnScroll
 
     public static void SetAdvanced(ScrollViewer viewer, bool value)
         => viewer.SetValue(AdvancedProperty, value);
+
+    public static double GetTailWidth(Grid grid)
+        => grid.GetValue(TailWidthProperty);
+
+    public static void SetTailWidth(Grid grid, double value)
+        => grid.SetValue(TailWidthProperty, value);
 
     public static string? GetBarGroup(ScrollBar bar)
         => bar.GetValue(BarGroupProperty);
@@ -296,6 +311,24 @@ public static class ColumnScroll
         }
 
         SyncFillWidth(viewer);
+    }
+
+    /// <summary>
+    /// 把最右那一列改成 <see cref="TailWidthProperty"/> 给的宽度。
+    /// 只动最后一列，冻结段与中段的定义全不碰；宽度没变就不写，免得每帧重排。
+    /// </summary>
+    private static void ApplyTailWidth(Grid grid)
+    {
+        double width = GetTailWidth(grid);
+
+        if (double.IsNaN(width) || width <= 0) return;
+        if (grid.ColumnDefinitions.Count == 0) return;
+
+        ColumnDefinition tail = grid.ColumnDefinitions[^1];
+
+        if (tail.Width.IsAbsolute && Math.Abs(tail.Width.Value - width) < 0.5) return;
+
+        tail.Width = new GridLength(width);
     }
 
     /// <summary>

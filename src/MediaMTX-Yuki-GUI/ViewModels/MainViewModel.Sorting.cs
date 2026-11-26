@@ -358,7 +358,7 @@ public sealed partial class MainViewModel
 
     [RelayCommand]
     private void CommitTargetOrder()
-        => _ = ApplyTargetsAsync();
+        => ApplySoon();
 
     /// <summary>把请求的目标位置夹在本行所属的那一组里：启用项占 [0, boundary)。</summary>
     private static int ClampToGroup<T>(ObservableCollection<T> items, int from, int requested, bool enabledFirst)

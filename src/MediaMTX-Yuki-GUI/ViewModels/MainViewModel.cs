@@ -1144,7 +1144,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             ApplyTargetSort();
         }
 
-        _ = ApplyTargetsAsync();
+        ApplySoon();
         RefreshOverview();
 
         ShowToast(L.T(isNew ? "t003-001" : "t003-002").Replace("{name}", item.DisplayName), ToastKind.Success);
@@ -1298,7 +1298,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             Targets.Remove(item);
         }
 
-        _ = ApplyTargetsAsync();
+        ApplySoon();
 
         ShowToast(L.T("t003-015").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)), ToastKind.Success);
     }
@@ -1319,7 +1319,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             changed++;
         }
 
-        if (changed > 0) _ = ApplyTargetsAsync();
+        if (changed > 0) ApplySoon();
 
         return changed;
     }
@@ -1467,6 +1467,30 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         {
             // 打不开资源管理器不影响主流程，但得说一声，否则点了没反应像坏了
             ShowToast(L.T("t004-006") + ex.Message, ToastKind.Error);
+        }
+    }
+
+    /// <summary>
+    /// 在浏览器里打开项目主页：本程序与引擎各有一个仓库，参数取 "app" 或 "engine"，其余按本程序算。
+    /// 地址从配置里的仓库名拼，不写死——仓库改名时只改配置就能跟上。
+    /// </summary>
+    [RelayCommand]
+    private void OpenProjectPage(string? kind)
+    {
+        string url = kind == "engine" ? EngineRepoText : AppRepoText;
+
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true,
+            });
+        }
+        catch (Exception ex)
+        {
+            // 打不开浏览器不影响主流程，但得说一声，否则点了没反应像坏了
+            ShowToast(L.T("t004-012") + ex.Message, ToastKind.Error);
         }
     }
 
@@ -2265,7 +2289,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         Targets.Remove(item);
 
-        _ = ApplyTargetsAsync();
+        ApplySoon();
 
         ShowToast(L.T("t003-009").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
@@ -2280,6 +2304,24 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         ShowToast(L.T(item.Enabled ? "t003-003" : "t003-004").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
+
+    /// <summary>
+    /// 落盘失败的兜底。调它的地方全是「用户改完点什么之后顺手做的」，一处都没有 await——
+    /// 异常一旦漏出去就是没人看得见的丢单：配置没存上，界面却一切正常。
+    /// </summary>
+    private async Task ApplySafelyAsync()
+    {
+        try
+        {
+            await ApplyTargetsAsync();
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            ShowToast(L.T("t004-013") + ex.Message, ToastKind.Error);
+        }
+    }
+
+    private void ApplySoon() => _ = ApplySafelyAsync();
 
     /// <summary>把界面上的列表落盘，并热更新到正在运行的引擎。</summary>
     public async Task ApplyTargetsAsync()
@@ -2344,7 +2386,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             return;
         }
 
-        if (!cts.IsCancellationRequested) await ApplyTargetsAsync();
+        if (!cts.IsCancellationRequested) await ApplySafelyAsync();
     }
 
     // ====== 内部 ======
