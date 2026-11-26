@@ -86,24 +86,72 @@ public sealed partial class TargetItemViewModel : ObservableObject
     // ====== 运行时状态（由主视图模型轮询引擎指标后回填） ======
 
     /// <summary>引擎侧这条转发的原始状态，来自 metrics 的 state 标签。</summary>
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(StateText))]
-    [NotifyPropertyChangedFor(nameof(StateTip))]
-    [NotifyPropertyChangedFor(nameof(StatusVariant))]
-    [NotifyPropertyChangedFor(nameof(IsStreaming))]
-    [NotifyPropertyChangedFor(nameof(IsErrored))]
     private string _runtimeState = string.Empty;
 
-    [ObservableProperty]
+    /// <summary>批量轮询期间只改字段、不发通知，由主视图模型一轮写完统一刷新。</summary>
+    public string RuntimeState
+    {
+        get => _runtimeState;
+        set
+        {
+            if (_runtimeState == value) return;
+            _runtimeState = value;
+            if (_bulkRuntime) return;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(StateText));
+            OnPropertyChanged(nameof(StateTip));
+            OnPropertyChanged(nameof(StatusVariant));
+            OnPropertyChanged(nameof(IsStreaming));
+            OnPropertyChanged(nameof(IsErrored));
+        }
+    }
+
     private string _speedText = "—";
 
+    /// <summary>批量轮询期间只改字段、不发通知，由主视图模型一轮写完统一刷新。</summary>
+    public string SpeedText
+    {
+        get => _speedText;
+        set
+        {
+            if (_speedText == value) return;
+            _speedText = value;
+            if (_bulkRuntime) return;
+            OnPropertyChanged();
+        }
+    }
+
     /// <summary>到目标服务器的 TCP 建连耗时，衡量这条线路通不通、快不快。</summary>
-    [ObservableProperty]
     private string _responseText = "—";
 
+    /// <summary>批量轮询期间只改字段、不发通知，由主视图模型一轮写完统一刷新。</summary>
+    public string ResponseText
+    {
+        get => _responseText;
+        set
+        {
+            if (_responseText == value) return;
+            _responseText = value;
+            if (_bulkRuntime) return;
+            OnPropertyChanged();
+        }
+    }
+
     /// <summary>这条转发累计已经发出去多少数据。</summary>
-    [ObservableProperty]
     private string _sentText = "—";
+
+    /// <summary>批量轮询期间只改字段、不发通知，由主视图模型一轮写完统一刷新。</summary>
+    public string SentText
+    {
+        get => _sentText;
+        set
+        {
+            if (_sentText == value) return;
+            _sentText = value;
+            if (_bulkRuntime) return;
+            OnPropertyChanged();
+        }
+    }
 
     /// <summary>引擎最后一次报的失败原因，只有出错时才有值。</summary>
     [ObservableProperty]
@@ -159,6 +207,24 @@ public sealed partial class TargetItemViewModel : ObservableObject
         => Strings.TargetState(Enabled, RuntimeState);
 
     /// <summary>正在推流，用于状态灯的绿色。</summary>
+
+    // ====== 批量写入（指标轮询用）======
+
+    /// <summary>为 true 时所有运行时属性只落字段、不发通知。</summary>
+    private bool _bulkRuntime;
+
+    /// <summary>开始一轮批量写入。</summary>
+    public void BeginBulkRuntime() => _bulkRuntime = true;
+
+    /// <summary>结束批量写入并统一刷新：一次通知覆盖整行，避免每行 5 次重排。</summary>
+    public void EndBulkRuntime()
+    {
+        if (!_bulkRuntime) return;
+
+        _bulkRuntime = false;
+        OnPropertyChanged(string.Empty);
+    }
+
     public bool IsStreaming
         => Enabled && !RuntimeDisabled && RuntimeState is "running" or "forwarding";
 

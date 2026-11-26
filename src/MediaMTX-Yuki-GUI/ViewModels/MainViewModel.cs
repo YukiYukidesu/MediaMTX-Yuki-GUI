@@ -1748,6 +1748,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         // 整份 metrics 有几千万字节，解析加写行要 0.7~1 秒，别的页面上没必要陪跑
         if (SelectedPage is not (0 or 1 or 2)) return;
 
+        // 概览页没有逐行的速率可看，只喂汇总数字，没必要每 2 秒把上百行算一遍
+        if (SelectedPage == 0 && (_metricsRound % 3 != 0)) return;
+
+        // 诊断：确认这一轮跑在哪个线程上（定位完删掉）
         long t0 = Environment.TickCount64;
 
         string? text = await _api.GetMetricsAsync(ct, _cfg.Engine.MetricsPort);
@@ -1768,12 +1772,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             long inner = Environment.TickCount64;
             IReadOnlyList<ForwardDestMetrics> parsed = MetricsParser.ParseForwardDests(text);
 
-            Services.AppLog.Write($"[PARSE] inner={Environment.TickCount64 - inner}");
-
             return GroupByPath(parsed);
         }, ct);
-
-        Services.AppLog.Write($"[PARSE] wait={Environment.TickCount64 - tp0}");
 
         long tb = Environment.TickCount64;
 
@@ -1786,6 +1786,11 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         // 每次写都会让整行重绘，隔一轮能把重绘次数砍半
         bool commitRows = SelectedPage is 1 or 2 && (_metricsRound % 2 == 1);
 
+        // 一轮指标写完再统一刷新：每行只发一次通知，避免 30 行 × 5 属性 = 150 次重排
+        foreach (TargetItemViewModel bulkRow in Targets)
+        {
+            bulkRow.BeginBulkRuntime();
+        }
         foreach (InputItemViewModel input in Inputs)
         {
             List<TargetItemViewModel> rows = ForwardRowsOf(input);
@@ -1794,10 +1799,12 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
             ApplyForwardMetrics(rows, found, now, commitRows);
         }
+        foreach (TargetItemViewModel bulkRow in Targets)
+        {
+            bulkRow.EndBulkRuntime();
+        }
 
         long t05 = Environment.TickCount64;
-
-        Services.AppLog.Write($"[SEG] before={tb - t00} loop={t05 - tb}");
 
         // 报错查询并发做：串行时每条源一次 HTTP，几条源就能把一轮拖到几百毫秒
         if (checkErrors)
@@ -1824,7 +1831,6 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         long t4 = Environment.TickCount64;
 
         // 定位卡顿用：每轮都记，哪一段慢一眼能看出来
-        Services.AppLog.Write($"[METRICS] http={t00 - t0} parse={t05 - t00} rows={t1 - t05} paths={t2 - t1} records={t3 - t2} stats={t4 - t3} total={t4 - t0}");
     }
 
     /// <summary>
@@ -1933,6 +1939,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     /// 条件与 <see cref="RuntimeYmlBuilder"/> 写 runtime.yml 时完全一致（启用、绑定到这条输入、地址非空），
     /// 少一条这里的序号就整体错位，状态会显示到别的目标头上。
     /// </summary>
+    // 注意：这里只许用廉价字段判断。曾经写成 ResolveDest(item.ToModel()).Length == 0，
+    // 每条源都要把所有目标行 ToModel + BuildDest + 解析代理重算一遍（31 源 × 390 行 ≈ 1.2 万次），
+    // 直接把 UI 线程占满，指标轮询每 2 秒卡顿 400 ms。别再改回去。
     private List<TargetItemViewModel> ForwardRowsOf(InputItemViewModel input)
     {
         List<TargetItemViewModel> rows = [];
@@ -1941,7 +1950,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         {
             if (!item.Enabled) continue;
             if (!string.Equals(item.InputSourceId, input.Id, StringComparison.Ordinal)) continue;
-            if (ResolveDest(item.ToModel()).Length == 0) continue;
+            // 只判「有没有服务器地址」：BuildDest 少一半都拼不出串，等价于原判断，
+            // 但不会像 ResolveDest(ToModel()) 那样每次都新建模型 + 读代理配置（31 源 × 390 行 ≈ 1.2 万次）
+            if (item.Server.Length == 0) continue;
 
             rows.Add(item);
         }
