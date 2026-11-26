@@ -1775,6 +1775,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         Services.AppLog.Write($"[PARSE] wait={Environment.TickCount64 - tp0}");
 
+        long tb = Environment.TickCount64;
+
         // 转发错误是每条源一次 HTTP 查询，条数一多就把两秒一轮撑成秒级卡顿；
         // 错误文案不需要那么灵，五轮（约十秒）查一次就够
         bool checkErrors = (_metricsRound++ % 5) == 0;
@@ -1794,6 +1796,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
 
         long t05 = Environment.TickCount64;
+
+        Services.AppLog.Write($"[SEG] before={tb - t00} loop={t05 - tb}");
 
         // 报错查询并发做：串行时每条源一次 HTTP，几条源就能把一轮拖到几百毫秒
         if (checkErrors)
