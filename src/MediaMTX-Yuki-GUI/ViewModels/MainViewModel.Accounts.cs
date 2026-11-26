@@ -29,6 +29,22 @@ public sealed partial class MainViewModel
     public string AccountsSummary
         => L.T("l027-002").Replace("{n}", Accounts.Count.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
+    public int SelectedAccountCount
+        => Accounts.Count(item => item.IsSelected);
+
+    public bool HasAccountSelection
+        => SelectedAccountCount > 0;
+
+    public bool IsAllAccountsSelected
+        => Accounts.Count > 0 && SelectedAccountCount == Accounts.Count;
+
+    /// <summary>工具栏那句「未选择 / 已选 N 项」，与两个列表页共用同一套词。</summary>
+    public string AccountSelectionText
+        => SelectedAccountCount == 0 ? L.T("c003-005") : L.T("c003-006") + SelectedAccountCount + L.T("c003-007");
+
+    public string SelectAllAccountsText
+        => IsAllAccountsSelected ? L.T("c003-004") : L.T("c003-003");
+
     /// <summary>把配置里的账号搬进列表。启动与切页都会调，重复调是安全的。</summary>
     private void RefreshAccounts()
     {
@@ -40,6 +56,7 @@ public sealed partial class MainViewModel
         OnPropertyChanged(nameof(IsAccountsEmpty));
         OnPropertyChanged(nameof(HasAccounts));
         OnPropertyChanged(nameof(AccountsSummary));
+        RefreshAccountSelection();
     }
 
     private void TrackAccount(AuthAccountItemViewModel item)
@@ -53,7 +70,16 @@ public sealed partial class MainViewModel
 
     /// <summary>账号任何一个字段被改，都要把整份配置重写一遍，否则重启就丢了。</summary>
     private void OnAccountChanged(object? sender, PropertyChangedEventArgs e)
-        => ScheduleApply();
+    {
+        // 勾选只是界面态：既不写盘，也不用重建表格，更新一下计数就够
+        if (e.PropertyName == nameof(AuthAccountItemViewModel.IsSelected))
+        {
+            RefreshAccountSelection();
+            return;
+        }
+
+        ScheduleApply();
+    }
 
     /// <summary>把列表写回配置。删账号时顺手把输入源里指向它的勾选一起摘掉。</summary>
     private void SyncAccountsToConfig()
@@ -128,11 +154,64 @@ public sealed partial class MainViewModel
         ShowToast(L.T("t007-003").Replace("{name}", item.User), ToastKind.Success);
     }
 
+    [RelayCommand]
+    private void ToggleSelectAllAccounts()
+    {
+        bool selectAll = !IsAllAccountsSelected;
+
+        foreach (AuthAccountItemViewModel item in Accounts) item.IsSelected = selectAll;
+    }
+
+    /// <summary>批量删除账号：删掉的账号会从各输入源的允许推流名单里一起摘掉，所以先问一句。</summary>
+    [RelayCommand(CanExecute = nameof(HasAccountSelection))]
+    private async Task RemoveSelectedAccountsAsync()
+    {
+        List<AuthAccountItemViewModel> doomed = Accounts.Where(item => item.IsSelected).ToList();
+
+        if (doomed.Count == 0) return;
+
+        string count = doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+        if (AppHost is not null)
+        {
+            bool ok = await AppHost.ConfirmAsync(
+                L.T("t006-003"),
+                L.T("t007-005").Replace("{n}", count),
+                L.T("t006-001"),
+                destructive: true);
+
+            if (!ok) return;
+        }
+
+        foreach (AuthAccountItemViewModel item in doomed)
+        {
+            UntrackAccount(item);
+            Accounts.Remove(item);
+        }
+
+        SyncAccountsToConfig();
+        RefreshAccountViews();
+        ScheduleApply();
+        ShowToast(L.T("t007-006").Replace("{n}", count), ToastKind.Success);
+    }
+
     private void RefreshAccountViews()
     {
         OnPropertyChanged(nameof(IsAccountsEmpty));
         OnPropertyChanged(nameof(HasAccounts));
         OnPropertyChanged(nameof(AccountsSummary));
+        RefreshAccountSelection();
+    }
+
+    private void RefreshAccountSelection()
+    {
+        OnPropertyChanged(nameof(SelectedAccountCount));
+        OnPropertyChanged(nameof(HasAccountSelection));
+        OnPropertyChanged(nameof(AccountSelectionText));
+        OnPropertyChanged(nameof(IsAllAccountsSelected));
+        OnPropertyChanged(nameof(SelectAllAccountsText));
+
+        RemoveSelectedAccountsCommand.NotifyCanExecuteChanged();
     }
 
     /// <summary>新建账号时给一个不重名的默认用户名。</summary>

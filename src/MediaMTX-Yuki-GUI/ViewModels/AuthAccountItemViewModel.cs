@@ -35,6 +35,10 @@ public partial class AuthAccountItemViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(CanViewVariant))]
     private bool _canView;
 
+    /// <summary>行首勾选框：只给批量删除用，不进配置。</summary>
+    [ObservableProperty]
+    private bool _isSelected;
+
     /// <summary>用户名与密码都填了才算能用的账号，缺一个引擎那侧就推不动。</summary>
     public bool IsUsable
         => !string.IsNullOrWhiteSpace(User) && !string.IsNullOrEmpty(Password);

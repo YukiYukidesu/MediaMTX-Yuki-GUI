@@ -222,44 +222,9 @@
     </Border>
 
     <!-- ================= 右侧内容区 ================= -->
-    <Grid Grid.Column="1" RowDefinitions="Auto,*">
+    <Grid Grid.Column="1">
 
-      <!-- 顶上这条只在「改动要重启才生效」时出现。
-           和右下角那张提示卡分工不同：这张说的是你自己刚改的东西，卡片说的是外面的事。 -->
-      <Border Grid.Row="0"
-              Margin="24,16,24,0"
-              Padding="14,10"
-              CornerRadius="{StaticResource DsRadiusMd}"
-              Background="{StaticResource DsWarningSoft}"
-              BorderBrush="{StaticResource DsWarning}"
-              BorderThickness="1"
-              IsVisible="{Binding RestartBarVisible}">
-        <Grid ColumnDefinitions="Auto,*,Auto">
-
-          <TextBlock Text="&#xE7BA;"
-                     FontFamily="Segoe Fluent Icons"
-                     FontSize="16"
-                     Foreground="{StaticResource DsWarning}"
-                     VerticalAlignment="Center" />
-
-          <TextBlock Grid.Column="1"
-                     Margin="10,0,16,0"
-                     Text="{Binding RestartBarText}"
-                     FontSize="12"
-                     TextWrapping="Wrap"
-                     VerticalAlignment="Center" />
-
-          <Button Grid.Column="2"
-                  Classes="primary"
-                  Content="{Binding RestartBarActionText}"
-                  Command="{Binding RestartCommand}"
-                  FontSize="12"
-                  Padding="14,5"
-                  VerticalAlignment="Center" />
-        </Grid>
-      </Border>
-
-      <Grid Grid.Row="1">
+      <Grid>
 
       <!-- 八个页面各自独立成 UserControl，可见性由 ViewModel 的 Is*Visible 驱动 -->
       <views:OverviewPage IsVisible="{Binding IsOverviewVisible}" />
@@ -355,6 +320,43 @@
 
       </Grid>
 
+      <!-- 「改动要重启才生效」的提示浮在右上角：不占行高，出现时页面不会被往下挤。
+           和右下角那张提示卡分工不同：这张说的是你自己刚改的东西，卡片说的是外面的事。 -->
+      <Border HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              Margin="0,14,24,0"
+              MaxWidth="560"
+              Padding="14,10"
+              CornerRadius="{StaticResource DsRadiusMd}"
+              Background="{DynamicResource DsSurfaceOverlayBrush}"
+              BorderBrush="{StaticResource DsWarning}"
+              BorderThickness="1"
+              BoxShadow="0 8 24 0 #33000000"
+              IsVisible="{Binding RestartBarVisible}">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+
+          <TextBlock Text="&#xE7BA;"
+                     FontFamily="Segoe Fluent Icons"
+                     FontSize="16"
+                     Foreground="{StaticResource DsWarning}"
+                     VerticalAlignment="Center" />
+
+          <TextBlock Grid.Column="1"
+                     Margin="10,0,16,0"
+                     Text="{Binding RestartBarText}"
+                     FontSize="12"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Center" />
+
+          <Button Grid.Column="2"
+                  Classes="primary"
+                  Content="{Binding RestartBarActionText}"
+                  Command="{Binding RestartCommand}"
+                  FontSize="12"
+                  Padding="14,5"
+                  VerticalAlignment="Center" />
+        </Grid>
+      </Border>
     </Grid>
   </Grid>
 </ui:FAAppWindow>

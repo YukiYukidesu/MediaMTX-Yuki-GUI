@@ -27,10 +27,15 @@ public sealed class UiOptions
     public string MemoryTrim { get; set; } = "default";
 
     /// <summary>
-    /// simple / advanced。只决定设置页多显示哪几栏，不影响引擎行为；
-    /// 默认简洁——刚拿到手的用户只需要把流转出去。
+    /// simple / advanced。只决定设置页多显示哪几栏，不影响引擎行为。
+    /// 发布版默认简洁——刚拿到手的用户只需要把流转出去；
+    /// Debug 编译默认高级，开发时不用每次手动切。
     /// </summary>
+#if DEBUG
+    public string Mode { get; set; } = AdvancedMode;
+#else
     public string Mode { get; set; } = SimpleMode;
+#endif
 
     /// <summary>
     /// 输入源列表的排序方式：manual（手动）/ name（备注名）/ protocol（协议）/ address（推流地址）。

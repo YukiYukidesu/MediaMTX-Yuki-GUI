@@ -11,19 +11,30 @@
       <TextBlock Text="{Binding PageSubtitle}" Classes="page-subtitle" />
     </StackPanel>
 
-    <!-- 工具栏：左边一句统计，右边只有一颗添加 -->
-    <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
-      <TextBlock Grid.Column="0"
+    <!-- 工具栏：左侧全选与已选计数，中间一句统计，右侧批量删除与添加 -->
+    <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
+      <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+        <Button Padding="10,4" FontSize="12"
+                Content="{Binding SelectAllAccountsText}"
+                ToolTip.Tip="{loc:Loc c003-002}"
+                Command="{Binding ToggleSelectAllAccountsCommand}" />
+        <TextBlock Text="{Binding AccountSelectionText}" Classes="hint" VerticalAlignment="Center" />
+      </StackPanel>
+
+      <TextBlock Grid.Column="1"
                  Classes="hint"
+                 HorizontalAlignment="Right"
                  VerticalAlignment="Center"
+                 Margin="12,0"
                  Text="{Binding AccountsSummary}" />
 
-      <Button Grid.Column="1"
-              Classes="primary"
-              Padding="12,4"
-              FontSize="12"
-              Content="{loc:Loc c027-005}"
-              Command="{Binding AddAccountCommand}" />
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
+                  HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button Classes="danger-solid" Padding="10,4" FontSize="12"
+                Content="{loc:Loc c003-033}" Command="{Binding RemoveSelectedAccountsCommand}" />
+        <Button Classes="primary" Padding="12,4" FontSize="12"
+                Content="{loc:Loc c027-005}" Command="{Binding AddAccountCommand}" />
+      </StackPanel>
     </Grid>
 
     <!-- 表格垫在一块极浅的底窗上，跟两个列表页同一套观感 -->
@@ -32,14 +43,14 @@
 
         <!-- 一个账号都没有时列头一起收起来，空状态浮在框内正中 -->
         <Grid Grid.Row="0"
-              ColumnDefinitions="*,*,*,140"
+              ColumnDefinitions="28,*,*,*,140"
               ColumnSpacing="8"
               Margin="16,0,16,6"
               IsVisible="{Binding HasAccounts}">
-          <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c027-001}" HorizontalAlignment="Left" />
-          <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c027-002}" HorizontalAlignment="Left" />
-          <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c027-003}" HorizontalAlignment="Center" />
-          <TextBlock Grid.Column="3" Classes="column-header" Text="{loc:Loc c003-015}" HorizontalAlignment="Left" Margin="8,0,0,0" />
+          <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c027-001}" HorizontalAlignment="Left" />
+          <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c027-002}" HorizontalAlignment="Left" />
+          <TextBlock Grid.Column="3" Classes="column-header" Text="{loc:Loc c027-003}" HorizontalAlignment="Center" />
+          <TextBlock Grid.Column="4" Classes="column-header" Text="{loc:Loc c003-015}" HorizontalAlignment="Left" Margin="8,0,0,0" />
         </Grid>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -47,31 +58,38 @@
             <ItemsControl.ItemTemplate>
               <DataTemplate>
                 <Border Classes="card" Padding="16,10" Margin="0,0,0,8">
-                  <Grid ColumnDefinitions="*,*,*,140" ColumnSpacing="8">
+                  <Grid ColumnDefinitions="28,*,*,*,140" ColumnSpacing="8">
+
+                    <!-- 行首勾选框只喂批量删除；Fluent 模板自带左边 8 的内边距，要抹掉 -->
+                    <CheckBox Grid.Column="0"
+                              IsChecked="{Binding IsSelected}"
+                              VerticalAlignment="Center"
+                              Padding="0"
+                              MinWidth="0" />
 
                     <!-- 用户名与密码占位是短值，各占一色；密码不给原文，只给长度 -->
-                    <c:PillBadge Grid.Column="0"
+                    <c:PillBadge Grid.Column="1"
                                  Variant="Id"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
                                  Text="{Binding User}"
                                  ToolTip.Tip="{Binding User}" />
 
-                    <c:PillBadge Grid.Column="1"
+                    <c:PillBadge Grid.Column="2"
                                  Variant="Metric"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Center"
                                  Text="{Binding PasswordMask}" />
 
                     <!-- 能否观看是两态，能看取绿、不能看取红，跟别的列表的开关同一套语义 -->
-                    <c:PillBadge Grid.Column="2"
+                    <c:PillBadge Grid.Column="3"
                                  Variant="{Binding CanViewVariant}"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
                                  Text="{Binding CanViewText}" />
 
                     <!-- 右段固定：只有编辑与删除两颗，靠左摆，与表头对齐 -->
-                    <StackPanel Grid.Column="3"
+                    <StackPanel Grid.Column="4"
                                 Orientation="Horizontal"
                                 Spacing="2"
                                 HorizontalAlignment="Left"
