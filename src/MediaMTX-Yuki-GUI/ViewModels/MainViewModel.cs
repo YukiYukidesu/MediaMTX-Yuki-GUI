@@ -1723,7 +1723,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     /// <summary>每两秒抓一次引擎指标，刷新每行的状态与速度。</summary>
     private async Task PollMetricsAsync(CancellationToken ct)
     {
-        using PeriodicTimer timer = new(TimeSpan.FromSeconds(2));
+        // 两秒一轮时，每轮属性更新让界面线程被堵 0.4~0.9 秒（[UI] 卡顿日志实测），
+        // 先拉长到五秒确认归因，再把每轮要刷的字段压下来
+        using PeriodicTimer timer = new(TimeSpan.FromSeconds(5));
 
         try
         {
