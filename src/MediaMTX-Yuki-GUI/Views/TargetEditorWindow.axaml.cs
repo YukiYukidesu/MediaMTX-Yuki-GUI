@@ -168,8 +168,16 @@ public sealed partial class TargetEditorWindow : FAAppWindow, INotifyPropertyCha
 
             ApplyPresetServer();
             Raise(nameof(SelectedPlatformChoice));
+            Raise(nameof(PlatformHint));
+            Raise(nameof(HasPlatformHint));
         }
     }
+
+    /// <summary>当前平台的说明：推流码去哪拿、服务器地址是否因账号而异。没有就返回空串。</summary>
+    public string PlatformHint => SelectedPlatformChoice?.Hint ?? string.Empty;
+
+    /// <summary>当前平台有没有说明；没有时那一行不占位。</summary>
+    public bool HasPlatformHint => PlatformHint.Length > 0;
 
     /// <summary>Avalonia 的 ComboBox 没有 SelectedValuePath，用选中项自己折算回平台 id。</summary>
     public PlatformPreset? SelectedPlatformChoice

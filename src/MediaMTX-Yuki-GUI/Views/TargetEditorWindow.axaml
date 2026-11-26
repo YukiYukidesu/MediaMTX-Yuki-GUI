@@ -57,6 +57,10 @@
                    IsVisible="{Binding ServerInvalid}"
                    Text="{loc:Loc l004-037}" />
         <TextBlock Classes="hint" Text="{loc:Loc l004-038}" />
+        <TextBlock Margin="0,2,0,0"
+                   Classes="hint"
+                   IsVisible="{Binding HasPlatformHint}"
+                   Text="{Binding PlatformHint}" />
 
         <TextBlock Margin="0,16,0,0" Classes="field-label" Text="{loc:Loc c004-016}" />
         <TextBox Margin="0,4,0,4" Text="{Binding StreamKey, Mode=TwoWay}" />
