@@ -43,7 +43,7 @@ public sealed partial class MainViewModel
     /// 显示成「短 id:备注」——两条输入的备注可能一样，靠 Id 才能分出是哪一条。
     /// </summary>
     public IReadOnlyList<InputChoice> InputChoices
-        => new[] { new InputChoice(string.Empty, L.T("l004-036")) }
+        => new[] { new InputChoice(string.Empty, L.T("l004-038")) }
             .Concat(Inputs.Select(input => new InputChoice(input.Id, input.ShortId + " : " + input.DisplayName)))
             .ToList();
 
@@ -65,7 +65,7 @@ public sealed partial class MainViewModel
             InputItemViewModel? owner = Inputs.FirstOrDefault(i => i.Id == target.InputSourceId);
 
             target.InputSourceName = owner == null
-                ? L.T("l004-036")
+                ? L.T("l004-038")
                 : owner.ShortId + " : " + owner.DisplayName;
         }
 

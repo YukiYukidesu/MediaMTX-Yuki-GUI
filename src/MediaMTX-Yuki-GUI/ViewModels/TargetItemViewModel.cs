@@ -57,7 +57,7 @@ public sealed partial class TargetItemViewModel : ObservableObject
 
     /// <summary>绑定的输入源显示名，由主视图模型在加载后回填。</summary>
     [ObservableProperty]
-    private string _inputSourceName = L.T("l004-036");
+    private string _inputSourceName = L.T("l004-038");
 
     /// <summary>这条目标走哪条代理：follow 跟随默认 / direct 直连 / custom 自定义。</summary>
     [ObservableProperty]
@@ -151,7 +151,7 @@ public sealed partial class TargetItemViewModel : ObservableObject
     public string StateText
         => RuntimeDisabled ? L.T("l004-008")
            : !Enabled ? L.T("l004-001")
-           : IsErrored ? L.T("l004-048")
+           : IsErrored ? L.T("l004-050")
            : L.T("l004-009");
 
     /// <summary>悬停时才看的细分状态，引擎报什么就说什么。</summary>
@@ -208,10 +208,10 @@ public sealed partial class TargetItemViewModel : ObservableObject
     public string ProxyText
         => ProxyMode switch
         {
-            ProxyOptions.Direct => L.T("l004-049"),
-            ProxyOptions.System => L.T("l004-050"),
+            ProxyOptions.Direct => L.T("l004-051"),
+            ProxyOptions.System => L.T("l004-052"),
             "custom" or ProxyOptions.Manual => L.T("b004-001"),
-            _ => L.T("l004-051").Replace("{mode}", DefaultProxyText),
+            _ => L.T("l004-053").Replace("{mode}", DefaultProxyText),
         };
 
     /// <summary>代理胶囊的配色：跟着实际生效的那一档取色，跟随默认时按默认档走。</summary>
@@ -234,9 +234,9 @@ public sealed partial class TargetItemViewModel : ObservableObject
     private string DefaultProxyText
         => DefaultProxyMode switch
         {
-            ProxyOptions.Direct => L.T("l004-049"),
-            ProxyOptions.Manual => L.T("l004-052"),
-            _                   => L.T("l004-053"),
+            ProxyOptions.Direct => L.T("l004-051"),
+            ProxyOptions.Manual => L.T("l004-054"),
+            _                   => L.T("l004-055"),
         };
 
     // ====== 平台切换时自动带出服务器地址 ======

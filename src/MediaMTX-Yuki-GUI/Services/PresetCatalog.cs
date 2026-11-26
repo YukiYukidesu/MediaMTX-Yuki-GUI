@@ -29,20 +29,20 @@ public static class PresetCatalog
         new("kuaishou", L.T("l004-026"), "",
             L.T("l004-027")),
 
-        new("youtube", "YouTube", "rtmps://a.rtmps.youtube.com/live2",
-            L.T("l004-028")),
-
-        new("twitch", "Twitch", "rtmp://live.twitch.tv/app/",
+        new("youtube", L.T("l004-028"), "rtmps://a.rtmps.youtube.com/live2",
             L.T("l004-029")),
 
-        new("huya", L.T("l004-030"), "",
+        new("twitch", L.T("l004-030"), "rtmp://live.twitch.tv/app/",
             L.T("l004-031")),
 
-        new("douyu", L.T("l004-032"), "",
+        new("huya", L.T("l004-032"), "",
             L.T("l004-033")),
 
-        new(CustomId, L.T("l004-034"), "",
+        new("douyu", L.T("l004-034"), "",
             L.T("l004-035")),
+
+        new(CustomId, L.T("l004-036"), "",
+            L.T("l004-037")),
     };
 
     /// <summary>按 id 找模板，找不到时回退到「自定义」。</summary>

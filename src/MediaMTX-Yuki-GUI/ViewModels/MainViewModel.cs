@@ -1315,7 +1315,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         {
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
-                L.T("l004-054").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                L.T("l004-056").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
                 L.T("b001-008"),
                 destructive: true);
 
@@ -2305,7 +2305,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             Targets.Select(item => item.Name).Where(name => !string.IsNullOrWhiteSpace(name)),
             StringComparer.Ordinal);
 
-        string baseName = L.T("l004-055");
+        string baseName = L.T("l004-057");
 
         if (!used.Contains(baseName)) return baseName;
 

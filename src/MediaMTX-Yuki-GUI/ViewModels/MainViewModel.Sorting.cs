@@ -57,7 +57,7 @@ public sealed partial class MainViewModel
         L.T("l003-024"), [L.T("c003-002"), L.T("c003-004"), L.T("c003-005")]);
 
     public IReadOnlyList<string> TargetSortChoices => BuildSortChoices(
-        L.T("l004-039"), [L.T("c004-008"), L.T("c004-005"), L.T("c004-006")]);
+        L.T("l004-041"), [L.T("c004-008"), L.T("c004-005"), L.T("c004-006")]);
 
     /// <summary>
     /// 排序下拉的内容：第一项是手动顺序，其余按「键 × 方向」展开成「备注 ↑ / 备注 ↓ / 协议 ↑…」。
