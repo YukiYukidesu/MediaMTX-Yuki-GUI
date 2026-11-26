@@ -11,7 +11,7 @@ namespace MediaMTX_Yuki_GUI.Controls;
 /// <summary>胶囊标签的语义变体。名字与 Resources\PillPalette.axaml 的键一一对应。</summary>
 public enum PillVariant
 {
-    /// <summary>中性灰白。备注名、地址、数字这类没有语义的值用它。</summary>
+    /// <summary>中性灰。地址、备注名这类长字符串用它；程序托管、当前不表态的中性态也用它。</summary>
     Plain,
 
     /// <summary>启用、在线、推流中。</summary>
@@ -38,11 +38,26 @@ public enum PillVariant
     /// <summary>SRT 推流协议。</summary>
     Srt,
 
+    /// <summary>主动拉流：从对方地址把流拉过来。</summary>
+    Pull,
+
+    /// <summary>接收推流：等 OBS 这类推流端连进来。</summary>
+    Push,
+
     /// <summary>跟随设置页的默认推流代理。</summary>
     Follow,
 
+    /// <summary>这个目标不走代理，直连平台。</summary>
+    Direct,
+
     /// <summary>这一条目标单独指定了代理地址。</summary>
     Custom,
+
+    /// <summary>短标识：编号、用户名、平台名。它们不是长字符串，照样上色。</summary>
+    Id,
+
+    /// <summary>数值度量：速率、占用、延迟、发送量，以及时间与时长。</summary>
+    Metric,
 }
 
 /// <summary>字段值的胶囊外壳：一行短文字，配一层语义底色。</summary>

@@ -19,7 +19,7 @@
           <TextBlock Text="{Binding TotalInboundText}"
                      FontSize="30"
                      FontWeight="SemiBold" />
-          <TextBlock Text="{Binding TargetSummaryText}" Classes="hint" />
+          <TextBlock Text="{Binding SourceSummaryText}" Classes="hint" />
         </StackPanel>
       </Border>
 

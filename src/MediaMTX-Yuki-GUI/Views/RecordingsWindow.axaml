@@ -43,12 +43,12 @@
                         BorderThickness="1">
                   <Grid ColumnDefinitions="*,110,64">
 
-                    <c:PillBadge Grid.Column="0" Variant="Plain" MaxWidth="330"
+                    <c:PillBadge Grid.Column="0" Variant="Metric" MaxWidth="330"
                                 HorizontalAlignment="Left" VerticalAlignment="Center"
                                 Text="{Binding StartText}"
                                 ToolTip.Tip="{Binding StartText}" />
 
-                    <c:PillBadge Grid.Column="1" Variant="Plain"
+                    <c:PillBadge Grid.Column="1" Variant="Metric"
                                  HorizontalAlignment="Center" VerticalAlignment="Center"
                                  Text="{Binding DurationText}" />
 

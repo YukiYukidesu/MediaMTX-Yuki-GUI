@@ -4,8 +4,12 @@
   <!--
     胶囊标签的配色。每个变体一对笔刷：底色是语义色的浅色版，文字是同色系的实色。
 
+    变体分三组：状态（Plain / On / Off / Warn / Error）、枚举值（协议四色、来源 Pull / Push、
+    代理 Follow / Direct / Custom）、字段值（Id 给编号、用户名、平台名这类短标识，Metric 给速率、
+    占用、延迟、时间这些数字）。长字符串（地址、备注名）仍走 Plain —— 一条长条挂满颜色只会更乱。
+
     取值不是拍脑袋定的：浅色按「卡片底色 #FFFFFF、底色再掺 14%」、深色按「卡片底色 #2B2B2B、掺 18%」
-    反算，全部达到 WCAG AA 的 4.5:1（实测 4.65 ~ 7.85）。算过的表与依据见 docs\UI参考-设计规范.md §四。
+    反算，全部达到 WCAG AA 的 4.5:1（16 个变体实测 4.65 ~ 7.85）。算过的表与依据见 docs\UI参考-设计规范.md §四。
 
     Off（已停用）用暗红而不是灰：停用是「这条现在不干活」，在列表里属于要一眼看出的状态；
     与 Error 的亮红 #B3261E 拉开层次（暗红更沉、更偏砖色），两颗粒子并排也不会看混。
@@ -35,10 +39,20 @@
       <SolidColorBrush x:Key="PillRtspBackground" Color="#E4F7F8" />
       <SolidColorBrush x:Key="PillSrtForeground" Color="#6A2FA0" />
       <SolidColorBrush x:Key="PillSrtBackground" Color="#F5EDFC" />
+      <SolidColorBrush x:Key="PillPullForeground" Color="#14664F" />
+      <SolidColorBrush x:Key="PillPullBackground" Color="#E4F3EC" />
+      <SolidColorBrush x:Key="PillPushForeground" Color="#2F5A8F" />
+      <SolidColorBrush x:Key="PillPushBackground" Color="#E9F0F8" />
       <SolidColorBrush x:Key="PillFollowForeground" Color="#0B6BCB" />
       <SolidColorBrush x:Key="PillFollowBackground" Color="#E6F2FE" />
+      <SolidColorBrush x:Key="PillDirectForeground" Color="#3F5A73" />
+      <SolidColorBrush x:Key="PillDirectBackground" Color="#E9EFF4" />
       <SolidColorBrush x:Key="PillCustomForeground" Color="#8A2F63" />
       <SolidColorBrush x:Key="PillCustomBackground" Color="#FCEDF4" />
+      <SolidColorBrush x:Key="PillIdForeground" Color="#46607E" />
+      <SolidColorBrush x:Key="PillIdBackground" Color="#EAF0F7" />
+      <SolidColorBrush x:Key="PillMetricForeground" Color="#6A5335" />
+      <SolidColorBrush x:Key="PillMetricBackground" Color="#F4EEE3" />
     </ResourceDictionary>
 
     <ResourceDictionary x:Key="Dark">
@@ -60,10 +74,20 @@
       <SolidColorBrush x:Key="PillRtspBackground" Color="#2E4748" />
       <SolidColorBrush x:Key="PillSrtForeground" Color="#CFA6F5" />
       <SolidColorBrush x:Key="PillSrtBackground" Color="#44394D" />
+      <SolidColorBrush x:Key="PillPullForeground" Color="#86E0C6" />
+      <SolidColorBrush x:Key="PillPullBackground" Color="#23453A" />
+      <SolidColorBrush x:Key="PillPushForeground" Color="#A6C4EA" />
+      <SolidColorBrush x:Key="PillPushBackground" Color="#303E4E" />
       <SolidColorBrush x:Key="PillFollowForeground" Color="#8CC5FF" />
       <SolidColorBrush x:Key="PillFollowBackground" Color="#314150" />
+      <SolidColorBrush x:Key="PillDirectForeground" Color="#A9C3D1" />
+      <SolidColorBrush x:Key="PillDirectBackground" Color="#33424B" />
       <SolidColorBrush x:Key="PillCustomForeground" Color="#F5A6CF" />
       <SolidColorBrush x:Key="PillCustomBackground" Color="#4D3944" />
+      <SolidColorBrush x:Key="PillIdForeground" Color="#A9C0DC" />
+      <SolidColorBrush x:Key="PillIdBackground" Color="#34404F" />
+      <SolidColorBrush x:Key="PillMetricForeground" Color="#D8BE96" />
+      <SolidColorBrush x:Key="PillMetricBackground" Color="#453B2E" />
     </ResourceDictionary>
 
   </ResourceDictionary.ThemeDictionaries>

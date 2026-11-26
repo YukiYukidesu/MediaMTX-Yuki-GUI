@@ -223,7 +223,7 @@ public sealed partial class TargetItemViewModel : ObservableObject
 
             return mode switch
             {
-                ProxyOptions.Direct            => PillVariant.Plain,
+                ProxyOptions.Direct            => PillVariant.Direct,
                 "custom" or ProxyOptions.Manual => PillVariant.Custom,
                 _                              => PillVariant.Follow,
             };

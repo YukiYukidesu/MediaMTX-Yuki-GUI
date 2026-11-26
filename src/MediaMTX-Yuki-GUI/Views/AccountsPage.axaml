@@ -1,6 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:loc="using:MediaMTX_Yuki_GUI"
+             xmlns:c="using:MediaMTX_Yuki_GUI.Controls"
              x:Class="MediaMTX_Yuki_GUI.Views.AccountsPage">
   <!-- 三行：标题、工具栏、底框。底框占星号，窗口怎么缩放它都自己长满 -->
   <Grid Margin="{StaticResource DsPagePadding}" RowDefinitions="Auto,Auto,*" RowSpacing="12">
@@ -48,21 +49,26 @@
                 <Border Classes="card" Padding="16,10" Margin="0,0,0,8">
                   <Grid ColumnDefinitions="*,*,*,140" ColumnSpacing="8">
 
-                    <TextBlock Grid.Column="0"
-                               VerticalAlignment="Center"
-                               TextTrimming="CharacterEllipsis"
-                               Text="{Binding User}" />
+                    <!-- 用户名与密码占位是短值，各占一色；密码不给原文，只给长度 -->
+                    <c:PillBadge Grid.Column="0"
+                                 Variant="Id"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding User}"
+                                 ToolTip.Tip="{Binding User}" />
 
-                    <TextBlock Grid.Column="1"
-                               Classes="hint"
-                               VerticalAlignment="Center"
-                               Text="{Binding PasswordMask}" />
+                    <c:PillBadge Grid.Column="1"
+                                 Variant="Metric"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding PasswordMask}" />
 
-                    <TextBlock Grid.Column="2"
-                               Classes="hint"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Text="{Binding CanViewText}" />
+                    <!-- 能否观看是两态，能看取绿、不能看取红，跟别的列表的开关同一套语义 -->
+                    <c:PillBadge Grid.Column="2"
+                                 Variant="{Binding CanViewVariant}"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding CanViewText}" />
 
                     <!-- 右段固定：只有编辑与删除两颗，靠左摆，与表头对齐 -->
                     <StackPanel Grid.Column="3"

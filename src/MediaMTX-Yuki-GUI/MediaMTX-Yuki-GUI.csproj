@@ -72,6 +72,44 @@
   </ItemGroup>
 
   <!--
+    语言包的主目录在工程根（....Languages），src 下这份只是编译输入。
+    编译前把根目录的两份 json 覆盖过来，省掉手工复制这一步：
+    改完根目录那份直接编译，产物里就是最新的。
+    README.md 是译者说明，不复制、也不进产物。
+  -->
+  <Target Name="SyncLanguagesFromRoot" BeforeTargets="BeforeBuild">
+    <ItemGroup>
+      <LanguagesFromRoot Include="$(MSBuildThisFileDirectory)..\..\Languages\*.json" />
+    </ItemGroup>
+    <!-- 先把根目录的两份 json 覆盖到 src 下的副本，让常规的复制项有源可拿 -->
+    <Copy SourceFiles="@(LanguagesFromRoot)"
+          DestinationFolder="$(MSBuildThisFileDirectory)Languages"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <!--
+    再补一遍输出目录：Target 里补进来的文件赶不上 SDK 在评估阶段算好的复制清单，
+    而 Build 中段的增量清理还会把它们当「多余输出」删掉，所以放在 Build 之后。
+  -->
+  <Target Name="CopyLanguagesToOutput" AfterTargets="Build">
+    <ItemGroup>
+      <LanguagesToOutput Include="$(MSBuildThisFileDirectory)..\..\Languages\*.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(LanguagesToOutput)"
+          DestinationFolder="$(OutDir)Languages"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="CopyLanguagesToPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <LanguagesToPublishDir Include="$(MSBuildThisFileDirectory)..\..\Languages\*.json" />
+    </ItemGroup>
+    <Copy SourceFiles="@(LanguagesToPublishDir)"
+          DestinationFolder="$(PublishDir)Languages"
+          SkipUnchangedFiles="true" />
+  </Target>
+
+  <!--
     发布产物里不要任何 pdb。
     SkiaSharp / HarfBuzzSharp 的 NuGet 包会带 native 的 pdb（libSkiaSharp.pdb 一个就 82 MB），
     DebugType 之类的属性管不到它们，只能在 publish 之后删。

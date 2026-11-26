@@ -178,7 +178,7 @@
                                      ToolTip.Tip="{Binding DisplayName}"
                                      Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
                                      CommandParameter="{Binding DisplayName}" />
-                        <c:PillBadge Grid.Column="1" Variant="Plain" MaxWidth="62"
+                        <c:PillBadge Grid.Column="1" Variant="Id" MaxWidth="62"
                                      HorizontalAlignment="Center"
                                      Text="{Binding ShortId}"
                                      ToolTip.Tip="{Binding Id}"
@@ -197,12 +197,12 @@
                         <c:PillBadge Grid.Column="5" Text="{Binding LiveText}" Variant="{Binding LiveVariant}"
                                      ShowDot="True" HorizontalAlignment="Center"
                                      IsVisible="{Binding EffectiveEnabled}" />
-                        <c:PillBadge Grid.Column="6" Variant="Plain"
+                        <c:PillBadge Grid.Column="6" Variant="Metric"
                                      Text="{Binding InboundSpeedText}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="7" Text="{Binding RecordStateText}" Variant="{Binding RecordStateVariant}"
                                      HorizontalAlignment="Center"
                                      IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
-                        <c:PillBadge Grid.Column="8" Variant="Plain"
+                        <c:PillBadge Grid.Column="8" Variant="Metric"
                                      Text="{Binding RecordSizeText}" HorizontalAlignment="Center"
                                      IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
                       </Grid>

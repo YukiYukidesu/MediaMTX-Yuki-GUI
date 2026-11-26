@@ -64,6 +64,14 @@
     <!-- 中性：状态灯熄灭态 -->
     <SolidColorBrush x:Key="DsNeutral" Color="#6E6E6E" />
 
+    <!-- ====== 转发关系图的连线 ======
+         四档只表达链路本身：通着（实线）、还没通上、目标报错、有一端停用（后三档虚线）。
+         节点自己的状态由圆点与胶囊表达，不在这层重复。 -->
+    <SolidColorBrush x:Key="RelationLinkActive" Color="#2E9E5B" />
+    <SolidColorBrush x:Key="RelationLinkPending" Color="#4C8AC9" />
+    <SolidColorBrush x:Key="RelationLinkError" Color="#C43B36" />
+    <SolidColorBrush x:Key="RelationLinkOff" Color="#B4BAC1" />
+
     <!-- ====== 常用尺寸 ====== -->
     <x:Double x:Key="DsStatusDot">8</x:Double>
     <x:Double x:Key="DsIconButton">30</x:Double>
@@ -206,6 +214,51 @@
 
   <Style Selector="Ellipse.status-dot.errored">
     <Setter Property="Fill" Value="#FF5C5C" />
+  </Style>
+
+  <!-- 转发关系图的节点：就一颗胶囊——前面一个图标（启用是圆点、未启用是叉），后面是名字。
+       底色与文字色成对取自 PillPalette 的状态档，深浅两套主题下自己跟着换 -->
+  <Style Selector="Border.map-node">
+    <Setter Property="Background" Value="{DynamicResource PillPlainBackground}" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="8,3" />
+  </Style>
+
+  <Style Selector="Border.map-node TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource PillPlainForeground}" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <Style Selector="Border.map-node.on">
+    <Setter Property="Background" Value="{DynamicResource PillOnBackground}" />
+  </Style>
+
+  <Style Selector="Border.map-node.on TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource PillOnForeground}" />
+  </Style>
+
+  <Style Selector="Border.map-node.idle">
+    <Setter Property="Background" Value="{DynamicResource PillRtmpBackground}" />
+  </Style>
+
+  <Style Selector="Border.map-node.idle TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource PillRtmpForeground}" />
+  </Style>
+
+  <Style Selector="Border.map-node.error">
+    <Setter Property="Background" Value="{DynamicResource PillErrorBackground}" />
+  </Style>
+
+  <Style Selector="Border.map-node.error TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource PillErrorForeground}" />
+  </Style>
+
+  <Style Selector="Border.map-node.off">
+    <Setter Property="Background" Value="{DynamicResource PillOffBackground}" />
+  </Style>
+
+  <Style Selector="Border.map-node.off TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource PillOffForeground}" />
   </Style>
 
   <!-- 运行状态卡片：引擎在跑时描边变绿加粗 -->

@@ -228,9 +228,9 @@ public partial class InputItemViewModel : ObservableObject
     public string SourceText
         => IsPulling ? L.T("c003-029") : L.T("c003-030");
 
-    /// <summary>来源胶囊的配色：拉流借「跟随」那一支的天蓝，接收推流用中性灰。</summary>
+    /// <summary>来源胶囊的配色：主动拉流与接收推流各占一色，跟代理那几档不混用。</summary>
     public PillVariant SourceVariant
-        => IsPulling ? PillVariant.Follow : PillVariant.Plain;
+        => IsPulling ? PillVariant.Pull : PillVariant.Push;
 
     public InputSource ToModel()
         => new()

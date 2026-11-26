@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using MediaMTX_Yuki_GUI.Controls;
 using MediaMTX_Yuki_GUI.Models;
 
 
@@ -30,6 +31,8 @@ public partial class AuthAccountItemViewModel : ObservableObject
     private string _password = "";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanViewText))]
+    [NotifyPropertyChangedFor(nameof(CanViewVariant))]
     private bool _canView;
 
     /// <summary>用户名与密码都填了才算能用的账号，缺一个引擎那侧就推不动。</summary>
@@ -43,6 +46,10 @@ public partial class AuthAccountItemViewModel : ObservableObject
     /// <summary>「能否观看」那一格显示成文字，空勾选框在只读表里不好认。</summary>
     public string CanViewText
         => CanView ? L.T("c027-004") : L.T("c027-011");
+
+    /// <summary>「能否观看」胶囊的配色：能看取绿，不能看取红，与其它列表的开关同一套语义。</summary>
+    public PillVariant CanViewVariant
+        => CanView ? PillVariant.On : PillVariant.Off;
 
     public AuthAccount ToModel()
         => new()

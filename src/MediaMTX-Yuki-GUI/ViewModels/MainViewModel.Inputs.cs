@@ -72,6 +72,8 @@ public sealed partial class MainViewModel
         OnPropertyChanged(nameof(UnboundTargetCount));
         OnPropertyChanged(nameof(HasUnboundTargets));
         OnPropertyChanged(nameof(InputChoices));
+
+        RebuildMap();
     }
 
     /// <summary>删除某条输入时，把它身上的输出一律退回未指定，免得悄悄推到别处去。</summary>

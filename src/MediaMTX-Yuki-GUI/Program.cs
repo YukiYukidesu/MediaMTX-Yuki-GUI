@@ -55,7 +55,7 @@ internal static class Program
         {
             // GPU 这条路起不来（驱动不支持、远程桌面、ANGLE 库缺失都算）就别硬撑：
             // 把失败记进日志，改用软件渲染再起一次。用户宁可看到界面，也不要一个闪退。
-            Services.AppLog.Write("渲染后端 GPU 启动失败，退回软件渲染：" + ex.Message);
+            Services.AppLog.Write("渲染后端 GPU 启动失败，退回软件渲染：" + ex);
             BuildAvaloniaApp(hardwareAcceleration: false).StartWithClassicDesktopLifetime(args);
         }
     }

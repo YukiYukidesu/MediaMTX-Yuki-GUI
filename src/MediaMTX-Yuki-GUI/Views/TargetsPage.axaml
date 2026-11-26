@@ -180,7 +180,7 @@
                         </StackPanel>
 
                         <!-- 编号列：短 Id，悬停看全的，点一下复制完整的 -->
-                        <c:PillBadge Grid.Column="1" Variant="Plain" MaxWidth="56" HorizontalAlignment="Center"
+                        <c:PillBadge Grid.Column="1" Variant="Id" MaxWidth="56" HorizontalAlignment="Center"
                                      Text="{Binding ShortId}"
                                      ToolTip.Tip="{Binding Id}"
                                      Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
@@ -192,7 +192,7 @@
                                      ToolTip.Tip="{Binding InputSourceName}" />
                         <c:PillBadge Grid.Column="3" Text="{Binding Protocol}" Variant="{Binding ProtocolVariant}"
                                      HorizontalAlignment="Center" />
-                        <c:PillBadge Grid.Column="4" Variant="Plain" Text="{Binding PlatformText}"
+                        <c:PillBadge Grid.Column="4" Variant="Id" Text="{Binding PlatformText}"
                                      HorizontalAlignment="Center" />
 
                         <!-- 推流地址：点一下复制，省掉一排复制按钮 -->
@@ -203,11 +203,11 @@
                                      CommandParameter="{Binding Server}" />
                         <c:PillBadge Grid.Column="6" Text="{Binding ProxyText}" Variant="{Binding ProxyVariant}"
                                      ToolTip.Tip="{loc:Loc l004-005}" HorizontalAlignment="Center" />
-                        <c:PillBadge Grid.Column="7" Text="{Binding ResponseText}" Variant="Plain"
+                        <c:PillBadge Grid.Column="7" Text="{Binding ResponseText}" Variant="Metric"
                                      ToolTip.Tip="{loc:Loc l004-004}" HorizontalAlignment="Center" />
-                        <c:PillBadge Grid.Column="8" Text="{Binding SpeedText}" Variant="Plain"
+                        <c:PillBadge Grid.Column="8" Text="{Binding SpeedText}" Variant="Metric"
                                      ToolTip.Tip="{loc:Loc c004-017}" HorizontalAlignment="Center" />
-                        <c:PillBadge Grid.Column="9" Text="{Binding SentText}" Variant="Plain"
+                        <c:PillBadge Grid.Column="9" Text="{Binding SentText}" Variant="Metric"
                                      ToolTip.Tip="{loc:Loc c004-016}" HorizontalAlignment="Center" />
                       </Grid>
                     </ScrollViewer>

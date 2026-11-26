@@ -1,8 +1,32 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:loc="using:MediaMTX_Yuki_GUI"
+             xmlns:c="using:MediaMTX_Yuki_GUI.Controls"
              x:Class="MediaMTX_Yuki_GUI.Views.OverviewPage">
-  <!-- 三行：标题、运行状态、转发关系。底框占星号，行数再多也只在框内滚动 -->
+
+  <!-- 关系图的节点：源与目标共用一套样子——就一颗胶囊，前面一个图标（启用是圆点、未启用是叉），
+        后面是名字。底色与文字色由 ViewModel 给的状态开关决定，模板这里只负责认四个类名 -->
+  <UserControl.Resources>
+    <DataTemplate x:Key="MapNodeTemplate">
+      <Border Classes="map-node"
+              Classes.on="{Binding IsOn}"
+              Classes.idle="{Binding IsIdle}"
+              Classes.error="{Binding IsError}"
+              Classes.off="{Binding IsOff}"
+              ClipToBounds="True"
+              ToolTip.Tip="{Binding Tip}">
+        <!-- 图标与名字放在 DockPanel 里：图标先占左侧固定宽度，名字只拿剩下的，
+             估宽有偏差时也只会把名字截断，不会把胶囊撑出画布 -->
+        <DockPanel LastChildFill="True">
+          <TextBlock DockPanel.Dock="Left" Text="{Binding Glyph}" FontSize="9" Margin="0,0,5,0"
+                     VerticalAlignment="Center" />
+          <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+        </DockPanel>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
+
+  <!-- 三行：标题、运行状态、转发关系。底框占星号，关系图按自己的画布尺寸等比缩放 -->
   <Grid Margin="{StaticResource DsPagePadding}" RowDefinitions="Auto,Auto,*" RowSpacing="12">
 
     <!-- 标题区：右端放程序图标，右上角那个方块不再空着 -->
@@ -55,64 +79,55 @@
     </Border>
 
     <!-- 转发关系：标题与说明在框外，底框里只放关系图本身。
-         底框占第 2 行（星号），一个输入源都没有时它也照样占着那一块 -->
+         底框占第 2 行（星号），一个节点都没有时它也照样占着那一块 -->
     <Grid Grid.Row="2" RowDefinitions="Auto,*">
       <StackPanel Grid.Row="0" Margin="{StaticResource DsCardGap}">
         <TextBlock Text="{loc:Loc c002-016}" FontSize="15" FontWeight="SemiBold" />
         <TextBlock Text="{loc:Loc l002-012}" Classes="hint" TextWrapping="Wrap" />
       </StackPanel>
 
-      <Border Grid.Row="1" Classes="well" Padding="16">
-        <!-- 关系图行数多时在框内纵向滚动；未绑定提示钉在框底，不跟着滚 -->
+      <Border Grid.Row="1" Classes="well" Padding="12">
         <Grid RowDefinitions="*,Auto">
-          <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto"
-                        HorizontalScrollBarVisibility="Disabled">
-            <ItemsControl ItemsSource="{Binding Inputs}">
-              <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                  <Grid ColumnDefinitions="200,36,*" Margin="0,0,0,8">
-                    <!-- 状态灯看的是引擎侧有没有在推，不是配置里的启用开关 -->
-                    <StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
-                      <StackPanel Orientation="Horizontal" Spacing="8">
-                        <Ellipse Width="8" Height="8" VerticalAlignment="Center"
-                                 Classes="status-dot" Classes.on="{Binding IsOnline}" />
-                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"
-                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                      </StackPanel>
-                      <TextBlock Text="{Binding RuntimeText}" Classes="hint" FontSize="11.5"
-                                 TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding RuntimeText}"
-                                 IsVisible="{Binding HasRuntimeText}" />
-                    </StackPanel>
 
-                    <TextBlock Grid.Column="1" Text="&#xE72A;" VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
-                               Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
+          <!-- 关系图：左列输入源、右列输出目标，中间用贝塞尔连线把绑定关系画出来。
+               画布宽度跟着这块面板走（源列贴左、目标列贴右），节点少也铺满整块；
+               节点多到一屏放不下就纵向滚动，不再整体缩小——缩到一半字就看不清了。
+               横向不出滚动条：画布宽度按可用宽度算，窄到装不下时才靠最小宽度兜底 -->
+      <ScrollViewer Grid.Row="0" x:Name="MapHost"
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled"
+                    SizeChanged="OnMapHostSizeChanged">
+            <Canvas Width="{Binding MapWidth}" Height="{Binding MapHeight}">
 
-                    <ItemsControl Grid.Column="2" ItemsSource="{Binding Outputs}"
-                                  VerticalAlignment="Center">
-                      <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                          <WrapPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                      </ItemsControl.ItemsPanel>
-                      <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                          <Border Margin="0,0,6,4" Padding="9,4"
-                                  Background="#1A3DDC84" CornerRadius="10">
-                            <TextBlock FontSize="11.5" Text="{Binding DisplayName}" />
-                          </Border>
-                        </DataTemplate>
-                      </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                  </Grid>
-                </DataTemplate>
-              </ItemsControl.ItemTemplate>
-            </ItemsControl>
-          </ScrollViewer>
+              <!-- 连线垫在最底层，节点卡片盖在上面 -->
+              <c:RelationLinks Links="{Binding MapLinks}"
+                               Width="{Binding MapWidth}" Height="{Binding MapHeight}" />
+
+              <ItemsControl ItemsSource="{Binding MapSources}"
+                            Width="{Binding MapWidth}" Height="{Binding MapHeight}"
+                            ItemTemplate="{StaticResource MapNodeTemplate}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <c:RelationCanvas LayoutVersion="{Binding MapVersion}" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              </ItemsControl>
+
+              <ItemsControl ItemsSource="{Binding MapTargets}"
+                            Width="{Binding MapWidth}" Height="{Binding MapHeight}"
+                            ItemTemplate="{StaticResource MapNodeTemplate}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <c:RelationCanvas LayoutVersion="{Binding MapVersion}" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              </ItemsControl>
+
+            </Canvas>
+      </ScrollViewer>
 
           <!-- 空状态浮在关系图那块的正中：底框照样占着那一块，只有这坨字挪到中间 -->
-          <StackPanel Grid.Row="0" IsVisible="{Binding IsInputsEmpty}"
+          <StackPanel Grid.Row="0" IsVisible="{Binding IsMapEmpty}"
                       HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="6"
                       IsHitTestVisible="False">
             <TextBlock Text="&#xE896;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
@@ -122,9 +137,11 @@
             <TextBlock Text="{loc:Loc l002-014}" Classes="hint" HorizontalAlignment="Center" />
           </StackPanel>
 
+          <!-- 孤儿目标现在图上看得见，这条提示仍然有用：它在说这些目标不会被推流 -->
           <TextBlock Grid.Row="1" Text="{loc:Loc l002-013}" FontSize="11.5" Foreground="#D9822B"
                      Margin="0,8,0,0" TextWrapping="Wrap"
                      IsVisible="{Binding HasUnboundTargets}" />
+
         </Grid>
       </Border>
     </Grid>

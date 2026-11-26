@@ -1725,6 +1725,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         await RefreshRecordSizesAsync();
 
         RefreshStats();
+
+        // 关系图的圆点与连线跟着这一轮指标一起变，不必等下一次配置变化
+        RebuildMap();
     }
 
     /// <summary>
@@ -2113,17 +2116,31 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    /// <summary>当前在转的目标条数，给统计页当一句话摘要。</summary>
+    /// <summary>输入源的启用数与有实时数据的条数，给统计页左卡当一句话摘要。</summary>
+    public string SourceSummaryText
+    {
+        get
+        {
+            int enabled = Inputs.Count(item => item.Enabled);
+            int live = Inputs.Count(item => item.Enabled && _inboundBps.ContainsKey(item.Id));
+
+            return L.T("l006-003")
+                .Replace("{on}", enabled.ToString())
+                .Replace("{live}", live.ToString());
+        }
+    }
+
+    /// <summary>输出目标的启用数与有实时数据的条数，给统计页右卡当一句话摘要。</summary>
     public string TargetSummaryText
     {
         get
         {
             int enabled = Targets.Count(item => item.Enabled);
-            int reporting = _targetBps.Count;
+            int live = Targets.Count(item => item.Enabled && _targetBps.ContainsKey(item.Id));
 
-            return L.T("l002-008")
+            return L.T("l006-004")
                 .Replace("{on}", enabled.ToString())
-                .Replace("{live}", reporting.ToString());
+                .Replace("{live}", live.ToString());
         }
     }
 
@@ -2132,6 +2149,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         OnPropertyChanged(nameof(TotalOutboundText));
         OnPropertyChanged(nameof(TotalInboundText));
+        OnPropertyChanged(nameof(SourceSummaryText));
         OnPropertyChanged(nameof(TargetSummaryText));
     }
 
@@ -2417,12 +2435,13 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     {
         bool simpleMode = !IsAdvancedMode;
 
-        foreach (InputItemViewModel input in Inputs)
+        // 遍历前先取快照：给行设标记会让这一行重新排位，直接遍历绑定集合会撞上「集合已被修改」
+        foreach (InputItemViewModel input in Inputs.ToList())
         {
             input.RuntimeDisabled = simpleMode && input.IsPulling;
         }
 
-        foreach (TargetItemViewModel target in Targets)
+        foreach (TargetItemViewModel target in Targets.ToList())
         {
             InputItemViewModel? owner = Inputs.FirstOrDefault(
                 candidate => string.Equals(candidate.Id, target.InputSourceId, StringComparison.Ordinal));
