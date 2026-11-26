@@ -640,6 +640,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     public MainViewModel()
     {
+        StartUiWatchdog();
+
         _cfg = _store.Load();
 
         // 日志条数一变，三颗按钮的可用状态就得跟着走
@@ -2726,7 +2728,32 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private readonly List<string> _pendingLogs = [];
     private string _lastApplied = string.Empty;
     private int _metricsRound;
+    private long _uiTick = Environment.TickCount64;
     private int _logFlushPosted;
+
+    /// <summary>
+    /// UI 看门狗：每 100ms 记一次实际间隔，超过 250ms 说明界面线程被堵住了。
+    /// 卡顿到底在哪个周期上，日志会直接写出来，不用再猜。
+    /// </summary>
+    private void StartUiWatchdog()
+    {
+        DispatcherTimer timer = new()
+        {
+            Interval = TimeSpan.FromMilliseconds(100),
+        };
+
+        timer.Tick += (_, _) =>
+        {
+            long now = Environment.TickCount64;
+            long gap = now - _uiTick;
+
+            _uiTick = now;
+
+            if (gap > 250) Services.AppLog.Write($"[UI] 卡顿 {gap} ms");
+        };
+
+        timer.Start();
+    }
 
     private void OnEngineLog(string line)
     {
