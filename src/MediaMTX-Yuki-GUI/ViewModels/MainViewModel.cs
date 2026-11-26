@@ -2113,10 +2113,11 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     /// <summary>清掉一行的运行时显示，配置字段一个都不碰。</summary>
     private static void ClearForwardRuntime(TargetItemViewModel item)
     {
-        item.RuntimeState = string.Empty;
-        item.SpeedText = "—";
-        item.SentText = "—";
-        item.ErrorText = string.Empty;
+        // 每轮都会走到这里：值和上次一样就别再赋值，省掉一次属性通知与随之而来的重绘
+        if (item.RuntimeState.Length > 0) item.RuntimeState = string.Empty;
+        if (item.SpeedText != "—") item.SpeedText = "—";
+        if (item.SentText != "—") item.SentText = "—";
+        if (item.ErrorText.Length > 0) item.ErrorText = string.Empty;
     }
 
     /// <summary>累计字节数转成人看的大小。</summary>
