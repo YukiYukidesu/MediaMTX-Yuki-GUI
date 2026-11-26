@@ -1759,13 +1759,16 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         // 错误文案不需要那么灵，五轮（约十秒）查一次就够
         bool checkErrors = (_metricsRound++ % 5) == 0;
 
+        // 只有输入源页（1）与输出目标页（2）看得到这些行；别的页面不写，省掉整轮重绘
+        bool commitRows = SelectedPage is 1 or 2;
+
         foreach (InputItemViewModel input in Inputs)
         {
             List<TargetItemViewModel> rows = ForwardRowsOf(input);
 
             byPath.TryGetValue(input.Path, out List<ForwardDestMetrics>? found);
 
-            ApplyForwardMetrics(rows, found, now);
+            ApplyForwardMetrics(rows, found, now, commitRows);
         }
 
         // 报错查询并发做：串行时每条源一次 HTTP，几条源就能把一轮拖到几百毫秒
@@ -1925,7 +1928,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     private void ApplyForwardMetrics(
         List<TargetItemViewModel> rows,
         List<ForwardDestMetrics>? metrics,
-        DateTime now)
+        DateTime now,
+        bool commit)
     {
         HashSet<TargetItemViewModel> filled = [];
 
@@ -1937,14 +1941,20 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
                 TargetItemViewModel item = rows[dest.Position - 1];
 
+                // 字典照常更新（统计要用），但行上的文本只有当前页看得到才写：
+                // 每写一次属性，绑定、重排、重绘都要跑一遍
+                string speed = FormatSpeed(item.Id, dest.OutboundBytes, now, bps => _targetBps[item.Id] = bps);
+
+                filled.Add(item);
+
+                if (!commit) continue;
+
                 item.RuntimeState = dest.State;
-                item.SpeedText = FormatSpeed(item.Id, dest.OutboundBytes, now, bps => _targetBps[item.Id] = bps);
+                item.SpeedText = speed;
                 item.SentText = FormatBytes(dest.OutboundBytes);
 
                 // 这一轮不报错了，上一轮留下的原因就得撤掉，别让红字一直挂着
                 if (!item.IsErrored) item.ErrorText = string.Empty;
-
-                filled.Add(item);
             }
         }
 
