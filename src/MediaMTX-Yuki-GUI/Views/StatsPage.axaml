@@ -29,7 +29,7 @@
           <TextBlock Text="{Binding TotalOutboundText}"
                      FontSize="30"
                      FontWeight="SemiBold" />
-          <TextBlock Text="{loc:Loc c006-004}" Classes="hint" />
+          <TextBlock Text="{Binding TargetSummaryText}" Classes="hint" />
         </StackPanel>
       </Border>
 
