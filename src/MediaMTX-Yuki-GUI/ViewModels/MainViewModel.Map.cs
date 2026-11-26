@@ -118,52 +118,58 @@ public sealed partial class MainViewModel
             clusters.Add((null, [target]));
         }
 
-        // 列数与簇宽由面板宽度反算：铺满面板、每簇等宽，节点名字太长就靠省略号截断
+        // 纯数学：胶囊宽度只由名字决定，每簇宽度 = 源宽 + 连线间隙 + 该簇最宽的目标
         double viewportWidth = _mapViewportWidth >= 200 ? _mapViewportWidth : 1200;
-        // 摆法只服务缩放比：按簇高降序排，高的集中在一行，行高更齐、行数更少
-        List<int> order = [.. Enumerable.Range(0, clusters.Count).OrderByDescending(index => ClusterHeight(clusters[index].Targets.Count))];
-
         double viewportHeight = _mapViewportHeight >= 120 ? _mapViewportHeight : 640;
-        int maxColumns = Math.Clamp((int)Math.Floor(viewportWidth / MapMinClusterWidth), 1, 6);
-        int columns = 1;
-        double clusterWidth = viewportWidth;
+
+        double[] sourceWidths = new double[clusters.Count];
+        double[] targetWidths = new double[clusters.Count];
+        double[] clusterWidths = new double[clusters.Count];
+        double[] blockHeights = new double[clusters.Count];
+
+        for (int index = 0; index < clusters.Count; index++)
+        {
+            (InputItemViewModel? source, List<TargetItemViewModel> targets) = clusters[index];
+            double widest = MapMinNodeWidth;
+
+            foreach (TargetItemViewModel target in targets)
+            {
+                widest = Math.Max(widest, EstimateNodeWidth(target.DisplayName));
+            }
+
+            sourceWidths[index] = source is null ? 0 : EstimateNodeWidth(source.DisplayName);
+            targetWidths[index] = widest;
+            clusterWidths[index] = source is null ? widest : sourceWidths[index] + MapClusterGap + widest;
+            blockHeights[index] = ClusterHeight(targets.Count);
+        }
+
+        // 摆法只服务缩放比：高的先放，每簇塞进当前最矮的一列（列宽随该列最宽的簇走）
+        List<int> order = [.. Enumerable.Range(0, clusters.Count).OrderByDescending(index => blockHeights[index])];
+
+        List<PackPlacement> placements = [];
+        double contentWidth = 0;
+        double contentHeight = 0;
         double bestScale = 0;
 
-        // 列数不是拍脑袋定的：横排行少、竖排行少，逐个试，取缩放比最大的那种
-        for (int candidate = 1; candidate <= maxColumns; candidate++)
+        // 列数从 1 到 n 全试一遍：不预设任何上限，谁让包围盒的缩放比最大就选谁
+        for (int candidate = 1; candidate <= Math.Max(1, clusters.Count); candidate++)
         {
-            double width = (viewportWidth - MapPadding * 2 - (candidate - 1) * MapGridGap) / candidate;
-            (double totalHeight, _) = StackIntoColumns(candidate, order, clusters, MapGridGap);
-            double totalWidth = candidate * width + (candidate - 1) * MapGridGap;
-            double scale = Math.Min(viewportWidth / totalWidth, viewportHeight / totalHeight);
+            (double width, double height, List<PackPlacement> arranged) = StackWide(
+                candidate,
+                order,
+                clusterWidths,
+                blockHeights,
+                MapGridGap);
+
+            double scale = Math.Min(viewportWidth / width, viewportHeight / height);
 
             if (scale <= bestScale) continue;
 
             bestScale = scale;
-            columns = candidate;
-            clusterWidth = width;
+            contentWidth = width;
+            contentHeight = height;
+            placements = arranged;
         }
-
-        double nodeWidth = Math.Clamp((clusterWidth - MapClusterGap) / 2, MapMinNodeWidth, MapMaxNodeWidth);
-
-        // 每簇当成一个矩形交给装箱器：宽度统一，高度随目标数量变
-        List<PackItem> blocks = [];
-
-        for (int index = 0; index < clusters.Count; index++)
-        {
-            blocks.Add(new PackItem(index, clusterWidth, ClusterHeight(clusters[index].Targets.Count)));
-        }
-
-        // 固定列数网格：每行最多 columns 簇，行高取该行最高的那一簇，横向铺满面板
-        (double contentHeight, List<PackPlacement> stacked) = StackIntoColumns(columns, order, clusters, MapGridGap);
-        List<PackPlacement> placements = [];
-
-        foreach (PackPlacement stack in stacked)
-        {
-            placements.Add(new PackPlacement(stack.Id, stack.X * (clusterWidth + MapGridGap), stack.Y));
-        }
-
-        double contentWidth = clusters.Count == 0 ? 0 : columns * clusterWidth + (columns - 1) * MapGridGap;
 
         // 画布只包住内容：外层 Viewbox 负责等比缩放与居中，永远不滚动
         double mapWidth = contentWidth + MapPadding * 2;
@@ -181,9 +187,10 @@ public sealed partial class MainViewModel
 
             double clusterX = left + placement.X;
             double clusterY = top + placement.Y;
-            double sourceRight = clusterX + nodeWidth;
+            double clusterWidth = clusterWidths[placement.Id];
+            double sourceRight = clusterX + sourceWidths[placement.Id];
             double targetX = sourceRight + MapClusterGap;
-            double blockHeight = ClusterHeight(targets.Count);
+            double blockHeight = blockHeights[placement.Id];
             double sourceY = clusterY + (blockHeight - MapNodeHeight) / 2;
 
             boxes.Add(new Rect(clusterX - MapPadding, clusterY - MapPadding, clusterWidth, blockHeight));
@@ -191,7 +198,7 @@ public sealed partial class MainViewModel
             if (source is not null)
             {
                 // 胶囊宽度随名字走，到列宽上限就停（再长就靠省略号）
-                double sourceNodeWidth = Math.Clamp(EstimateNodeWidth(source.DisplayName), MapMinNodeWidth, nodeWidth);
+                double sourceNodeWidth = sourceWidths[placement.Id];
 
                 RelationNode sourceNode = UpsertNode(
                     "s:" + source.Id,
@@ -218,7 +225,7 @@ public sealed partial class MainViewModel
 
             foreach (TargetItemViewModel target in targets)
             {
-                double targetNodeWidth = Math.Clamp(EstimateNodeWidth(target.DisplayName), MapMinNodeWidth, nodeWidth);
+                double targetNodeWidth = Math.Max(MapMinNodeWidth, EstimateNodeWidth(target.DisplayName));
 
                 RelationNode targetNode = UpsertNode(
                     "t:" + target.Id,
@@ -272,17 +279,19 @@ public sealed partial class MainViewModel
 
     /// <summary>按名字估一颗胶囊的宽度：中文按整字、拉丁按半字，再加图标与两侧留白。</summary>
     /// <summary>
-    /// 把簇依次塞进当前最矮的一列：列高自然拉平，不会像按行铺那样在矮簇下方留空洞。
-    /// 返回的是「列号 + 该列内的 Y」，列号由调用方按簇宽换算成 X。
+    /// 把簇依次塞进当前最矮的一列，列宽取该列最宽的簇。
+    /// 返回包围盒宽高与每簇的左上角；列宽不等，所以 X 要按前面各列的宽度累加。
     /// </summary>
-    private static (double TotalHeight, List<PackPlacement> Placements) StackIntoColumns(
+    private static (double Width, double Height, List<PackPlacement> Placements) StackWide(
         int columns,
         List<int> order,
-        List<(InputItemViewModel? Source, List<TargetItemViewModel> Targets)> clusters,
+        double[] widths,
+        double[] heights,
         double gap)
     {
-        List<PackPlacement> placements = [];
+        double[] columnWidths = new double[columns];
         double[] columnHeights = new double[columns];
+        List<(int Id, int Column, double Y)> pending = [];
 
         foreach (int index in order)
         {
@@ -293,8 +302,18 @@ public sealed partial class MainViewModel
                 if (columnHeights[column] < columnHeights[target]) target = column;
             }
 
-            placements.Add(new PackPlacement(index, target, columnHeights[target]));
-            columnHeights[target] += ClusterHeight(clusters[index].Targets.Count) + gap;
+            pending.Add((index, target, columnHeights[target]));
+            columnWidths[target] = Math.Max(columnWidths[target], widths[index]);
+            columnHeights[target] += heights[index] + gap;
+        }
+
+        double[] columnX = new double[columns];
+        double cursor = 0;
+
+        for (int column = 0; column < columns; column++)
+        {
+            columnX[column] = cursor;
+            cursor += columnWidths[column] + gap;
         }
 
         double totalHeight = 0;
@@ -304,7 +323,14 @@ public sealed partial class MainViewModel
             totalHeight = Math.Max(totalHeight, height);
         }
 
-        return (Math.Max(0, totalHeight - gap), placements);
+        List<PackPlacement> placements = [];
+
+        foreach ((int Id, int Column, double Y) item in pending)
+        {
+            placements.Add(new PackPlacement(item.Id, columnX[item.Column], item.Y));
+        }
+
+        return (Math.Max(0, cursor - gap), Math.Max(0, totalHeight - gap), placements);
     }
 
     private static double EstimateNodeWidth(string title)
