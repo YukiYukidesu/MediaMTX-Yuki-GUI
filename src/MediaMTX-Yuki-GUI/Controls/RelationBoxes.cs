@@ -28,7 +28,7 @@ public sealed class RelationBoxes : Control
 
         if (boxes is null || boxes.Count == 0) return;
 
-        Pen pen = new(new SolidColorBrush(Color.Parse("#26FFFFFF")), 1);
+        Pen pen = new(new SolidColorBrush(Color.Parse("#8CFFFFFF")), 2);
 
         foreach (Rect box in boxes)
         {

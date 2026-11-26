@@ -29,7 +29,7 @@ public sealed partial class MainViewModel
     private const double MapMaxNodeWidth = 240;
 
     /// <summary>一个簇最窄能到多少：低于这个宽度就不再多分一列，宁可少放一簇。</summary>
-    private const double MapMinClusterWidth = 300;
+    private const double MapMinClusterWidth = 320;
 
     // 孤儿源右边那截断头虚线：够看出「它没接东西」，又不会让人以为连到了远处
     private const double MapLinkStub = 28;
@@ -120,8 +120,42 @@ public sealed partial class MainViewModel
 
         // 列数与簇宽由面板宽度反算：铺满面板、每簇等宽，节点名字太长就靠省略号截断
         double viewportWidth = _mapViewportWidth >= 200 ? _mapViewportWidth : 1200;
-        int columns = Math.Clamp((int)Math.Floor(viewportWidth / MapMinClusterWidth), 1, 4);
-        double clusterWidth = (viewportWidth - MapPadding * 2 - (columns - 1) * MapGridGap) / columns;
+        double viewportHeight = _mapViewportHeight >= 120 ? _mapViewportHeight : 640;
+        int maxColumns = Math.Clamp((int)Math.Floor(viewportWidth / MapMinClusterWidth), 1, 6);
+        int columns = 1;
+        double clusterWidth = viewportWidth;
+        double bestScale = 0;
+
+        // 列数不是拍脑袋定的：横排行少、竖排行少，逐个试，取缩放比最大的那种
+        for (int candidate = 1; candidate <= maxColumns; candidate++)
+        {
+            double width = (viewportWidth - MapPadding * 2 - (candidate - 1) * MapGridGap) / candidate;
+            int rows = (clusters.Count + candidate - 1) / candidate;
+            double[] heights = new double[rows];
+            double totalHeight = 0;
+
+            for (int index = 0; index < clusters.Count; index++)
+            {
+                int row = index / candidate;
+
+                heights[row] = Math.Max(heights[row], ClusterHeight(clusters[index].Targets.Count));
+            }
+
+            for (int row = 0; row < rows; row++)
+            {
+                totalHeight += heights[row] + (row == rows - 1 ? 0 : MapGridGap);
+            }
+
+            double totalWidth = candidate * width + (candidate - 1) * MapGridGap;
+            double scale = Math.Min(viewportWidth / totalWidth, viewportHeight / totalHeight);
+
+            if (scale <= bestScale) continue;
+
+            bestScale = scale;
+            columns = candidate;
+            clusterWidth = width;
+        }
+
         double nodeWidth = Math.Clamp((clusterWidth - MapClusterGap) / 2, MapMinNodeWidth, MapMaxNodeWidth);
 
         // 每簇当成一个矩形交给装箱器：宽度统一，高度随目标数量变
@@ -132,44 +166,38 @@ public sealed partial class MainViewModel
             blocks.Add(new PackItem(index, clusterWidth, ClusterHeight(clusters[index].Targets.Count)));
         }
 
-        // 高度给足：装箱只负责横向铺满，永远放得下；画布尺寸随内容走，由外层 Viewbox 等比缩到一屏
-        double stackHeight = 0;
+        // 固定列数网格：每行最多 columns 簇，行高取该行最高的那一簇，横向铺满面板
+        int rowCount = (clusters.Count + columns - 1) / columns;
+        double[] rowHeights = new double[rowCount];
 
-        foreach (PackItem block in blocks)
+        for (int index = 0; index < clusters.Count; index++)
         {
-            stackHeight += block.Height + MapGridGap;
+            int row = index / columns;
+
+            rowHeights[row] = Math.Max(rowHeights[row], ClusterHeight(clusters[index].Targets.Count));
         }
 
-        PackResult packed = PackSolver.Solve(
-            Math.Max(1, viewportWidth - MapPadding * 2),
-            Math.Max(1, Math.Max(stackHeight, 640 - MapPadding * 2)),
-            blocks,
-            MapGridGap);
+        List<PackPlacement> placements = [];
 
-        List<PackPlacement> placements = [.. packed.Placements];
-
-        // 装箱失败（只在面板比一簇还小时发生）就退回竖排：宁可滚动，也不丢节点
-        if (placements.Count != clusters.Count)
+        for (int index = 0; index < clusters.Count; index++)
         {
-            placements.Clear();
+            int row = index / columns;
+            double rowY = 0;
 
-            double fallbackY = 0;
-
-            for (int index = 0; index < clusters.Count; index++)
+            for (int above = 0; above < row; above++)
             {
-                placements.Add(new PackPlacement(index, 0, fallbackY));
-                fallbackY += ClusterHeight(clusters[index].Targets.Count) + MapGridGap;
+                rowY += rowHeights[above] + MapGridGap;
             }
+
+            placements.Add(new PackPlacement(index, (index % columns) * (clusterWidth + MapGridGap), rowY));
         }
 
-        double contentWidth = 0;
+        double contentWidth = clusters.Count == 0 ? 0 : columns * clusterWidth + (columns - 1) * MapGridGap;
         double contentHeight = 0;
 
-        foreach (PackPlacement placement in placements)
+        for (int row = 0; row < rowCount; row++)
         {
-            PackItem item = blocks[placement.Id];
-            contentWidth = Math.Max(contentWidth, placement.X + item.Width);
-            contentHeight = Math.Max(contentHeight, placement.Y + item.Height);
+            contentHeight += rowHeights[row] + (row == rowCount - 1 ? 0 : MapGridGap);
         }
 
         // 画布只包住内容：外层 Viewbox 负责等比缩放与居中，永远不滚动
