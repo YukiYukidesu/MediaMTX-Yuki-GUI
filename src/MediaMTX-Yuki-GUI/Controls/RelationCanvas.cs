@@ -41,8 +41,9 @@ public sealed class RelationCanvas : Panel
 
             if (child.DataContext is IMapNode node)
             {
-                right = Math.Max(right, node.X + node.Width);
-                bottom = Math.Max(bottom, node.Y + node.Height);
+                // 宽度取「算出来的」与「控件量出来的」较大者：估算偏小时不会把字截断
+                right = Math.Max(right, node.X + Math.Max(node.Width, child.DesiredSize.Width));
+                bottom = Math.Max(bottom, node.Y + Math.Max(node.Height, child.DesiredSize.Height));
                 continue;
             }
 
@@ -59,7 +60,10 @@ public sealed class RelationCanvas : Panel
         {
             if (child.DataContext is IMapNode node)
             {
-                child.Arrange(new Rect(node.X, node.Y, node.Width, node.Height));
+                double width = Math.Max(node.Width, child.DesiredSize.Width);
+                double height = Math.Max(node.Height, child.DesiredSize.Height);
+
+                child.Arrange(new Rect(node.X, node.Y, width, height));
                 continue;
             }
 
