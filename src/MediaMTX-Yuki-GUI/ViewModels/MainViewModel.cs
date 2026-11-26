@@ -1762,8 +1762,12 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             byPath.TryGetValue(input.Path, out List<ForwardDestMetrics>? found);
 
             ApplyForwardMetrics(rows, found, now);
+        }
 
-            if (checkErrors) await FillForwardErrorsAsync(input, rows, ct);
+        // 报错查询并发做：串行时每条源一次 HTTP，几条源就能把一轮拖到几百毫秒
+        if (checkErrors)
+        {
+            await Task.WhenAll(Inputs.Select(input => FillForwardErrorsAsync(input, ForwardRowsOf(input), ct)));
         }
 
         long t1 = Environment.TickCount64;
