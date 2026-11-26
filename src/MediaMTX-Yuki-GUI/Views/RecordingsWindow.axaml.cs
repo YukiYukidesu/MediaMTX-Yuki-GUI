@@ -198,8 +198,8 @@ public sealed partial class RecordingsWindow : FAAppWindow, INotifyPropertyChang
         Popconfirm.Show(
             button,
             L.T("l009-004"),
-            L.T("l001-003"),
-            L.T("b001-006"),
+            L.T("b001-008"),
+            L.T("b001-002"),
             () => _ = DeleteSegmentAsync(row));
     }
 

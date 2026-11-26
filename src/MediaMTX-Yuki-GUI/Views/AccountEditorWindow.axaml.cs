@@ -58,7 +58,7 @@ public sealed partial class AccountEditorWindow : FAAppWindow, INotifyPropertyCh
         => _isNew ? L.T("l005-003") : L.T("c005-005");
 
     public string ConfirmText
-        => _isNew ? L.T("b001-007") : L.T("b001-008");
+        => _isNew ? L.T("b001-006") : L.T("b001-009");
 
     public IRelayCommand ConfirmCommand { get; }
 

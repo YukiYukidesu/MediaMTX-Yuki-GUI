@@ -26,10 +26,10 @@ public sealed partial class MainViewModel
         => Inputs.Count > 0 && SelectedInputCount == Inputs.Count;
 
     public string InputSelectionText
-        => SelectedInputCount == 0 ? L.T("l001-004") : L.T("l001-005").Replace("{n}", SelectedInputCount.ToString());
+        => SelectedInputCount == 0 ? L.T("l001-002") : L.T("l001-003").Replace("{n}", SelectedInputCount.ToString());
 
     public string SelectAllInputsText
-        => IsAllInputsSelected ? L.T("b001-015") : L.T("b001-014");
+        => IsAllInputsSelected ? L.T("b001-012") : L.T("b001-011");
 
     public bool IsInputsEmpty
         => Inputs.Count == 0;
@@ -222,7 +222,7 @@ public sealed partial class MainViewModel
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
                 L.T("l003-033").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("l001-003"),
+                L.T("b001-008"),
                 destructive: true);
 
             if (!ok) return;

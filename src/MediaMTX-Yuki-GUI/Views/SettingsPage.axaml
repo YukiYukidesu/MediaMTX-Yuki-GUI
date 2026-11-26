@@ -644,7 +644,7 @@
                   Margin="12,0,0,0"
                   Padding="10,2"
                   FontSize="11"
-                  Content="{loc:Loc bs12-001}"
+                  Content="{loc:Loc b001-003}"
                   Command="{Binding OpenFolderCommand}"
                   CommandParameter="engine" />
         </Grid>
@@ -674,7 +674,7 @@
                   Margin="12,0,0,0"
                   Padding="10,2"
                   FontSize="11"
-                  Content="{loc:Loc bs12-001}"
+                  Content="{loc:Loc b001-003}"
                   Command="{Binding OpenFolderCommand}"
                   CommandParameter="config" />
         </Grid>
@@ -704,7 +704,7 @@
                   Margin="12,0,0,0"
                   Padding="10,2"
                   FontSize="11"
-                  Content="{loc:Loc bs12-001}"
+                  Content="{loc:Loc b001-003}"
                   Command="{Binding OpenFolderCommand}"
                   CommandParameter="logs" />
         </Grid>
@@ -734,7 +734,7 @@
                   Margin="12,0,0,0"
                   Padding="10,2"
                   FontSize="11"
-                  Content="{loc:Loc bs12-001}"
+                  Content="{loc:Loc b001-003}"
                   Command="{Binding OpenFolderCommand}"
                   CommandParameter="record" />
         </Grid>

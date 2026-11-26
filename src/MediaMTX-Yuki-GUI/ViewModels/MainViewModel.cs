@@ -524,7 +524,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     /// <summary>按钮文字跟着说什么变：没装是「前往下载」，有新版是「前往更新」。</summary>
     public string TipActionText
-        => Tip == TipKind.EngineMissing ? L.T("b001-012") : L.T("b001-013");
+        => Tip == TipKind.EngineMissing ? L.T("b001-017") : L.T("b001-018");
 
     /// <summary>图标同理：缺引擎是警告三角，有新版本是向下的箭头。</summary>
     public string TipGlyph
@@ -1227,10 +1227,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public bool IsAllSelected => Targets.Count > 0 && SelectedCount == Targets.Count;
 
     /// <summary>工具栏右侧的勾选提示。</summary>
-    public string SelectionText => SelectedCount == 0 ? L.T("l001-004") : L.T("l001-005").Replace("{n}", SelectedCount.ToString());
+    public string SelectionText => SelectedCount == 0 ? L.T("l001-002") : L.T("l001-003").Replace("{n}", SelectedCount.ToString());
 
     /// <summary>全选按钮的文案，全选之后就变成取消全选。</summary>
-    public string SelectAllText => IsAllSelected ? L.T("b001-015") : L.T("b001-014");
+    public string SelectAllText => IsAllSelected ? L.T("b001-012") : L.T("b001-011");
 
     /// <summary>全选与取消全选的切换。</summary>
     [RelayCommand]
@@ -1316,7 +1316,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
                 L.T("l004-036").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("l001-003"),
+                L.T("b001-008"),
                 destructive: true);
 
             if (!ok) return;

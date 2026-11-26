@@ -36,10 +36,10 @@
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
-        <Button Classes="batch-green" Content="{loc:Loc b001-001}" Command="{Binding StartSelectedInputsCommand}" />
-        <Button Classes="batch-red" Content="{loc:Loc b001-002}" Command="{Binding StopSelectedInputsCommand}" />
+        <Button Classes="batch-green" Content="{loc:Loc b001-013}" Command="{Binding StartSelectedInputsCommand}" />
+        <Button Classes="batch-red" Content="{loc:Loc b001-014}" Command="{Binding StopSelectedInputsCommand}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc b001-004}" Command="{Binding RemoveSelectedInputsCommand}" />
+                Content="{loc:Loc b001-015}" Command="{Binding RemoveSelectedInputsCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
                 Content="{loc:Loc b003-001}" Command="{Binding AddInputCommand}" />
       </StackPanel>
@@ -258,7 +258,7 @@
                         </Panel>
                       </Button>
 
-                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc l001-002}"
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc b001-007}"
                               IsVisible="{Binding !RuntimeDisabled}"
                               Command="{Binding $parent[Window].DataContext.OpenInputCommand}"
                               CommandParameter="{Binding}">
@@ -293,7 +293,7 @@
                         </Button>
                       </StackPanel>
 
-                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc l001-003}"
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc b001-008}"
                               Click="OnRemoveInputClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>

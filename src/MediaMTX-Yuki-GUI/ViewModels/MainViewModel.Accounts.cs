@@ -40,10 +40,10 @@ public sealed partial class MainViewModel
 
     /// <summary>工具栏那句「未选择 / 已选 N 项」，与两个列表页共用同一套词。</summary>
     public string AccountSelectionText
-        => SelectedAccountCount == 0 ? L.T("l001-004") : L.T("l001-005").Replace("{n}", SelectedAccountCount.ToString());
+        => SelectedAccountCount == 0 ? L.T("l001-002") : L.T("l001-003").Replace("{n}", SelectedAccountCount.ToString());
 
     public string SelectAllAccountsText
-        => IsAllAccountsSelected ? L.T("b001-015") : L.T("b001-014");
+        => IsAllAccountsSelected ? L.T("b001-012") : L.T("b001-011");
 
     /// <summary>把配置里的账号搬进列表。启动与切页都会调，重复调是安全的。</summary>
     private void RefreshAccounts()
@@ -177,7 +177,7 @@ public sealed partial class MainViewModel
             bool ok = await AppHost.ConfirmAsync(
                 L.T("c001-012"),
                 L.T("l005-009").Replace("{n}", count),
-                L.T("l001-003"),
+                L.T("b001-008"),
                 destructive: true);
 
             if (!ok) return;
