@@ -295,7 +295,7 @@ public sealed partial class MainViewModel
         RefreshOverview();
         ScheduleApply();
 
-        ShowToast(L.T(isNew ? "c003-047" : "c003-048").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(isNew ? "t003-007" : "t003-008").Replace("{name}", item.DisplayName), ToastKind.Success);
 
         return true;
     }
@@ -339,7 +339,7 @@ public sealed partial class MainViewModel
 
         item.Enabled = !item.Enabled;
 
-        ShowToast(L.T(item.Enabled ? "c003-049" : "c003-050").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(item.Enabled ? "t003-009" : "t003-010").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
 
     /// <summary>
@@ -354,7 +354,7 @@ public sealed partial class MainViewModel
         item.Record = !item.Record;
         NeedsEngineRestart = true;
 
-        ShowToast(L.T(item.Record ? "c003-051" : "c003-052").Replace("{name}", item.DisplayName), ToastKind.Warn);
+        ShowToast(L.T(item.Record ? "t003-011" : "t003-012").Replace("{name}", item.DisplayName), ToastKind.Warn);
     }
 
     /// <summary>

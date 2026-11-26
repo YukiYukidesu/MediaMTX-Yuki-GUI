@@ -1147,7 +1147,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         ApplySoon();
         RefreshOverview();
 
-        ShowToast(L.T(isNew ? "c004-059" : "c004-060").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(isNew ? "t004-009" : "t004-010").Replace("{name}", item.DisplayName), ToastKind.Success);
 
         return true;
     }
@@ -2353,7 +2353,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         item.Enabled = !item.Enabled;
 
-        ShowToast(L.T(item.Enabled ? "c004-061" : "c004-062").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(item.Enabled ? "t004-011" : "t004-012").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
 
     /// <summary>

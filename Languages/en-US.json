@@ -131,12 +131,6 @@
   "c003-044": "", // not manually reviewed
   "c003-045": "", // not manually reviewed
   "c003-046": "", // not manually reviewed
-  "c003-047": "", // not manually reviewed
-  "c003-048": "", // not manually reviewed
-  "c003-049": "", // not manually reviewed
-  "c003-050": "", // not manually reviewed
-  "c003-051": "", // not manually reviewed
-  "c003-052": "", // not manually reviewed
   "c003-053": "", // not manually reviewed
   "c003-054": "", // not manually reviewed
   "c003-055": "", // not manually reviewed
@@ -163,6 +157,12 @@
   "t003-004": "", // not manually reviewed
   "t003-005": "", // not manually reviewed
   "t003-006": "", // not manually reviewed
+  "t003-007": "", // not manually reviewed
+  "t003-008": "", // not manually reviewed
+  "t003-009": "", // not manually reviewed
+  "t003-010": "", // not manually reviewed
+  "t003-011": "", // not manually reviewed
+  "t003-012": "", // not manually reviewed
   // ===== G04 输出目标：列表、编辑窗、toast =====
   "c004-001": "", // not manually reviewed
   "c004-002": "", // not manually reviewed
@@ -222,10 +222,6 @@
   "c004-056": "", // not manually reviewed
   "c004-057": "", // not manually reviewed
   "c004-058": "", // not manually reviewed
-  "c004-059": "", // not manually reviewed
-  "c004-060": "", // not manually reviewed
-  "c004-061": "", // not manually reviewed
-  "c004-062": "", // not manually reviewed
   "c004-063": "", // not manually reviewed
     "c004-064": "", // not manually reviewed
   "l004-001": "", // not manually reviewed
@@ -258,6 +254,10 @@
   "t004-006": "", // not manually reviewed
     "t004-007": "", // not manually reviewed
     "t004-008": "", // not manually reviewed
+  "t004-009": "", // not manually reviewed
+  "t004-010": "", // not manually reviewed
+  "t004-011": "", // not manually reviewed
+  "t004-012": "", // not manually reviewed
   // ===== G05 账号：列表、编辑窗、toast =====
   "c005-001": "", // not manually reviewed
   "c005-002": "", // not manually reviewed
