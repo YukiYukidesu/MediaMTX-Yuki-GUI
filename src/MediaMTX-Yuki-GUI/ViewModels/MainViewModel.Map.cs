@@ -27,7 +27,7 @@ public sealed partial class MainViewModel
     private const double MapNodeFontSize = 12;
     private const double MapNodeChrome = 30;
     /// <summary>胶囊的最小宽度：只防「A」这种一个字被压成一条缝，不设上限（长名字靠名字自己撑宽）。</summary>
-    private const double MapMinNodeWidth = 64;
+    private const double MapMinNodeWidth = 32;
 
     /// <summary>胶囊的最大宽度：名字再长也只到这里，多出来的用省略号截掉。</summary>
     private const double MapMaxNodeWidth = 240;
