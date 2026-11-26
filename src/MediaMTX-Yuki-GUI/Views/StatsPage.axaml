@@ -7,7 +7,7 @@
 
     <StackPanel Margin="{StaticResource DsCardGap}">
       <TextBlock Text="{loc:Loc c001-005}" Classes="page-title" />
-      <TextBlock Text="{loc:Loc l001-005}" Classes="page-subtitle" />
+      <TextBlock Text="{loc:Loc l006-001}" Classes="page-subtitle" />
     </StackPanel>
 
     <!-- 两块大数字：入流合计 / 出网合计 -->
@@ -39,7 +39,7 @@
     <Grid Grid.Row="2" RowDefinitions="Auto,*">
       <StackPanel Grid.Row="0" Margin="{StaticResource DsCardGap}">
         <TextBlock Text="{loc:Loc c006-003}" FontSize="15" FontWeight="SemiBold" />
-        <TextBlock Text="{loc:Loc l006-001}" Classes="hint" TextWrapping="Wrap" />
+        <TextBlock Text="{loc:Loc l006-002}" Classes="hint" TextWrapping="Wrap" />
       </StackPanel>
 
       <Border Grid.Row="1" Classes="well" Padding="16">
@@ -48,9 +48,9 @@
           <!-- 一个目标都没有时列头一起收起来，只留中间那坨空状态 -->
           <Grid Grid.Row="0" ColumnDefinitions="*,110,110,Auto" ColumnSpacing="8"
                 IsVisible="{Binding IsTargetsVisible}">
-            <TextBlock Grid.Column="0" Text="{loc:Loc c006-005}" Classes="hint" />
-            <TextBlock Grid.Column="1" Text="{loc:Loc c006-006}" Classes="hint" HorizontalAlignment="Right" />
-            <TextBlock Grid.Column="2" Text="{loc:Loc c006-007}" Classes="hint" HorizontalAlignment="Right" />
+            <TextBlock Grid.Column="0" Text="{loc:Loc c006-004}" Classes="hint" />
+            <TextBlock Grid.Column="1" Text="{loc:Loc c006-005}" Classes="hint" HorizontalAlignment="Right" />
+            <TextBlock Grid.Column="2" Text="{loc:Loc c006-006}" Classes="hint" HorizontalAlignment="Right" />
           </Grid>
 
           <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
@@ -86,8 +86,8 @@
             <TextBlock Text="&#xE8FD;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
                        HorizontalAlignment="Center"
                        Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-            <TextBlock Text="{loc:Loc c006-008}" Classes="empty-title" HorizontalAlignment="Center" />
-            <TextBlock Text="{loc:Loc l006-002}" Classes="hint" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc c006-007}" Classes="empty-title" HorizontalAlignment="Center" />
+            <TextBlock Text="{loc:Loc l006-003}" Classes="hint" HorizontalAlignment="Center" />
           </StackPanel>
 
         </Grid>

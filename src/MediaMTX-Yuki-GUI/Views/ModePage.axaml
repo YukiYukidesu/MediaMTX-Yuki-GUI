@@ -25,28 +25,28 @@
                          FontSize="20"
                          VerticalAlignment="Center"
                          Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-              <TextBlock Text="{loc:Loc c007-001}"
+              <TextBlock Text="{loc:Loc c008-001}"
                          FontSize="17"
                          FontWeight="SemiBold"
                          VerticalAlignment="Center" />
               <c:PillBadge Variant="On"
-                           Text="{loc:Loc c007-003}"
+                           Text="{loc:Loc c008-003}"
                            VerticalAlignment="Center"
                            Margin="4,0,0,0"
                            IsVisible="{Binding IsSimpleMode}" />
             </StackPanel>
 
-            <TextBlock Text="{loc:Loc l007-001}" Classes="hint" TextWrapping="Wrap" />
+            <TextBlock Text="{loc:Loc l008-002}" Classes="hint" TextWrapping="Wrap" />
 
             <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
-            <TextBlock Text="{loc:Loc l007-002}" TextWrapping="Wrap" LineHeight="22" />
+            <TextBlock Text="{loc:Loc l008-003}" TextWrapping="Wrap" LineHeight="22" />
 
-            <Button Content="{loc:Loc c007-004}"
+            <Button Content="{loc:Loc c008-004}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsAdvancedMode}"
                     Command="{Binding SwitchModeCommand}"
                     CommandParameter="{x:Static models:UiOptions.SimpleMode}" />
-            <Button Content="{loc:Loc c007-003}"
+            <Button Content="{loc:Loc c008-003}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsSimpleMode}"
                     IsEnabled="False" />
@@ -64,29 +64,29 @@
                          FontSize="20"
                          VerticalAlignment="Center"
                          Foreground="{DynamicResource AccentFillColorDefaultBrush}" />
-              <TextBlock Text="{loc:Loc c007-002}"
+              <TextBlock Text="{loc:Loc c008-002}"
                          FontSize="17"
                          FontWeight="SemiBold"
                          VerticalAlignment="Center" />
               <c:PillBadge Variant="On"
-                           Text="{loc:Loc c007-003}"
+                           Text="{loc:Loc c008-003}"
                            VerticalAlignment="Center"
                            Margin="4,0,0,0"
                            IsVisible="{Binding IsAdvancedMode}" />
             </StackPanel>
 
-            <TextBlock Text="{loc:Loc l007-003}" Classes="hint" TextWrapping="Wrap" />
+            <TextBlock Text="{loc:Loc l008-004}" Classes="hint" TextWrapping="Wrap" />
 
             <!-- 要点整段来自语言包的一条多行文本：想加行直接改语言包，不用动 XAML -->
-            <TextBlock Text="{loc:Loc l007-004}" TextWrapping="Wrap" LineHeight="22" />
+            <TextBlock Text="{loc:Loc l008-005}" TextWrapping="Wrap" LineHeight="22" />
 
             <Button Classes="primary"
-                    Content="{loc:Loc c007-004}"
+                    Content="{loc:Loc c008-004}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsSimpleMode}"
                     Command="{Binding SwitchModeCommand}"
                     CommandParameter="{x:Static models:UiOptions.AdvancedMode}" />
-            <Button Content="{loc:Loc c007-003}"
+            <Button Content="{loc:Loc c008-003}"
                     Margin="0,6,0,0"
                     IsVisible="{Binding IsAdvancedMode}"
                     IsEnabled="False" />

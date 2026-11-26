@@ -8,7 +8,7 @@
     <Grid Grid.Row="0" Margin="{StaticResource DsCardGap}">
       <StackPanel VerticalAlignment="Center">
         <TextBlock Text="{loc:Loc c001-006}" Classes="page-title" />
-        <TextBlock Text="{loc:Loc l001-006}" Classes="page-subtitle" />
+        <TextBlock Text="{loc:Loc l007-001}" Classes="page-subtitle" />
       </StackPanel>
 
       <!-- 三颗按钮都贴着标题右侧，跟总览页右上角那枚图标一个位置；
@@ -16,17 +16,17 @@
       <StackPanel Orientation="Horizontal" Spacing="8"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
         <Button Padding="12,4" FontSize="12"
-                Content="{loc:Loc c005-003}"
+                Content="{loc:Loc c007-003}"
                 IsEnabled="{Binding HasLogs}"
-                ToolTip.Tip="{loc:Loc l005-001}"
+                ToolTip.Tip="{loc:Loc l007-002}"
                 Command="{Binding CopyLogsCommand}" />
         <Button Padding="12,4" FontSize="12"
-                Content="{loc:Loc c005-004}"
+                Content="{loc:Loc c007-004}"
                 IsEnabled="{Binding HasLogs}"
-                ToolTip.Tip="{loc:Loc l005-002}"
+                ToolTip.Tip="{loc:Loc l007-003}"
                 Command="{Binding ExportLogsCommand}" />
         <Button Padding="12,4" FontSize="12"
-                Content="{loc:Loc c005-001}"
+                Content="{loc:Loc c007-001}"
                 IsEnabled="{Binding HasLogs}"
                 Command="{Binding ClearLogsCommand}" />
       </StackPanel>

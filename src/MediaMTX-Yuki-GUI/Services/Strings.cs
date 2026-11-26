@@ -23,14 +23,14 @@ public static class Strings
 
         return key switch
         {
-            "disabled"     => IsEnglish ? "Disabled" : L.T("c004-026"),
-            "unknown"      => IsEnglish ? "Not running" : L.T("c004-034"),
-            "running"      => IsEnglish ? "Streaming" : L.T("c004-029"),
-            "forwarding"   => IsEnglish ? "Forwarding" : L.T("c004-029"),
-            "idle"         => IsEnglish ? "Idle" : L.T("c004-030"),
-            "ready"        => IsEnglish ? "Standby" : L.T("c004-031"),
-            "reconnecting" => IsEnglish ? "Reconnecting" : L.T("c004-032"),
-            "error"        => IsEnglish ? "Error" : L.T("c004-033"),
+            "disabled"     => IsEnglish ? "Disabled" : L.T("c004-015"),
+            "unknown"      => IsEnglish ? "Not running" : L.T("c004-023"),
+            "running"      => IsEnglish ? "Streaming" : L.T("c004-018"),
+            "forwarding"   => IsEnglish ? "Forwarding" : L.T("c004-018"),
+            "idle"         => IsEnglish ? "Idle" : L.T("c004-019"),
+            "ready"        => IsEnglish ? "Standby" : L.T("c004-020"),
+            "reconnecting" => IsEnglish ? "Reconnecting" : L.T("c004-021"),
+            "error"        => IsEnglish ? "Error" : L.T("c004-022"),
             _              => runtimeState,
         };
     }

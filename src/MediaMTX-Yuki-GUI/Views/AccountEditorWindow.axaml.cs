@@ -55,10 +55,10 @@ public sealed partial class AccountEditorWindow : FAAppWindow, INotifyPropertyCh
     public new event PropertyChangedEventHandler? PropertyChanged;
 
     public string WindowTitle
-        => _isNew ? L.T("c027-007") : L.T("c027-008");
+        => _isNew ? L.T("c005-005") : L.T("c005-007");
 
     public string ConfirmText
-        => _isNew ? L.T("c008-015") : L.T("c008-016");
+        => _isNew ? L.T("c001-022") : L.T("c001-023");
 
     public IRelayCommand ConfirmCommand { get; }
 
@@ -76,7 +76,7 @@ public sealed partial class AccountEditorWindow : FAAppWindow, INotifyPropertyCh
             foreach (string other in _otherUsers)
             {
                 if (string.Equals(other, trimmed, StringComparison.OrdinalIgnoreCase))
-                    return L.T("c027-009").Replace("{name}", trimmed);
+                    return L.T("c005-008").Replace("{name}", trimmed);
             }
 
             return "";

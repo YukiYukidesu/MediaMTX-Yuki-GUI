@@ -302,7 +302,7 @@
                       HorizontalAlignment="Right"
                       Spacing="8"
                       Margin="0,4,0,0">
-            <Button Content="{loc:Loc c011-005}"
+            <Button Content="{loc:Loc c001-030}"
                     FontSize="12"
                     Padding="12,5"
                     MinWidth="88"

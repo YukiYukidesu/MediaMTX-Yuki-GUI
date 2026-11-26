@@ -18,12 +18,12 @@
     <TextBlock Grid.Row="0"
                Margin="0,0,0,20"
                Classes="page-subtitle"
-               Text="{loc:Loc l027-001}" />
+               Text="{loc:Loc l005-002}" />
 
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
       <StackPanel>
 
-        <TextBlock Classes="field-label" Text="{loc:Loc c027-001}" />
+        <TextBlock Classes="field-label" Text="{loc:Loc c005-001}" />
         <TextBox Margin="0,4,0,4" Text="{Binding User, Mode=TwoWay}" />
 
         <!-- 重名只提醒不拦：两个账号叫一个名字引擎也会当成两条，只是不好认 -->
@@ -32,19 +32,19 @@
                    IsVisible="{Binding HasNameWarning}"
                    Text="{Binding NameWarning}" />
 
-        <TextBlock Classes="field-label" Text="{loc:Loc c027-002}" />
+        <TextBlock Classes="field-label" Text="{loc:Loc c005-002}" />
         <TextBox Margin="0,4,0,12" PasswordChar="&#x25CF;" Text="{Binding Password, Mode=TwoWay}" />
 
         <!-- 只看不推的账号把这一项勾上；推流的范围由每个输入源那边勾 -->
         <StackPanel Orientation="Horizontal" Spacing="10">
-          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c027-003}" />
+          <TextBlock VerticalAlignment="Center" Text="{loc:Loc c005-003}" />
           <ToggleSwitch VerticalAlignment="Center" IsChecked="{Binding CanView, Mode=TwoWay}" />
         </StackPanel>
 
         <TextBlock Margin="0,6,0,0"
                    Classes="hint"
                    TextWrapping="Wrap"
-                   Text="{loc:Loc l027-003}" />
+                   Text="{loc:Loc l005-004}" />
 
       </StackPanel>
     </ScrollViewer>
@@ -55,7 +55,7 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
       <Button MinWidth="88"
-              Content="{loc:Loc c008-014}"
+              Content="{loc:Loc c001-021}"
               Command="{Binding CancelCommand}"
               IsCancel="True" />
       <Button Margin="8,0,0,0" MinWidth="88" Classes="primary" Content="{Binding ConfirmText}" Command="{Binding ConfirmCommand}" IsDefault="True" />

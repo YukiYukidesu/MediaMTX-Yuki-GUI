@@ -26,10 +26,10 @@ public sealed partial class MainViewModel
         => Inputs.Count > 0 && SelectedInputCount == Inputs.Count;
 
     public string InputSelectionText
-        => SelectedInputCount == 0 ? L.T("c003-005") : L.T("c003-006") + SelectedInputCount + L.T("c003-007");
+        => SelectedInputCount == 0 ? L.T("c001-014") : L.T("c001-015") + SelectedInputCount + L.T("c001-016");
 
     public string SelectAllInputsText
-        => IsAllInputsSelected ? L.T("c003-004") : L.T("c003-003");
+        => IsAllInputsSelected ? L.T("c001-013") : L.T("c001-012");
 
     public bool IsInputsEmpty
         => Inputs.Count == 0;
@@ -43,7 +43,7 @@ public sealed partial class MainViewModel
     /// 显示成「短 id:备注」——两条输入的备注可能一样，靠 Id 才能分出是哪一条。
     /// </summary>
     public IReadOnlyList<InputChoice> InputChoices
-        => new[] { new InputChoice(string.Empty, L.T("c004-035")) }
+        => new[] { new InputChoice(string.Empty, L.T("c004-024")) }
             .Concat(Inputs.Select(input => new InputChoice(input.Id, input.ShortId + " : " + input.DisplayName)))
             .ToList();
 
@@ -65,7 +65,7 @@ public sealed partial class MainViewModel
             InputItemViewModel? owner = Inputs.FirstOrDefault(i => i.Id == target.InputSourceId);
 
             target.InputSourceName = owner == null
-                ? L.T("c004-035")
+                ? L.T("c004-024")
                 : owner.ShortId + " : " + owner.DisplayName;
         }
 
@@ -193,8 +193,8 @@ public sealed partial class MainViewModel
         int changed = SetEnabledForInputSelection(true);
 
         ShowToast(changed > 0
-            ? L.T("t002-005").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
-            : L.T("t002-014"),
+            ? L.T("t003-005").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            : L.T("t003-013"),
             changed > 0 ? ToastKind.Success : ToastKind.Info);
     }
 
@@ -204,8 +204,8 @@ public sealed partial class MainViewModel
         int changed = SetEnabledForInputSelection(false);
 
         ShowToast(changed > 0
-            ? L.T("t002-006").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
-            : L.T("t002-015"),
+            ? L.T("t003-006").Replace("{n}", changed.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            : L.T("t003-014"),
             changed > 0 ? ToastKind.Success : ToastKind.Info);
     }
 
@@ -220,9 +220,9 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("t006-003"),
-                L.T("t002-012").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
-                L.T("t006-001"),
+                L.T("t001-012"),
+                L.T("t003-011").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)),
+                L.T("t001-010"),
                 destructive: true);
 
             if (!ok) return;
@@ -237,7 +237,7 @@ public sealed partial class MainViewModel
         RefreshOverview();
         ScheduleApply();
 
-        ShowToast(L.T("t002-013").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)), ToastKind.Success);
+        ShowToast(L.T("t003-012").Replace("{n}", doomed.Count.ToString(System.Globalization.CultureInfo.InvariantCulture)), ToastKind.Success);
     }
 
     [RelayCommand]
@@ -295,7 +295,7 @@ public sealed partial class MainViewModel
         RefreshOverview();
         ScheduleApply();
 
-        ShowToast(L.T(isNew ? "t002-001" : "t002-002").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(isNew ? "t003-001" : "t003-002").Replace("{name}", item.DisplayName), ToastKind.Success);
 
         return true;
     }
@@ -339,7 +339,7 @@ public sealed partial class MainViewModel
 
         item.Enabled = !item.Enabled;
 
-        ShowToast(L.T(item.Enabled ? "t002-003" : "t002-004").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T(item.Enabled ? "t003-003" : "t003-004").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
 
     /// <summary>
@@ -354,7 +354,7 @@ public sealed partial class MainViewModel
         item.Record = !item.Record;
         NeedsEngineRestart = true;
 
-        ShowToast(L.T(item.Record ? "t002-007" : "t002-008").Replace("{name}", item.DisplayName), ToastKind.Warn);
+        ShowToast(L.T(item.Record ? "t003-007" : "t003-008").Replace("{name}", item.DisplayName), ToastKind.Warn);
     }
 
     /// <summary>
@@ -410,7 +410,7 @@ public sealed partial class MainViewModel
         RefreshOverview();
         ScheduleApply();
 
-        ShowToast(L.T("t002-009").Replace("{name}", item.DisplayName), ToastKind.Success);
+        ShowToast(L.T("t003-009").Replace("{name}", item.DisplayName), ToastKind.Success);
     }
 
     /// <summary>新增一条输入：先弹窗填，确认了才加进列表。</summary>
@@ -438,7 +438,7 @@ public sealed partial class MainViewModel
             Inputs.Select(item => item.Name).Where(name => !string.IsNullOrWhiteSpace(name)),
             StringComparer.Ordinal);
 
-        string baseName = L.T("c003-036");
+        string baseName = L.T("c003-024");
 
         if (!used.Contains(baseName)) return baseName;
 

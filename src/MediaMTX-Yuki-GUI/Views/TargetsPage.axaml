@@ -16,7 +16,7 @@
     <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
       <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
         <Button Padding="10,4" FontSize="12" Content="{Binding SelectAllText}"
-                ToolTip.Tip="{loc:Loc c004-002}"
+                ToolTip.Tip="{loc:Loc c001-011}"
                 Command="{Binding ToggleSelectAllCommand}" />
         <TextBlock Text="{Binding SelectionText}" Classes="hint" VerticalAlignment="Center" />
       </StackPanel>
@@ -26,22 +26,22 @@
         <ComboBox MinWidth="132" FontSize="12" VerticalAlignment="Center"
                   ItemsSource="{Binding TargetSortChoices}"
                   SelectedIndex="{Binding TargetSortIndex}"
-                  ToolTip.Tip="{loc:Loc c004-020}" />
-        <TextBlock Text="{loc:Loc c004-021}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
+                  ToolTip.Tip="{loc:Loc c004-011}" />
+        <TextBlock Text="{loc:Loc c004-012}" Classes="hint" VerticalAlignment="Center" Margin="6,0,0,0" />
         <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
                       OffContent="" OnContent=""
                       IsChecked="{Binding TargetEnabledFirst}"
-                      ToolTip.Tip="{loc:Loc l004-001}" />
+                      ToolTip.Tip="{loc:Loc l004-002}" />
       </StackPanel>
 
       <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
-        <Button Classes="batch-green" Content="{loc:Loc c004-042}" Command="{Binding StartSelectedCommand}" />
-        <Button Classes="batch-red" Content="{loc:Loc c004-043}" Command="{Binding StopSelectedCommand}" />
+        <Button Classes="batch-green" Content="{loc:Loc c004-031}" Command="{Binding StartSelectedCommand}" />
+        <Button Classes="batch-red" Content="{loc:Loc c004-032}" Command="{Binding StopSelectedCommand}" />
         <Button Classes="danger-solid" Padding="10,4" FontSize="12"
-                Content="{loc:Loc c004-044}" Command="{Binding RemoveSelectedCommand}" />
+                Content="{loc:Loc c001-020}" Command="{Binding RemoveSelectedCommand}" />
         <Button Classes="primary" Padding="12,4" FontSize="12"
-                Content="{loc:Loc c004-045}" Command="{Binding AddTargetCommand}" />
+                Content="{loc:Loc c004-033}" Command="{Binding AddTargetCommand}" />
       </StackPanel>
     </Grid>
 
@@ -63,7 +63,7 @@
               IsVisible="{Binding IsTargetsVisible}">
           <!-- 左对齐、跟行里那颗勾选框的左缘齐 -->
           <TextBlock Grid.Column="0" Classes="column-header"
-                     Text="{loc:Loc c004-008}" HorizontalAlignment="Left" />
+                     Text="{loc:Loc c004-001}" HorizontalAlignment="Left" />
 
           <!-- 表头的中段也挂同一个同步组，横向滚动时跟行一起走。
                列宽写成「最小宽度*」：窗口宽时按权重把多出来的宽度分掉，窄时保持最小宽度横向滚动。 -->
@@ -88,22 +88,22 @@
                 <ColumnDefinition Width="48*" MinWidth="48" />
                 <ColumnDefinition Width="48*" MinWidth="48" />
               </Grid.ColumnDefinitions>
-              <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c004-009}" />
-              <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c004-010}"
+              <TextBlock Grid.Column="0" Classes="column-header" Text="{loc:Loc c004-002}" />
+              <TextBlock Grid.Column="1" Classes="column-header" Text="{loc:Loc c004-003}"
                          HorizontalAlignment="Center" />
-              <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c004-049}" />
-              <TextBlock Grid.Column="3" Classes="column-header" Text="{loc:Loc c004-013}"
+              <TextBlock Grid.Column="2" Classes="column-header" Text="{loc:Loc c004-037}" />
+              <TextBlock Grid.Column="3" Classes="column-header" Text="{loc:Loc c004-006}"
                          HorizontalAlignment="Center" />
-              <TextBlock Grid.Column="4" Classes="column-header" Text="{loc:Loc c004-012}"
+              <TextBlock Grid.Column="4" Classes="column-header" Text="{loc:Loc c004-005}"
                          HorizontalAlignment="Center" />
-              <TextBlock Grid.Column="5" Classes="column-header" Text="{loc:Loc c004-011}" />
-              <TextBlock Grid.Column="6" Classes="column-header" Text="{loc:Loc c004-014}"
+              <TextBlock Grid.Column="5" Classes="column-header" Text="{loc:Loc c004-004}" />
+              <TextBlock Grid.Column="6" Classes="column-header" Text="{loc:Loc c004-007}"
                          HorizontalAlignment="Center" />
-              <TextBlock Grid.Column="7" Classes="column-header" Text="{loc:Loc c004-015}"
+              <TextBlock Grid.Column="7" Classes="column-header" Text="{loc:Loc c004-008}"
                          HorizontalAlignment="Center" />
-              <TextBlock Grid.Column="8" Classes="column-header" Text="{loc:Loc c004-016}"
+              <TextBlock Grid.Column="8" Classes="column-header" Text="{loc:Loc c004-009}"
                          HorizontalAlignment="Center" />
-              <TextBlock Grid.Column="9" Classes="column-header" Text="{loc:Loc c004-017}"
+              <TextBlock Grid.Column="9" Classes="column-header" Text="{loc:Loc c004-010}"
                          HorizontalAlignment="Center" />
             </Grid>
           </ScrollViewer>
@@ -111,7 +111,7 @@
           <!-- 操作列的文字与行内按钮都靠左：按钮数量会随模式变，靠右会让第一个按钮的位置
                跟着数量横跳，跟分界线的间距就不固定了 -->
           <TextBlock Grid.Column="2" Classes="column-header" Margin="4,0,0,0"
-                     Text="{loc:Loc c004-018}" HorizontalAlignment="Left" />
+                     Text="{loc:Loc c001-017}" HorizontalAlignment="Left" />
         </Grid>
 
         <!-- 行数超出底框就在框内纵向滚动：底框高度固定，行多也不会把整页撑长 -->
@@ -202,13 +202,13 @@
                                      Command="{Binding $parent[Window].DataContext.CopyTextCommand}"
                                      CommandParameter="{Binding Server}" />
                         <c:PillBadge Grid.Column="6" Text="{Binding ProxyText}" Variant="{Binding ProxyVariant}"
-                                     ToolTip.Tip="{loc:Loc l004-005}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc l004-006}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="7" Text="{Binding ResponseText}" Variant="Metric"
-                                     ToolTip.Tip="{loc:Loc l004-004}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc l004-005}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="8" Text="{Binding SpeedText}" Variant="Metric"
-                                     ToolTip.Tip="{loc:Loc c004-017}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc c004-010}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="9" Text="{Binding SentText}" Variant="Metric"
-                                     ToolTip.Tip="{loc:Loc c004-016}" HorizontalAlignment="Center" />
+                                     ToolTip.Tip="{loc:Loc c004-009}" HorizontalAlignment="Center" />
                       </Grid>
                     </ScrollViewer>
                     <!-- 分界线与阴影：**都画在这张白卡上**，卡在哪它们就在哪。
@@ -250,7 +250,7 @@
                                 HorizontalAlignment="Left" VerticalAlignment="Center">
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
-                              ToolTip.Tip="{loc:Loc c004-024}"
+                              ToolTip.Tip="{loc:Loc c004-013}"
                               Command="{Binding $parent[Window].DataContext.ToggleTargetEnabledCommand}"
                               CommandParameter="{Binding}">
                         <Panel>
@@ -260,14 +260,14 @@
                         </Panel>
                       </Button>
 
-                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc c004-022}"
+                      <Button Classes="icon-square" ToolTip.Tip="{loc:Loc c001-018}"
                               IsEnabled="{Binding !RuntimeDisabled}"
                               Command="{Binding $parent[Window].DataContext.OpenTargetCommand}"
                               CommandParameter="{Binding}">
                         <TextBlock Classes="glyph" Text="&#xE70F;" />
                       </Button>
 
-                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c004-023}"
+                      <Button Classes="icon-square danger" ToolTip.Tip="{loc:Loc c001-019}"
                               Click="OnRemoveTargetClick">
                         <TextBlock Classes="glyph" Text="&#xE74D;" />
                       </Button>
@@ -276,7 +276,7 @@
                               Background="Transparent" Cursor="SizeAll"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
-                              ToolTip.Tip="{loc:Loc l004-002}">
+                              ToolTip.Tip="{loc:Loc l004-003}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -299,8 +299,8 @@
           <TextBlock Text="&#xE8FD;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="34"
                      HorizontalAlignment="Center"
                      Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
-          <TextBlock Text="{loc:Loc c004-046}" Classes="empty-title" HorizontalAlignment="Center" />
-          <TextBlock Text="{loc:Loc l004-003}" Classes="hint" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc c004-034}" Classes="empty-title" HorizontalAlignment="Center" />
+          <TextBlock Text="{loc:Loc l004-004}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
         <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。

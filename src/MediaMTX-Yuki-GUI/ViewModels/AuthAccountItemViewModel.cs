@@ -49,7 +49,7 @@ public partial class AuthAccountItemViewModel : ObservableObject
 
     /// <summary>「能否观看」那一格显示成文字，空勾选框在只读表里不好认。</summary>
     public string CanViewText
-        => CanView ? L.T("c027-004") : L.T("c027-011");
+        => CanView ? L.T("c005-004") : L.T("c005-009");
 
     /// <summary>「能否观看」胶囊的配色：能看取绿，不能看取红，与其它列表的开关同一套语义。</summary>
     public PillVariant CanViewVariant

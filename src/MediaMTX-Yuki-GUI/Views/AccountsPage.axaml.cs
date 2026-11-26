@@ -25,9 +25,9 @@ public partial class AccountsPage : UserControl
 
         Popconfirm.Show(
             (Control)sender,
-            L.T("t007-004").Replace("{name}", item.User),
-            L.T("t006-001"),
-            L.T("t006-002"),
+            L.T("t005-004").Replace("{name}", item.User),
+            L.T("t001-010"),
+            L.T("t001-011"),
             () => viewModel.RemoveAccountCommand.Execute(item));
     }
 }

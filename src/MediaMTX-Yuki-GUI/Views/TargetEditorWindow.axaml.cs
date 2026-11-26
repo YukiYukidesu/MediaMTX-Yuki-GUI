@@ -85,10 +85,10 @@ public sealed partial class TargetEditorWindow : FAAppWindow, INotifyPropertyCha
     public new event PropertyChangedEventHandler? PropertyChanged;
 
     public string WindowTitle
-        => _isNew ? L.T("c009-001") : L.T("c009-002");
+        => _isNew ? L.T("c004-033") : L.T("c004-038");
 
     public string ConfirmText
-        => _isNew ? L.T("c009-026") : L.T("c009-027");
+        => _isNew ? L.T("c001-022") : L.T("c001-023");
 
     public ObservableCollection<PlatformPreset> PlatformChoices { get; } =
         new(PresetCatalog.All);
@@ -112,7 +112,7 @@ public sealed partial class TargetEditorWindow : FAAppWindow, INotifyPropertyCha
             if (name.Length == 0) return string.Empty;
 
             return _otherNames.Contains(name, StringComparer.Ordinal)
-                ? L.T("c009-023").Replace("{name}", name)
+                ? L.T("c004-056").Replace("{name}", name)
                 : string.Empty;
         }
     }

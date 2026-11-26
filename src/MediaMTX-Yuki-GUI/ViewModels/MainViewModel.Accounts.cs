@@ -27,7 +27,7 @@ public sealed partial class MainViewModel
 
     /// <summary>表格里那个「允许推流的源数」统计，给页面副标题用。</summary>
     public string AccountsSummary
-        => L.T("l027-002").Replace("{n}", Accounts.Count.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        => L.T("l005-003").Replace("{n}", Accounts.Count.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
     public int SelectedAccountCount
         => Accounts.Count(item => item.IsSelected);
@@ -40,10 +40,10 @@ public sealed partial class MainViewModel
 
     /// <summary>工具栏那句「未选择 / 已选 N 项」，与两个列表页共用同一套词。</summary>
     public string AccountSelectionText
-        => SelectedAccountCount == 0 ? L.T("c003-005") : L.T("c003-006") + SelectedAccountCount + L.T("c003-007");
+        => SelectedAccountCount == 0 ? L.T("c001-014") : L.T("c001-015") + SelectedAccountCount + L.T("c001-016");
 
     public string SelectAllAccountsText
-        => IsAllAccountsSelected ? L.T("c003-004") : L.T("c003-003");
+        => IsAllAccountsSelected ? L.T("c001-013") : L.T("c001-012");
 
     /// <summary>把配置里的账号搬进列表。启动与切页都会调，重复调是安全的。</summary>
     private void RefreshAccounts()
@@ -107,7 +107,7 @@ public sealed partial class MainViewModel
         EnsureAuthEnabled();
         RefreshAccountViews();
         ScheduleApply();
-        ShowToast(L.T("t007-001").Replace("{name}", draft.User), ToastKind.Success);
+        ShowToast(L.T("t005-001").Replace("{name}", draft.User), ToastKind.Success);
     }
 
     /// <summary>
@@ -138,7 +138,7 @@ public sealed partial class MainViewModel
         item.CopyFrom(draft);
         SyncAccountsToConfig();
         ScheduleApply();
-        ShowToast(L.T("t007-002").Replace("{name}", item.User), ToastKind.Success);
+        ShowToast(L.T("t005-002").Replace("{name}", item.User), ToastKind.Success);
     }
 
     [RelayCommand]
@@ -151,7 +151,7 @@ public sealed partial class MainViewModel
         SyncAccountsToConfig();
         RefreshAccountViews();
         ScheduleApply();
-        ShowToast(L.T("t007-003").Replace("{name}", item.User), ToastKind.Success);
+        ShowToast(L.T("t005-003").Replace("{name}", item.User), ToastKind.Success);
     }
 
     [RelayCommand]
@@ -175,9 +175,9 @@ public sealed partial class MainViewModel
         if (AppHost is not null)
         {
             bool ok = await AppHost.ConfirmAsync(
-                L.T("t006-003"),
-                L.T("t007-005").Replace("{n}", count),
-                L.T("t006-001"),
+                L.T("t001-012"),
+                L.T("t005-005").Replace("{n}", count),
+                L.T("t001-010"),
                 destructive: true);
 
             if (!ok) return;
@@ -192,7 +192,7 @@ public sealed partial class MainViewModel
         SyncAccountsToConfig();
         RefreshAccountViews();
         ScheduleApply();
-        ShowToast(L.T("t007-006").Replace("{n}", count), ToastKind.Success);
+        ShowToast(L.T("t005-006").Replace("{n}", count), ToastKind.Success);
     }
 
     private void RefreshAccountViews()

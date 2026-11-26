@@ -46,8 +46,8 @@ public static class InputProtocols
     public static string HintFor(string? protocol)
         => (protocol ?? Rtmp).ToLowerInvariant() switch
         {
-            Rtsp => Services.Localization.Instance["l008-008"],
-            Srt => Services.Localization.Instance["l008-009"],
-            _ => Services.Localization.Instance["l008-010"],
+            Rtsp => Services.Localization.Instance["l003-012"],
+            Srt => Services.Localization.Instance["l003-013"],
+            _ => Services.Localization.Instance["l003-014"],
         };
 }
