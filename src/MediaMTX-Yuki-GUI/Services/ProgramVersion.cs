@@ -15,7 +15,7 @@ public static class ProgramVersion
     private const string RecommendedEngineKey = "RecommendedEngineVersion";
 
     /// <summary>元数据缺失时的兜底版本，正常构建读不到它。</summary>
-    private const string FallbackRecommendedEngine = "1.21.3";
+    private const string FallbackRecommendedEngine = "1.21.4";
 
     /// <summary>
     /// 带 v 前缀的显示串，例如 v0.0.2。

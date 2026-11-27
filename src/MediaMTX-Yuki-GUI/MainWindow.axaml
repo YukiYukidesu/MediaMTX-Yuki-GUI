@@ -226,15 +226,9 @@
 
       <Grid>
 
-      <!-- 八个页面各自独立成 UserControl，可见性由 ViewModel 的 Is*Visible 驱动 -->
-      <views:OverviewPage IsVisible="{Binding IsOverviewVisible}" />
-      <views:InputsPage IsVisible="{Binding IsInputsPageVisible}" />
-      <views:TargetsPage IsVisible="{Binding IsTargetsPageVisible}" />
-      <views:LogsPage IsVisible="{Binding IsLogsPageVisible}" />
-      <views:StatsPage IsVisible="{Binding IsStatsPageVisible}" />
-      <views:AccountsPage IsVisible="{Binding IsAccountsPageVisible}" />
-      <views:SettingsPage IsVisible="{Binding IsSettingsPageVisible}" />
-      <views:ModePage IsVisible="{Binding IsModePageVisible}" />
+      <!-- 页面按需创建：哪一页要显示才建哪一页，建好就留在 MainWindow 的缓存里，
+           从托盘把窗口叫回来时不必再把八套 XAML 重新解析一遍 -->
+      <Grid x:Name="PageHost" />
 
       <!-- 底部气泡：一句话的短提示，不挡鼠标。底色与图标由 ToastBar 按 Kind 现查，
            四类语气各一套，换主题自己跟着换。

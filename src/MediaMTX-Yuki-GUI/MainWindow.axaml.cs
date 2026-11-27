@@ -34,6 +34,25 @@ public partial class MainWindow : FAAppWindow, IAppHost
     /// <summary>true 表示这次关闭是真退出（托盘菜单点的）。</summary>
     private bool _isExiting;
 
+    /// <summary>
+    /// 建过的页面按名字留着：窗口是次抛的，每重建一次就把八套 XAML 重新解析一遍太贵，
+    /// 而页面本身不认窗口，挂到哪一扇上都能用。
+    /// </summary>
+    private static readonly Dictionary<string, Control> PageCache = new(StringComparer.Ordinal);
+
+    /// <summary>这几个属性一变就可能要换页，其余属性（提示卡那些）不必动页面。</summary>
+    private static readonly HashSet<string> PageProperties = new(StringComparer.Ordinal)
+    {
+        nameof(MainViewModel.IsOverviewVisible),
+        nameof(MainViewModel.IsInputsPageVisible),
+        nameof(MainViewModel.IsTargetsPageVisible),
+        nameof(MainViewModel.IsLogsPageVisible),
+        nameof(MainViewModel.IsStatsPageVisible),
+        nameof(MainViewModel.IsAccountsPageVisible),
+        nameof(MainViewModel.IsSettingsPageVisible),
+        nameof(MainViewModel.IsModePageVisible),
+    };
+
     /// <summary>无参构造给设计器用；正常运行时由 AppShell 传同一个 ViewModel 进来。</summary>
     public MainWindow() : this(AppShell.ViewModel)
     {
@@ -49,6 +68,9 @@ public partial class MainWindow : FAAppWindow, IAppHost
         _viewModel.AppHost = this;
 
         DataContext = _viewModel;
+
+        // 页面按需建：首屏只要当前那一页，其余等切过去再说
+        SyncPages();
 
         // 选中项一变就挪滑块。事件挂在整个侧栏上冒泡收，不逐项 hook——
         // 项数是会变的（简洁模式少一个账号），逐个订阅就得跟着维护那张名单，漏一个就有一项不亮。
@@ -279,6 +301,10 @@ public partial class MainWindow : FAAppWindow, IAppHost
     {
         _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
 
+        // 页面是跨窗口缓存的，得先从这一扇的视觉树上摘下来：
+        // 挂着不放窗口就回收不掉，下一次重建也会撞上「一个控件两个爹」
+        PageHost?.Children.Clear();
+
         // 窗口要没了，界面能力先脱钩，免得 VM 还攥着一个死窗口
         if (ReferenceEquals(_viewModel.AppHost, this)) _viewModel.AppHost = null;
 
@@ -293,10 +319,74 @@ public partial class MainWindow : FAAppWindow, IAppHost
         Close();
     }
 
+    // ====== 页面切换 ======
+
+    /// <summary>把当前该显示的那一页挂进 PageHost，其余摘下去（摘下来的仍在缓存里）。</summary>
+    private void SyncPages()
+    {
+        if (PageHost is null) return;
+
+        (string Key, Func<Control> Factory)? current = ResolveCurrentPage();
+
+        // 编辑器窗口开着时没有页面该显示：把内容区让出来，跟原来那套靠 IsVisible 藏起来的一个样
+        if (current is null)
+        {
+            PageHost.Children.Clear();
+
+            return;
+        }
+
+        Control page = GetPage(current.Value.Key, current.Value.Factory);
+
+        if (PageHost.Children.Count == 1 && ReferenceEquals(PageHost.Children[0], page)) return;
+
+        PageHost.Children.Clear();
+        PageHost.Children.Add(page);
+
+        // 页面是缓存的，重新挂上来时 Avalonia 未必再发一次 DataContext 变化通知（继承值没变），
+        // 靠这条通知订阅的页面（设置页）就再也收不到消息。清一下再赋回，强制走一遍变化流程
+        page.DataContext = null;
+        page.DataContext = _viewModel;
+    }
+
+    /// <summary>当前该显示哪一页：键用来查缓存，工厂只在第一次用到时执行。</summary>
+    private (string Key, Func<Control> Factory)? ResolveCurrentPage()
+    {
+        if (_viewModel.IsOverviewVisible) return ("overview", () => new Views.OverviewPage());
+        if (_viewModel.IsInputsPageVisible) return ("inputs", () => new Views.InputsPage());
+        if (_viewModel.IsTargetsPageVisible) return ("targets", () => new Views.TargetsPage());
+        if (_viewModel.IsLogsPageVisible) return ("logs", () => new Views.LogsPage());
+        if (_viewModel.IsStatsPageVisible) return ("stats", () => new Views.StatsPage());
+        if (_viewModel.IsAccountsPageVisible) return ("accounts", () => new Views.AccountsPage());
+        if (_viewModel.IsSettingsPageVisible) return ("settings", () => new Views.SettingsPage());
+        if (_viewModel.IsModePageVisible) return ("mode", () => new Views.ModePage());
+
+        return null;
+    }
+
+    /// <summary>取一页：缓存里有就复用，没有才现建。</summary>
+    private static Control GetPage(string key, Func<Control> factory)
+    {
+        if (PageCache.TryGetValue(key, out Control? page)) return page;
+
+        page = factory();
+        PageCache[key] = page;
+
+        return page;
+    }
+
     // ====== 右下角提示卡 ======
 
     private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        // 换页：把该显示的那一页挂进来，别的摘下去（但留在缓存里）
+        if (e.PropertyName is { } page && PageProperties.Contains(page))
+        {
+            SyncPages();
+
+            return;
+        }
+
         // 模式一换，侧栏「账号」那一项会显/隐，下面的项整体上移或下移——
         // SidebarRoot 自己的高度没变，SizeChanged 不会来，只能在这儿主动补一次
         if (e.PropertyName == nameof(MainViewModel.IsAdvancedMode))

@@ -69,17 +69,16 @@
           <TextBlock Grid.Column="0" Classes="column-header"
                      Text="{loc:Loc c004-001}" HorizontalAlignment="Left" />
 
-          <!-- 表头的中段也挂同一个同步组，横向滚动时跟行一起走。
+          <!-- 表头与所有行的中段共用一条横向偏移（ColumnPan）：中段是一块裁剪窗口，
+               里面装一份比窗口宽的内容，整组共享一个平移，滚一次全跟着走。
                列宽写成「最小宽度*」：窗口宽时按权重把多出来的宽度分掉，窄时保持最小宽度横向滚动。 -->
-          <ScrollViewer Grid.Column="1"
-                        HorizontalScrollBarVisibility="Hidden"
-                        VerticalScrollBarVisibility="Disabled"
-                        c:ColumnScroll.SyncGroup="targets"
-                        c:ColumnScroll.FillViewport="True"
-                        Margin="0,0,6,0">
+          <Border Grid.Column="1"
+                  ClipToBounds="True"
+                  c:ColumnPan.Group="targets"
+                  Margin="0,0,6,0">
             <!-- 左右各留 14：分界线的阴影自己就宽 6，只留 8 的话那点空隙全被阴影吃掉，
-                 内容看着还是贴着线。14 = 6 的阴影 + 8 的白。这两个数会自动从 SyncFillWidth 里减掉 -->
-            <Grid ColumnSpacing="6" Margin="14,0">
+                 内容看着还是贴着线。14 = 6 的阴影 + 8 的白。这两个数会自动从内容宽里减掉 -->
+            <Grid ColumnSpacing="6" Margin="14,0" HorizontalAlignment="Left">
               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="160*" MinWidth="160" />
                 <ColumnDefinition Width="56*" MinWidth="56" />
@@ -110,7 +109,7 @@
               <TextBlock Grid.Column="9" Classes="column-header" Text="{loc:Loc c004-010}"
                          HorizontalAlignment="Center" />
             </Grid>
-          </ScrollViewer>
+          </Border>
 
           <!-- 操作列的文字与行内按钮都靠左：按钮数量会随模式变，靠右会让第一个按钮的位置
                跟着数量横跳，跟分界线的间距就不固定了 -->
@@ -147,15 +146,14 @@
                                    ShowDot="True" ToolTip.Tip="{Binding StateTip}" />
                     </Grid>
 
-                    <!-- 中段：按列摆，列宽固定，长字符串靠左、其余居中；多行共享同一条偏移 -->
-                    <ScrollViewer Grid.Column="1"
-                                  HorizontalScrollBarVisibility="Hidden"
-                                  VerticalScrollBarVisibility="Disabled"
-                                  c:ColumnScroll.SyncGroup="targets"
-                                  c:ColumnScroll.FillViewport="True"
-                                  Margin="0,0,6,0">
+                    <!-- 中段：按列摆，列宽固定，长字符串靠左、其余居中；所有行共享同一条偏移 -->
+                    <Border Grid.Column="1"
+                            ClipToBounds="True"
+                            c:ColumnPan.Group="targets"
+                            Margin="0,0,6,0">
                       <!-- 左右各留 14，与上面表头那两处一致：滚到两端时不贴分界线 -->
                       <Grid ColumnSpacing="6" Margin="14,0" VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
                             Classes="row-fields" Classes.disabled="{Binding !EffectiveEnabled}">
                         <Grid.ColumnDefinitions>
                           <ColumnDefinition Width="160*" MinWidth="160" />
@@ -214,7 +212,7 @@
                         <c:PillBadge Grid.Column="9" Text="{Binding SentText}" Variant="Metric"
                                      ToolTip.Tip="{loc:Loc c004-009}" HorizontalAlignment="Center" />
                       </Grid>
-                    </ScrollViewer>
+                    </Border>
                     <!-- 分界线与阴影：**都画在这张白卡上**，卡在哪它们就在哪。
                          高度要盖满整张卡，所以上下各探 10（把 Border 的 Padding 上下值抵消掉）。
                          线在内容被裁断的位置：左线贴住冻结段的右缘，右线在 12 的右边距处；
@@ -307,13 +305,13 @@
           <TextBlock Text="{loc:Loc l004-013}" Classes="hint" HorizontalAlignment="Center" />
         </StackPanel>
 
-        <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnScroll 同步。
+        <!-- 常驻横向滚动条：所有行的中段共用这一条，滑块位置与拖拽由 ColumnPan 同步。
              铺满整个底框、不跟着中段缩进，滑块才能走到最左最右。 -->
         <ScrollBar Grid.Row="2" Orientation="Horizontal" Margin="0,4,0,0" Height="8"
                    AllowAutoHide="False"
                    IsVisible="{Binding IsTargetsVisible}"
                    Theme="{StaticResource DsFlatScrollBar}"
-                   c:ColumnScroll.BarGroup="targets" />
+                   c:ColumnPan.BarGroup="targets" />
 
       </Grid>
     </Border>

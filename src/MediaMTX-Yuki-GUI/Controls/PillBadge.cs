@@ -65,7 +65,7 @@ public enum PillVariant
 /// 颜色不写死在模板里：按 <see cref="Variant"/> 与当前主题变体去资源里取
 /// Pill{变体}Foreground 与 Pill{变体}Background 这一对笔刷，浅色与深色各一套取值，
 /// 换主题时颜色自己跟着换。色板取值与实测对比度见 Resources\PillPalette.axaml 与
-/// docs\UI参考-设计规范.md 第四节。
+/// docs\UI参考-设计规范.md 第二节。
 ///
 /// 默认靠左不撑满：胶囊的宽度应当由内容决定，撑满整列会把「短值」画成一条长条。
 /// 需要居中时在使用处覆盖 HorizontalAlignment。

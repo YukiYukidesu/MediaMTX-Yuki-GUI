@@ -290,10 +290,19 @@ public static class AppShell
     {
         // 「忙」的判据是窗口又回来了。窗口开着的时候别去动堆。
         // 引擎在跑不算忙：它是独立进程，回收只暂停本进程的托管线程，转流一秒都不受影响。
-        _trimmer = new MemoryTrimmer(() => _window is not null, MemoryTrimmer.TrimAndRelease);
+        //
+        // 回收动作本身是阻塞的（两次 blocking GC 再把工作集交还系统，按注释自己的说法是几百毫秒），
+        // 这里再套一层线程池：计时器回调立刻返回，等待落到线程池上，不会把下一次排程也拖住
+        _trimmer = new MemoryTrimmer(() => _window is not null, TrimInBackground);
 
         // 档位存在 app.json 里，这里只是把它翻译成等待时长
         ApplyTrimPolicy(ViewModel.MemoryTrim);
+    }
+
+    /// <summary>在线程池上收堆，别让计时器回调陪着等。</summary>
+    private static void TrimInBackground()
+    {
+        _ = Task.Run(MemoryTrimmer.TrimAndRelease);
     }
 
     /// <summary>按设置页的档位换回收节奏。值来自 app.json 的 ui.memoryTrim。</summary>

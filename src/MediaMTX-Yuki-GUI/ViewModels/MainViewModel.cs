@@ -89,6 +89,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     /// </summary>
     private static readonly HashSet<string> RuntimeProperties = new(StringComparer.Ordinal)
     {
+        // BulkRuntime 收口时发的是「整行都变了」的空名通知：它是回填的结束信号，不是配置变更
+        string.Empty,
+
         nameof(TargetItemViewModel.RuntimeState),
         nameof(TargetItemViewModel.SpeedText),
         nameof(TargetItemViewModel.ResponseText),
@@ -1720,12 +1723,12 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     // ====== 指标轮询 ======
 
-    /// <summary>每两秒抓一次引擎指标，刷新每行的状态与速度。</summary>
+    /// <summary>每五秒抓一次引擎指标，刷新每行的状态与速度。</summary>
     private async Task PollMetricsAsync(CancellationToken ct)
     {
-        // 两秒一轮时，每轮属性更新让界面线程被堵 0.4~0.9 秒（[UI] 卡顿日志实测），
-        // 先拉长到五秒确认归因，再把每轮要刷的字段压下来
-        using PeriodicTimer timer = new(TimeSpan.FromSeconds(2));
+        // 两秒一轮时，每轮属性更新让界面线程被堵 0.4~1.9 秒（[UI] 卡顿日志实测），
+        // 拉长到五秒先把卡顿密度压下来；单轮成本另靠「只在提交的那一轮包 Begin/End」压
+        using PeriodicTimer timer = new(TimeSpan.FromSeconds(5));
 
         try
         {
@@ -1748,15 +1751,14 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         // 整份 metrics 有几千万字节，解析加写行要 0.7~1 秒，别的页面上没必要陪跑
         if (SelectedPage is not (0 or 1 or 2)) return;
 
-        // 概览页没有逐行的速率可看，只喂汇总数字，没必要每 2 秒把上百行算一遍
-        if (SelectedPage == 0 && (_metricsRound % 3 != 0)) return;
+        // 概览页没有逐行的速率可看，只喂汇总数字，没必要每轮都把上百行算一遍（两轮约十秒）
+        if (SelectedPage == 0 && (_metricsRound % 2 != 0)) return;
 
         // 诊断：确认这一轮跑在哪个线程上（定位完删掉）
         long t0 = Environment.TickCount64;
 
-        string? text = await _api.GetMetricsAsync(ct, _cfg.Engine.MetricsPort);
-
-        if (text is null) return;
+        // 流式读：边收边解析，不把整份 metrics 读成字符串（那个大字符串会直接进大对象堆）
+        if (await _api.GetForwardMetricsAsync(ct, _cfg.Engine.MetricsPort) is not { } parsed) return;
 
         long t00 = Environment.TickCount64;
 
@@ -1764,33 +1766,33 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         // 每条输入源在引擎里是一条独立路径，各有自己的 forward 数组与 pos 编号，
         // 所以先按路径名分组、再在组内按序号回填。跨路径按 pos 取下标，会把目标串到别人身上。
-        // 整份 metrics 有几千万字节，解析要近一秒；放到线程池里做，别把 UI 线程堵住
+        // 解析已经随流在线程池上做完，这里只剩按路径名分组这件纯 CPU 活，也别占 UI 线程
         long tp0 = Environment.TickCount64;
 
-        Dictionary<string, List<ForwardDestMetrics>> byPath = await Task.Run(() =>
-        {
-            long inner = Environment.TickCount64;
-            IReadOnlyList<ForwardDestMetrics> parsed = MetricsParser.ParseForwardDests(text);
-
-            return GroupByPath(parsed);
-        }, ct);
+        Dictionary<string, List<ForwardDestMetrics>> byPath = await Task.Run(() => GroupByPath(parsed), ct);
 
         long tb = Environment.TickCount64;
 
-        // 转发错误是每条源一次 HTTP 查询，条数一多就把两秒一轮撑成秒级卡顿；
-        // 错误文案不需要那么灵，五轮（约十秒）查一次就够
-        bool checkErrors = (_metricsRound++ % 5) == 0;
+        // 转发错误是每条源一次 HTTP 查询，条数一多就把一轮撑成秒级卡顿；
+        // 错误文案不需要那么灵，两轮（约十秒）查一次就够
+        bool checkErrors = (_metricsRound++ % 2) == 0;
 
         // 只有输入源页（1）与输出目标页（2）看得到这些行；别的页面不写，省掉整轮重绘
         // 数值每轮都算（统计要用），界面上隔一轮写一次：速率本来就是给人看个趋势，
         // 每次写都会让整行重绘，隔一轮能把重绘次数砍半
         bool commitRows = SelectedPage is 1 or 2 && (_metricsRound % 2 == 1);
 
-        // 一轮指标写完再统一刷新：每行只发一次通知，避免 30 行 × 5 属性 = 150 次重排
-        foreach (TargetItemViewModel bulkRow in Targets)
+        // 一轮指标写完再统一刷新：每行只发一次通知，避免 30 行 × 5 属性 = 150 次重排。
+        // 只有真要写界面的那一轮才包：不提交值的轮次里 ApplyForwardMetrics 根本不赋值，
+        // 包了等于每隔一轮就把整行所有绑定作废重算一遍，39 行白白多扛几百毫秒
+        if (commitRows)
         {
-            bulkRow.BeginBulkRuntime();
+            foreach (TargetItemViewModel bulkRow in Targets)
+            {
+                bulkRow.BeginBulkRuntime();
+            }
         }
+
         foreach (InputItemViewModel input in Inputs)
         {
             List<TargetItemViewModel> rows = ForwardRowsOf(input);
@@ -1799,9 +1801,13 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
             ApplyForwardMetrics(rows, found, now, commitRows);
         }
-        foreach (TargetItemViewModel bulkRow in Targets)
+
+        if (commitRows)
         {
-            bulkRow.EndBulkRuntime();
+            foreach (TargetItemViewModel bulkRow in Targets)
+            {
+                bulkRow.EndBulkRuntime();
+            }
         }
 
         long t05 = Environment.TickCount64;
@@ -1835,7 +1841,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
     /// <summary>
     /// 把每条输入录制目录的大小刷到列表上。扫盘是磁盘 IO，按十秒一次就够了，
-    /// 节流用轮次计数（指标两秒一轮），不另起计时器。
+    /// 节流用轮次计数（指标五秒一轮），不另起计时器。
     /// </summary>
     private async Task RefreshRecordSizesAsync()
     {
@@ -1857,7 +1863,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         _recordSizeTick++;
 
-        if (_recordSizeTick % 5 != 0) return;
+        if (_recordSizeTick % 2 != 0) return;
 
         // 目录里可能躺着成千上万个分段，别在 UI 线程上数
         Dictionary<string, long> sizes = await Task.Run(() =>

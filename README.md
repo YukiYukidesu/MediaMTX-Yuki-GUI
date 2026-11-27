@@ -1,34 +1,36 @@
-# MediaMTX-Yuki-GUI （这版先让大肥鱼代笔下，仅测试，之后作者再重写）
+# MediaMTX-Yuki-GUI
 
-MediaMTX 的 Windows 桌面外壳：把一台机器上的推流转发、录制、鉴权、状态监控收进一个窗口里。
+（这版先让大肥鱼代笔下，仅测试，之后作者再重写）
 
-MediaMTX 本身是命令行程序，配置文件是一大坨 YAML。日常要干的活其实就那么几件——加一路推流入口、把它转发到几个平台、看现在有没有在跑、谁推得进来——但每件都得改配置、重启、翻日志。这个程序把这些包了一层，改完点保存就行，引擎那边由它自己重启。
+MediaMTX 的 Windows 桌面外壳：把多路推流转发、录制、鉴权与状态监控收进一个窗口。
 
-> 版本 v0.0.2，还很早期。功能是齐的，界面与交互仍在按实际使用习惯调整。
+MediaMTX 本身是命令行程序，配置是一份 YAML。日常操作只有几件事——新增一路推流入口、把它转发到几个平台、确认当前状态、查看谁在推流——但每一步都要改配置、重启、翻日志。本程序把这些操作封装为界面：修改后保存即可，引擎由程序自己重启。
 
-## 它长什么样
+> 版本 v0.0.3，早期版本。功能完整，界面与交互仍在按实际使用调整。
 
-窗口左侧一列导航，右侧是对应页面：
+## 界面
 
-| 页面 | 干什么 |
+窗口左侧为导航栏，右侧为对应页面：
+
+| 页面 | 用途 |
 | --- | --- |
-| 总览 | 引擎现在跑没跑，一路输入源分发给了哪些输出目标，一眼看完 |
-| 输入源 | 建立各路推流入口：接收推流（OBS 之类推上来）或主动拉流（引擎去连远端地址） |
-| 输出目标 | 把某一路输入转发到各平台，可独立启停 |
-| 账号 | 一张账号表管所有推流身份，每个输入源单独勾选「允许谁往这一路推」 |
-| 统计数据 | 入流与各路的实时码率、已发送量，每 2 秒刷新 |
-| 运行日志 | 引擎与界面自己的标准输出，可一键复制或导出 |
+| 总览 | 引擎运行状态，以及每路输入源向哪些输出目标分发 |
+| 输入源 | 建立各路推流入口：接收推流（如 OBS）或主动拉流（引擎连接远端地址） |
+| 输出目标 | 将某一路输入转发到各平台，可独立启停 |
+| 权限账号 | 统一管理推流身份，每个输入源单独授权允许推流的账号 |
+| 统计数据 | 入流与各路目标的实时码率、已发送量，每 5 秒刷新 |
+| 运行日志 | 引擎与程序的标准输出，支持一键复制或导出 |
+| 高级模式 | 简洁模式与高级模式切换 |
 | 设置 | 引擎参数、协议开关、录制、目录、更新与代理 |
-| 工作模式 | 简洁模式与高级模式的切换 |
 
-两种模式是给不同人用的：简洁模式只留日常转流要用的东西，引擎里也只开最小的一套协议；高级模式把拉流、录制、鉴权、连接治理这些放出来。**切回简洁模式不会改掉你在高级模式里配过的东西**，只是暂时不生效。
+两种模式面向不同使用强度：简洁模式只保留日常转流所需的项目，引擎侧也只启用最小协议集；高级模式开放拉流、录制、鉴权与连接治理。切回简洁模式不会修改高级模式里已配置的内容，只是暂时不生效。
 
-## 怎么跑起来
+## 运行
 
-### 要求
+### 环境要求
 
 - Windows 10 / 11（x64）
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)（构建用；跑发布包不需要）
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)（仅构建需要；发布包无需安装 .NET）
 
 ### 从源码构建
 
@@ -37,66 +39,62 @@ dotnet build 'src\MediaMTX-Yuki-GUI\MediaMTX-Yuki-GUI.csproj' -c Debug
 dotnet run --project 'src\MediaMTX-Yuki-GUI\MediaMTX-Yuki-GUI.csproj'
 ```
 
-### 打包成发布包
+### 打包发布包
 
 ```powershell
-.\build-release.ps1              # 两个包都出
-.\build-release.ps1 -NoRestore   # 依赖没变时跳过 restore
+.\build-release.ps1            # 生成两个包
+.\build-release.ps1 -Label test  # 包名追加 _test，便于并存
+.\build-release.ps1 -SkipEngine  # 两个包都不带引擎
 ```
 
-产出两个包，都在 `dist\`，名字带版本号（版本号取自 csproj 的 `<Version>`）：
+打包必须执行 restore，不要加 `-NoRestore`（缺少运行时标识资产会导致 NETSDK1047）。产物在 `dist\`，文件名带版本号（取自 csproj 的 `<Version>`）：
 
-- `MediaMTX-Yuki-GUI_<版本>_x64.zip`：只有程序本体，目标机什么都不用装
-- `MediaMTX-Yuki-GUI_<版本>_x64_With_MediaMTX.zip`：多一个 `MediaMTX\` 目录，里面是推荐适配版本的引擎
+- `MediaMTX-Yuki-GUI_<版本>_x64.zip`：仅程序本体，目标机无需额外安装
+- `MediaMTX-Yuki-GUI_<版本>_x64_With_MediaMTX.zip`：额外包含 `MediaMTX\` 目录，内含适配版本的引擎
 
-程序是自包含 + 裁剪 + 单文件：代码与 .NET 运行时全部焊进一个 exe，不留散落的 dll，目标机不需要装 .NET。
-
-```powershell
-.\build-release.ps1 -SkipEngine   # 断网时出两个都不带引擎的包
-.\build-release.ps1 -Label test    # 包名多一段 _test，便于并存
-```
+程序采用自包含、裁剪、单文件打包：代码与 .NET 运行时全部编进一个 exe，不产生散落的 dll。
 
 ### 关于引擎
 
-**仓库里不带 MediaMTX 引擎**（它有自己的发布节奏与许可证）。打包时会去下载 csproj 里 `<RecommendedEngineVersion>` 指定的那一版，塞进 `_x64_With_MediaMTX` 那个包。
+**仓库不包含 MediaMTX 引擎**（引擎有自己的发布节奏与许可证）。打包时按 csproj 的 `<RecommendedEngineVersion>` 下载指定版本，放入 `_x64_With_MediaMTX` 包。
 
-用的是不带引擎的包、或者第一次启动时没检测到引擎，界面右下角会提示，点「前往下载」到设置页取一份即可，装完自动接上。
+若使用不带引擎的包，或首次启动时未检测到引擎，右下角会给出提示，可前往设置页下载安装，安装完成后自动接入。
 
-引擎装在程序目录下的 `MediaMTX\`，录制文件落在 `recordings\`，日志在 `logs\`。
+引擎安装在程序目录下的 `MediaMTX\`，录制文件写入 `recordings\`，日志写入 `logs\`。
 
 ## 目录结构
 
 ```
 src/MediaMTX-Yuki-GUI/
-  Controls/     自绘控件：滚动条联动、Toast 气泡、气泡确认、平滑展开、滚轮缓动
-  Models/       配置模型，直接对应 app.json 的结构
-  Services/     引擎管理、配置读写与迁移、YAML 生成、Control API、更新下载、代理
-  ViewModels/   每个页面一个部分类，外壳状态在 MainViewModel.cs
-  Views/        八个页面与几个模态编辑窗
+  Controls/     自绘控件：列表横向平移、平滑滚动、Toast 气泡、气泡确认、平滑展开、关系图
+  Models/       配置模型，对应 app.json 结构
+  Services/     引擎管理、配置读写与迁移、YAML 生成、Control API、更新下载、代理与本地 RTMP 中转
+  ViewModels/   各页面按部分类拆分，外壳状态在 MainViewModel.cs
+  Views/        八个页面与若干模态编辑窗口
   Resources/    设计系统：颜色、字号、圆角、控件主题
-  Languages/    界面文案，加语言不用改代码
+  Languages/    界面文案，新增语言无需改代码
 ```
 
-配置落在 `config\app.json`，运行时生成的引擎配置在 `config\runtime.yml`。前者是给人看的、可以手改；后者每次启动重写。
+配置位于 `config\app.json`，可手工编辑；引擎运行配置为 `config\runtime.yml`，每次启动重写，勿手工修改。
 
-## 加一种语言
+## 新增语言
 
-往 `src\MediaMTX-Yuki-GUI\Languages\` 丢一个 `xx-YY.json`（BCP 47 标签），程序启动时会自动扫到它。格式与约定见该目录下的 [README](src/MediaMTX-Yuki-GUI/Languages/README.md)。
+在 `src\MediaMTX-Yuki-GUI\Languages\` 中放入一个 `xx-YY.json`（BCP 47 标签），程序启动时自动扫描。格式与约定见该目录下的 [README](src/MediaMTX-Yuki-GUI/Languages/README.md)。
 
 ## 技术栈
 
-- [Avalonia 12](https://avaloniaui.net/) + [FluentAvalonia](https://github.com/amwx/FluentAvalonia)：跨平台 UI，Windows 上走云母 / 亚克力材质
+- [Avalonia 12](https://avaloniaui.net/) + [FluentAvalonia](https://github.com/amwx/FluentAvalonia)：跨平台 UI，Windows 上使用云母 / 亚克力材质
 - [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet)：MVVM 源生成器
 - Windows 原生 DWM 接口：标题栏、材质、窗口阴影
 
 ## 致谢
 
-- [MediaMTX](https://github.com/bluenviron/mediamtx)：本项目只是它的外壳，所有转流能力都来自它
+- [MediaMTX](https://github.com/bluenviron/mediamtx)：本项目仅为其外壳，全部转流能力由引擎提供
 - [Avalonia](https://github.com/AvaloniaUI/Avalonia) 与 [FluentAvalonia](https://github.com/amwx/FluentAvalonia)
-- [Filee](https://github.com/okwhm/Filee)：窗口生命周期与几条 UI 手法的参照
+- [Filee](https://github.com/KnifeLemon/Filee)：窗口生命周期与若干 UI 手法的参照
 
 ## 许可
 
-[MIT](LICENSE)。随便用，改动、闭源、商用都行，只要保留那份版权声明。
+[MIT](LICENSE)。允许修改、闭源与商用，保留版权声明即可。
 
-（MediaMTX 引擎不随本仓库的源码分发，它有自己的许可证；`_x64_With_MediaMTX` 那个**发布包**里含一份，同样按 MIT 授权。）
+MediaMTX 引擎不随本仓库源码分发，遵循其自身许可证；`_x64_With_MediaMTX` **发布包**内含一份，同样按 MIT 授权。

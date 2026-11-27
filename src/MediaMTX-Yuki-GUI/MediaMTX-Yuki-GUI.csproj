@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.0.2</Version>
+    <Version>0.0.3</Version>
 
     <!--
       GUI 已验证过的 MediaMTX 引擎版本（带引擎那个包预装的就是这一版）。
@@ -17,7 +17,7 @@
       mediamtx_v<版本>_windows_amd64.zip；程序里由 ProgramVersion.RecommendedEngineVersion
       读出来补上 v 前缀再给界面用。要升就改这一处，别在 C# 与脚本里各写一份。
     -->
-    <RecommendedEngineVersion>1.21.3</RecommendedEngineVersion>
+    <RecommendedEngineVersion>1.21.4</RecommendedEngineVersion>
 
     <Product>MediaMTX-Yuki-GUI</Product>
     <Description>轻量 RTMP 多路转发控制器</Description>

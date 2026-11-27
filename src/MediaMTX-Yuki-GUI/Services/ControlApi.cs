@@ -215,22 +215,37 @@ public sealed class ControlApi : IDisposable
 
     // ====== 码率统计 ======
 
-    /// <summary>抓 Prometheus metrics 原文，调用方自己解析需要的行。</summary>
-    public async Task<string?> GetMetricsAsync(CancellationToken ct, int metricsPort)
+    /// <summary>流式读转发目标的字节数：边收边解析，不把整份 metrics 读成字符串。</summary>
+    /// <remarks>
+    /// metrics 端点支持 type 过滤（internal/metrics/metrics.go 的 metricsTypeForwardDests = "forward_dests"），
+    /// 但过滤只决定返回哪些行，响应体照样要经网络传一遍，整份读成 string 就是一个大对象。
+    /// 这里用 ResponseHeadersRead 拿到流后逐行解析，内存占用只跟目标条数成正比。
+    /// </remarks>
+    public async Task<IReadOnlyList<ForwardDestMetrics>?> GetForwardMetricsAsync(CancellationToken ct, int metricsPort)
     {
         HttpClient meter = MeterFor(metricsPort);
 
         try
         {
-            // 只要转发目标的字节数。MediaMTX 的 metrics 端点支持 type 过滤（internal/metrics/metrics.go:78
-        // 的 metricsTypeForwardDests = "forward_dests"），拉全量是几千万字节、光解析就要零点几秒
-        return await meter.GetStringAsync("/metrics?type=forward_dests", ct);
+            using HttpResponseMessage response = await meter
+                .GetAsync("/metrics?type=forward_dests", HttpCompletionOption.ResponseHeadersRead, ct)
+                .ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode) return null;
+
+            await using Stream body = await response.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+
+            return await MetricsParser.ParseForwardDestsAsync(body, ct).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            return null;
         }
         catch (HttpRequestException)
         {
             return null;
         }
-        catch (TaskCanceledException)
+        catch (IOException)
         {
             return null;
         }

@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using System.Text;
 
 namespace MediaMTX_Yuki_GUI.Services;
 
@@ -9,74 +9,72 @@ namespace MediaMTX_Yuki_GUI.Services;
 /// <param name="OutboundBytes">累计发出的字节数，用于差分算码率。</param>
 public sealed record ForwardDestMetrics(int Position, string Path, string State, long OutboundBytes);
 
-/// <summary>把 Prometheus 文本格式的 metrics 文本解析成结构化数据。</summary>
+/// <summary>把 Prometheus 文本格式的 metrics 解析成结构化数据。</summary>
 public static class MetricsParser
 {
     private const string MetricPrefix = "forward_dests_outbound_bytes{";
 
-    /// <summary>一个 <c>key="value"</c> 形式的标签。</summary>
-    private static readonly Regex LabelPattern = new(
-        "(?<key>[a-zA-Z_]+)=\"(?<value>[^\"]*)\"",
-        RegexOptions.Compiled);
-
-    /// <summary>解析出所有转发目标的指标，先按路径名、再按序号升序排列。</summary>
-    public static IReadOnlyList<ForwardDestMetrics> ParseForwardDests(string? text)
+    /// <summary>边读边解析，只留转发目标那几行，其余直接丢弃；先按路径名、再按序号升序排列。</summary>
+    /// <remarks>
+    /// 响应体大小跟着路径数和连接数走：本地 11 条路径、25 个转发目标时，?type=forward_dests 只有 6.5 KB，
+    /// 全量 /metrics 也才 13.8 KB；但路径上百、SRT 连接一多就是另一个量级（每条 SRT 连接光指标就几十行）。
+    /// 所以不能先读成字符串再找，那样一个大字符串直接进大对象堆，一次回收就把界面停住近一秒。
+    /// 这里按行流式处理，分配量只跟需要的数据条数成正比。
+    /// 流由调用方负责释放，本方法只读不关。
+    /// </remarks>
+    public static async Task<List<ForwardDestMetrics>> ParseForwardDestsAsync(Stream stream, CancellationToken ct)
     {
         List<ForwardDestMetrics> result = [];
 
-        if (string.IsNullOrEmpty(text)) return result;
+        using StreamReader reader = new(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: false, bufferSize: 8192, leaveOpen: true);
 
-        // 整份 metrics 有几千万字节：按 Span 逐段扫描，不 Split、不为每行建字符串，
-        // 否则光是拆分就会产生上百万个小对象，一轮一次 Gen2 回收就能把界面停住近一秒
-        ReadOnlySpan<char> span = text.AsSpan();
-        int cursor = 0;
-
-        while (cursor < span.Length)
+        while (await reader.ReadLineAsync(ct).ConfigureAwait(false) is { } line)
         {
-            int start = span[cursor..].IndexOf(MetricPrefix, StringComparison.Ordinal);
+            ForwardDestMetrics? metric = TryParseLine(line.AsSpan());
 
-            if (start < 0) break;
-
-            start += cursor;
-
-            int end = span[start..].IndexOf('\n');
-
-            if (end < 0) end = span.Length - start;
-
-            ReadOnlySpan<char> line = span.Slice(start, end);
-            cursor = start + end + 1;
-
-            int close = line.IndexOf('}');
-
-            if (close < 0) continue;
-
-            ReadOnlySpan<char> labels = line[..close];
-            ReadOnlySpan<char> tail = line[(close + 1)..].Trim();
-
-            if (!int.TryParse(ReadLabel(labels, "pos"), out int position)) continue;
-            if (!long.TryParse(tail, out long bytes)) continue;
-
-            result.Add(new ForwardDestMetrics(
-                position,
-                ReadLabel(labels, "path").ToString(),
-                ReadLabel(labels, "state").ToString(),
-                bytes));
+            if (metric is not null) result.Add(metric);
         }
 
-        result.Sort((left, right) =>
-        {
-            int byPath = string.CompareOrdinal(left.Path, right.Path);
-
-            return byPath != 0 ? byPath : left.Position.CompareTo(right.Position);
-        });
+        result.Sort(CompareByPathAndPosition);
 
         return result;
+    }
+
+    /// <summary>解析一行 <c>forward_dests_outbound_bytes{...} 123</c>，前缀不匹配或字段缺失返回 null。</summary>
+    private static ForwardDestMetrics? TryParseLine(ReadOnlySpan<char> line)
+    {
+        if (!line.StartsWith(MetricPrefix, StringComparison.Ordinal)) return null;
+
+        int close = line.IndexOf('}');
+
+        if (close < 0) return null;
+
+        ReadOnlySpan<char> labels = line[..close];
+        ReadOnlySpan<char> tail = line[(close + 1)..].Trim();
+
+        if (!int.TryParse(ReadLabel(labels, "pos"), out int position)) return null;
+        if (!long.TryParse(tail, out long bytes)) return null;
+
+        return new ForwardDestMetrics(
+            position,
+            ReadLabel(labels, "path").ToString(),
+            ReadLabel(labels, "state").ToString(),
+            bytes);
+    }
+
+    /// <summary>先按路径名、再按序号升序。</summary>
+    private static int CompareByPathAndPosition(ForwardDestMetrics left, ForwardDestMetrics right)
+    {
+        int byPath = string.CompareOrdinal(left.Path, right.Path);
+
+        return byPath != 0 ? byPath : left.Position.CompareTo(right.Position);
     }
 
     /// <summary>从标签串里取一个值，取不到给空串。</summary>
     private static ReadOnlySpan<char> ReadLabel(ReadOnlySpan<char> labels, string key)
     {
         string needle = key + "=\"";
+
         int at = labels.IndexOf(needle.AsSpan(), StringComparison.Ordinal);
 
         if (at < 0) return default;
