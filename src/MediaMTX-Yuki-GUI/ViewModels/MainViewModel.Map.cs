@@ -118,7 +118,9 @@ public sealed partial class MainViewModel
                     node.Y + node.Height / 2,
                     targetNode.X,
                     targetNode.Y + targetNode.Height / 2,
-                    LinkState(source, target, engineRunning)));
+                    LinkState(source, target, engineRunning),
+                    node.Key,
+                    targetNode.Key));
             }
         }
 
@@ -246,7 +248,9 @@ public sealed partial class MainViewModel
                         sourceY + MapNodeHeight / 2,
                         sourceRight + MapLinkStub,
                         sourceY + MapNodeHeight / 2,
-                        MapLinkState.Off));
+                        MapLinkState.Off,
+                        sourceNode.Key,
+                        string.Empty));
                 }
             }
 
@@ -274,7 +278,9 @@ public sealed partial class MainViewModel
                         targetY + MapNodeHeight / 2,
                         targetX,
                         targetY + MapNodeHeight / 2,
-                        MapLinkState.Off));
+                        MapLinkState.Off,
+                        string.Empty,
+                        targetNode.Key));
                 }
 
                 if (source is not null)
@@ -284,7 +290,10 @@ public sealed partial class MainViewModel
                         sourceY + MapNodeHeight / 2,
                         targetX,
                         targetY + MapNodeHeight / 2,
-                        LinkState(source, target, engineRunning)));
+                        LinkState(source, target, engineRunning),
+                        // 源的节点变量在上一段 if 里，作用域到不了这里；键的拼法与 UpsertNode 一致
+                        "s:" + source.Id,
+                        targetNode.Key));
                 }
 
                 targetY += MapNodeHeight + MapRowGap;

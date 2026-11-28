@@ -198,7 +198,7 @@
                         <c:PillBadge Grid.Column="6" Variant="Metric"
                                      Text="{Binding InboundSpeedText}" HorizontalAlignment="Center" />
                         <c:PillBadge Grid.Column="7" Text="{Binding RecordStateText}" Variant="{Binding RecordStateVariant}"
-                                     HorizontalAlignment="Center"
+                                     ShowDot="True" HorizontalAlignment="Center"
                                      IsVisible="{Binding $parent[Window].DataContext.IsAdvancedMode}" />
                         <c:PillBadge Grid.Column="8" Variant="Metric"
                                      Text="{Binding RecordSizeText}" HorizontalAlignment="Center"

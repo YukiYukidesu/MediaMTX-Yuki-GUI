@@ -11,15 +11,40 @@ public static class SystemProxy
         @"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings";
 
     /// <summary>
+    /// 读到的值缓存这么久。为什么非缓存不可：底下是 reg.exe 子进程，
+    /// 而「这条目标走不走代理」要按目标逐条问，39 条目标就是几十次 process start，
+    /// 一次重写 runtime.yml 实测 1.7 秒 —— 正好卡在拖动排序松手那一刻，界面像冻住一样。
+    /// 系统代理不是高频变化的东西，几秒延迟换掉一次卡顿很划算。
+    /// </summary>
+    private static readonly TimeSpan CacheLifetime = TimeSpan.FromSeconds(3);
+
+    /// <summary>reg.exe 不并发：一次排序会连着问几十次，串起来只让头一个真去问。</summary>
+    private static readonly object Gate = new();
+
+    private static string? _cached;
+    private static long _cachedAt;
+    private static bool _hasCache;
+
+    /// <summary>
     /// 读出可用的系统代理地址（形如 http://127.0.0.1:7897）。
     /// 系统没配代理、或者配置读不出来都返回 null，调用方据此回落直连。
     /// </summary>
     public static string? Read()
     {
-        string? fromRegistry = ReadRegistry();
-        if (!string.IsNullOrWhiteSpace(fromRegistry)) return fromRegistry;
+        lock (Gate)
+        {
+            long now = Environment.TickCount64;
 
-        return ReadEnvironment();
+            if (_hasCache && now - _cachedAt < (long)CacheLifetime.TotalMilliseconds) return _cached;
+
+            string? fromRegistry = ReadRegistry();
+
+            _cached = !string.IsNullOrWhiteSpace(fromRegistry) ? fromRegistry : ReadEnvironment();
+            _cachedAt = now;
+            _hasCache = true;
+
+            return _cached;
+        }
     }
 
     // ====== 注册表 ======

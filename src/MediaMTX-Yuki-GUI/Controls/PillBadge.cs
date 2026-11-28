@@ -53,6 +53,27 @@ public enum PillVariant
     /// <summary>这一条目标单独指定了代理地址。</summary>
     Custom,
 
+    /// <summary>B 站：标识色是粉。</summary>
+    Bilibili,
+
+    /// <summary>抖音：标识是黑底加青红点缀，这里取黑。</summary>
+    Douyin,
+
+    /// <summary>快手：标识色是橙红。</summary>
+    Kuaishou,
+
+    /// <summary>YouTube：标识色是红。</summary>
+    Youtube,
+
+    /// <summary>Twitch：标识色是紫。</summary>
+    Twitch,
+
+    /// <summary>虎牙：标识色是橙黄。</summary>
+    Huya,
+
+    /// <summary>斗鱼：标识色是橙。</summary>
+    Douyu,
+
     /// <summary>短标识：编号、用户名、平台名。它们不是长字符串，照样上色。</summary>
     Id,
 

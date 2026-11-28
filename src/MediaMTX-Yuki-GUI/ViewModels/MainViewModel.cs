@@ -630,6 +630,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private string _statusDetail = L.T("l002-009");
 
+    /// <summary>日志页里是否混入程序自己的调试记录（界面卡顿、引擎日志密度、启动异常）。</summary>
+    [ObservableProperty]
+    private bool _showDebugLogs;
+
     // ====== 数据 ======
 
     public ObservableCollection<TargetItemViewModel> Targets { get; } = new();
@@ -672,6 +676,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         _engine.LogLine += OnEngineLog;
         _engine.Exited += OnEngineExited;
+
+        // 调试日志光落盘时界面看不见，勾上开关才送进日志面板
+        Services.AppLog.Written += OnAppLogWritten;
+
         Targets.CollectionChanged += OnTargetsChanged;
         Inputs.CollectionChanged += OnInputsChanged;
 
@@ -2863,6 +2871,54 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         });
     }
 
+    /// <summary>调试行在面板里的统一前缀，关掉开关时靠它把行摘出去。</summary>
+    private static string DebugPrefix => "[" + L.T("l007-007") + "] ";
+
+    /// <summary>AppLog 可能在后台线程上写，回界面要走 Post。</summary>
+    private void OnAppLogWritten(string line)
+    {
+        if (!ShowDebugLogs) return;
+
+        Action<Action>? post = Post;
+
+        if (post is null) return;
+
+        string text = DebugPrefix + line;
+
+        post(() =>
+        {
+            // 排队这一下开关可能已经关掉了
+            if (!ShowDebugLogs) return;
+
+            Logs.Add(text);
+
+            while (Logs.Count > 500) Logs.RemoveAt(0);
+        });
+    }
+
+    /// <summary>打开时把缓冲里的补进来；关掉时只摘调试行，引擎自己的输出与顺序都不动。</summary>
+    partial void OnShowDebugLogsChanged(bool value)
+    {
+        string prefix = DebugPrefix;
+
+        if (value)
+        {
+            foreach (string line in Services.AppLog.Snapshot())
+            {
+                Logs.Add(prefix + line);
+            }
+
+            while (Logs.Count > 500) Logs.RemoveAt(0);
+
+            return;
+        }
+
+        for (int index = Logs.Count - 1; index >= 0; index--)
+        {
+            if (Logs[index].StartsWith(prefix, StringComparison.Ordinal)) Logs.RemoveAt(index);
+        }
+    }
+
     // ====== 释放 ======
 
     public void Dispose()
@@ -2882,6 +2938,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
 
         _engine.LogLine -= OnEngineLog;
         _engine.Exited -= OnEngineExited;
+        Services.AppLog.Written -= OnAppLogWritten;
 
         _toastCts?.Cancel();
         _toastCts = null;

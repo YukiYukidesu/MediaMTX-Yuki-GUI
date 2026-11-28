@@ -4,12 +4,19 @@
   <!--
     胶囊标签的配色。每个变体一对笔刷：底色是语义色的浅色版，文字是同色系的实色。
 
-    变体分三组：状态（Plain / On / Off / Warn / Error）、枚举值（协议四色、来源 Pull / Push、
-    代理 Follow / Direct / Custom）、字段值（Id 给编号、用户名、平台名这类短标识，Metric 给速率、
-    占用、延迟、时间这些数字）。长字符串（地址、备注名）仍走 Plain —— 一条长条挂满颜色只会更乱。
+    变体分四组：状态（Plain / On / Off / Warn / Error）、枚举值（协议四色、来源 Pull / Push、
+    代理 Follow / Direct / Custom）、平台品牌色（Bilibili / Douyin / Kuaishou / Youtube / Twitch /
+    Huya / Douyu，一个平台一个色，色相照着各家的标识）、字段值（Id 给编号、用户名、平台名这类短标识，
+    Metric 给速率、占用、延迟、时间这些数字）。长字符串（地址、备注名）仍走 Plain —— 一条长条挂满颜色只会更乱。
+
+    代理三档的语义色：系统 / 跟随走绿（Follow）、手动 / 自定义走黄（Custom）、直连保持中性灰蓝（Direct）——
+    「不走代理」本身不是一个决定，不该跟「走哪条代理」抢颜色。
+
+    平台色只给 7 个内置平台：自定义平台（PresetCatalog 的 custom）没有品牌色可依，走 Plain。
 
     取值不是拍脑袋定的：浅色按「卡片底色 #FFFFFF、底色再掺 14%」、深色按「卡片底色 #2B2B2B、掺 18%」
-    反算，全部达到 WCAG AA 的 4.5:1（16 个变体实测 4.65 ~ 7.85）。算过的表与依据见 docs\UI参考-设计规范.md §二。
+    反算，全部达到 WCAG AA 的 4.5:1（23 个变体实测：浅色 4.74 ~ 14.36、深色 5.20 ~ 12.17）。
+    算过的表与依据见 docs\UI参考-设计规范.md §二。
 
     Off（已停用）用暗红而不是灰：停用是「这条现在不干活」，在列表里属于要一眼看出的状态；
     与 Error 的亮红 #B3261E 拉开层次（暗红更沉、更偏砖色），两颗粒子并排也不会看混。
@@ -43,12 +50,26 @@
       <SolidColorBrush x:Key="PillPullBackground" Color="#E4F3EC" />
       <SolidColorBrush x:Key="PillPushForeground" Color="#2F5A8F" />
       <SolidColorBrush x:Key="PillPushBackground" Color="#E9F0F8" />
-      <SolidColorBrush x:Key="PillFollowForeground" Color="#0B6BCB" />
-      <SolidColorBrush x:Key="PillFollowBackground" Color="#E6F2FE" />
+      <SolidColorBrush x:Key="PillFollowForeground" Color="#0F7A4A" />
+      <SolidColorBrush x:Key="PillFollowBackground" Color="#E4F6EC" />
       <SolidColorBrush x:Key="PillDirectForeground" Color="#3F5A73" />
       <SolidColorBrush x:Key="PillDirectBackground" Color="#E9EFF4" />
-      <SolidColorBrush x:Key="PillCustomForeground" Color="#8A2F63" />
-      <SolidColorBrush x:Key="PillCustomBackground" Color="#FCEDF4" />
+      <SolidColorBrush x:Key="PillCustomForeground" Color="#8A6200" />
+      <SolidColorBrush x:Key="PillCustomBackground" Color="#FBF3DC" />
+      <SolidColorBrush x:Key="PillBilibiliForeground" Color="#C2185B" />
+      <SolidColorBrush x:Key="PillBilibiliBackground" Color="#FCE4EC" />
+      <SolidColorBrush x:Key="PillDouyinForeground" Color="#17181B" />
+      <SolidColorBrush x:Key="PillDouyinBackground" Color="#E6E7EA" />
+      <SolidColorBrush x:Key="PillKuaishouForeground" Color="#B03A0A" />
+      <SolidColorBrush x:Key="PillKuaishouBackground" Color="#FBEAE2" />
+      <SolidColorBrush x:Key="PillYoutubeForeground" Color="#C62828" />
+      <SolidColorBrush x:Key="PillYoutubeBackground" Color="#FBE9E7" />
+      <SolidColorBrush x:Key="PillTwitchForeground" Color="#6A3FC0" />
+      <SolidColorBrush x:Key="PillTwitchBackground" Color="#EFE9FC" />
+      <SolidColorBrush x:Key="PillHuyaForeground" Color="#955800" />
+      <SolidColorBrush x:Key="PillHuyaBackground" Color="#FCEEDC" />
+      <SolidColorBrush x:Key="PillDouyuForeground" Color="#B04A00" />
+      <SolidColorBrush x:Key="PillDouyuBackground" Color="#FDEBDF" />
       <SolidColorBrush x:Key="PillIdForeground" Color="#46607E" />
       <SolidColorBrush x:Key="PillIdBackground" Color="#EAF0F7" />
       <SolidColorBrush x:Key="PillMetricForeground" Color="#6A5335" />
@@ -78,12 +99,26 @@
       <SolidColorBrush x:Key="PillPullBackground" Color="#23453A" />
       <SolidColorBrush x:Key="PillPushForeground" Color="#A6C4EA" />
       <SolidColorBrush x:Key="PillPushBackground" Color="#303E4E" />
-      <SolidColorBrush x:Key="PillFollowForeground" Color="#8CC5FF" />
-      <SolidColorBrush x:Key="PillFollowBackground" Color="#314150" />
+      <SolidColorBrush x:Key="PillFollowForeground" Color="#62D9A2" />
+      <SolidColorBrush x:Key="PillFollowBackground" Color="#2C4639" />
       <SolidColorBrush x:Key="PillDirectForeground" Color="#A9C3D1" />
       <SolidColorBrush x:Key="PillDirectBackground" Color="#33424B" />
-      <SolidColorBrush x:Key="PillCustomForeground" Color="#F5A6CF" />
-      <SolidColorBrush x:Key="PillCustomBackground" Color="#4D3944" />
+      <SolidColorBrush x:Key="PillCustomForeground" Color="#F2C65F" />
+      <SolidColorBrush x:Key="PillCustomBackground" Color="#4A4029" />
+      <SolidColorBrush x:Key="PillBilibiliForeground" Color="#FFA6C4" />
+      <SolidColorBrush x:Key="PillBilibiliBackground" Color="#4A2F3B" />
+      <SolidColorBrush x:Key="PillDouyinForeground" Color="#E8E9ED" />
+      <SolidColorBrush x:Key="PillDouyinBackground" Color="#26282C" />
+      <SolidColorBrush x:Key="PillKuaishouForeground" Color="#FFA27A" />
+      <SolidColorBrush x:Key="PillKuaishouBackground" Color="#4A3328" />
+      <SolidColorBrush x:Key="PillYoutubeForeground" Color="#FF8A80" />
+      <SolidColorBrush x:Key="PillYoutubeBackground" Color="#4E2F2D" />
+      <SolidColorBrush x:Key="PillTwitchForeground" Color="#C2A8FF" />
+      <SolidColorBrush x:Key="PillTwitchBackground" Color="#3A3350" />
+      <SolidColorBrush x:Key="PillHuyaForeground" Color="#FFC65E" />
+      <SolidColorBrush x:Key="PillHuyaBackground" Color="#493B27" />
+      <SolidColorBrush x:Key="PillDouyuForeground" Color="#FFAE73" />
+      <SolidColorBrush x:Key="PillDouyuBackground" Color="#4A3527" />
       <SolidColorBrush x:Key="PillIdForeground" Color="#A9C0DC" />
       <SolidColorBrush x:Key="PillIdBackground" Color="#34404F" />
       <SolidColorBrush x:Key="PillMetricForeground" Color="#D8BE96" />

@@ -6,6 +6,9 @@ namespace MediaMTX_Yuki_GUI.Controls;
 /// </summary>
 public interface IMapNode
 {
+    /// <summary>节点在位移表里的键：源是 "s:{id}"，目标是 "t:{id}"。</summary>
+    string Key { get; }
+
     /// <summary>节点左上角的 X。</summary>
     double X { get; }
 

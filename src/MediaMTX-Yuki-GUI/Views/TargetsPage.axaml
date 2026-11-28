@@ -194,7 +194,7 @@
                                      ToolTip.Tip="{Binding InputSourceName}" />
                         <c:PillBadge Grid.Column="3" Text="{Binding Protocol}" Variant="{Binding ProtocolVariant}"
                                      HorizontalAlignment="Center" />
-                        <c:PillBadge Grid.Column="4" Variant="Id" Text="{Binding PlatformText}"
+                        <c:PillBadge Grid.Column="4" Text="{Binding PlatformText}" Variant="{Binding PlatformVariant}"
                                      HorizontalAlignment="Center" />
 
                         <!-- 推流地址：点一下复制，省掉一排复制按钮 -->

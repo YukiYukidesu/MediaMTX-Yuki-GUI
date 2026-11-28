@@ -11,19 +11,28 @@ namespace MediaMTX_Yuki_GUI.Controls;
 /// <param name="X2">终点 X，目标节点左边缘中点。</param>
 /// <param name="Y2">终点 Y。</param>
 /// <param name="State">链路状态，决定线色与虚实。</param>
-public readonly record struct RelationLinkShape(double X1, double Y1, double X2, double Y2, MapLinkState State);
+/// <param name="SourceKey">起点所属节点在位移表里的键；断头线留空。</param>
+/// <param name="TargetKey">终点所属节点在位移表里的键；断头线留空。</param>
+public readonly record struct RelationLinkShape(
+    double X1,
+    double Y1,
+    double X2,
+    double Y2,
+    MapLinkState State,
+    string SourceKey,
+    string TargetKey);
 
 /// <summary>关系图的连线层：压在节点下面的一层贝塞尔曲线。</summary>
 /// <remarks>
 /// 颜色按 <see cref="MapLinkState"/> 去资源里取，与胶囊标签同一套做法：
 /// 资源键是 RelationLink{状态}，取不到时退回一组内置色，界面不至于画不出线。
+/// <para>
+/// 端点不自己插值：每个端点加上它那个节点此刻的位移补偿，而那份补偿与胶囊是同一张
+/// <see cref="MapMotion"/> 表，所以缩放窗口时线和点必然贴在一起，不会「线先走、点后到」。
+/// </para>
 /// </remarks>
 public sealed class RelationLinks : Control
 {
-    /// <summary>要画的连线。整体替换一次就重绘一次。</summary>
-    public static readonly StyledProperty<IReadOnlyList<RelationLinkShape>?> LinksProperty =
-        AvaloniaProperty.Register<RelationLinks, IReadOnlyList<RelationLinkShape>?>(nameof(Links));
-
     private static readonly IBrush FallbackActive = new SolidColorBrush(Color.Parse("#2E9E5B"));
 
     private static readonly IBrush FallbackPending = new SolidColorBrush(Color.Parse("#4C8AC9"));
@@ -34,6 +43,10 @@ public sealed class RelationLinks : Control
 
     /// <summary>虚线：断掉的链路用，短划比实线更容易看出「没接上」。</summary>
     private static readonly IDashStyle Dash = new DashStyle(new double[] { 5, 4 }, 0);
+
+    /// <summary>要画的连线。整体替换一次就重绘一次。</summary>
+    public static readonly StyledProperty<IReadOnlyList<RelationLinkShape>?> LinksProperty =
+        AvaloniaProperty.Register<RelationLinks, IReadOnlyList<RelationLinkShape>?>(nameof(Links));
 
     static RelationLinks()
     {
@@ -46,6 +59,7 @@ public sealed class RelationLinks : Control
         get => GetValue(LinksProperty);
         set => SetValue(LinksProperty, value);
     }
+
 
     public override void Render(DrawingContext context)
     {
@@ -68,8 +82,40 @@ public sealed class RelationLinks : Control
                 _                    => off,
             };
 
-            context.DrawGeometry(null, pen, Curve(link));
+            // 端点各自加上它那个节点此刻的位移：和胶囊读的是同一份表，所以永远贴在一起
+            Vector from = MapMotion.Shared.Get(link.SourceKey);
+            Vector to = MapMotion.Shared.Get(link.TargetKey);
+
+            RelationLinkShape moved = link with
+            {
+                X1 = link.X1 + from.X,
+                Y1 = link.Y1 + from.Y,
+                X2 = link.X2 + to.X,
+                Y2 = link.Y2 + to.Y,
+            };
+
+            context.DrawGeometry(null, pen, Curve(moved));
         }
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        MapMotion.Shared.Moved += OnMoved;
+    }
+
+    /// <summary>从可视化树上摘下来时松开：页面切走就没人喂动画帧了。</summary>
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        MapMotion.Shared.Moved -= OnMoved;
+        base.OnDetachedFromVisualTree(e);
+    }
+
+
+    /// <summary>位移推进了一帧：重画一遍连线。</summary>
+    private void OnMoved()
+    {
+        InvalidateVisual();
     }
 
     /// <summary>左右两列之间的三次贝塞尔：两端水平进出，中间不用拐直角。</summary>

@@ -15,6 +15,14 @@
            底下日志框的布局一点不动 -->
       <StackPanel Orientation="Horizontal" Spacing="8"
                   HorizontalAlignment="Right" VerticalAlignment="Center">
+        <!-- 打开才把程序自己的诊断记录混进来：卡顿、日志密度、启动异常这些 -->
+        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+          <TextBlock Text="{loc:Loc c007-001}" Classes="hint" VerticalAlignment="Center"
+                     ToolTip.Tip="{loc:Loc l007-006}" />
+          <ToggleSwitch Width="40" MinWidth="0" VerticalAlignment="Center"
+                        IsChecked="{Binding ShowDebugLogs}"
+                        ToolTip.Tip="{loc:Loc l007-006}" />
+        </StackPanel>
         <Button Padding="12,4" FontSize="12"
                 Content="{loc:Loc b007-002}"
                 IsEnabled="{Binding HasLogs}"

@@ -18,6 +18,7 @@ public sealed partial class TargetItemViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(DisplayName))]
     [NotifyPropertyChangedFor(nameof(Preset))]
     [NotifyPropertyChangedFor(nameof(PlatformText))]
+    [NotifyPropertyChangedFor(nameof(PlatformVariant))]
     private string _platform = PresetCatalog.CustomId;
 
     [ObservableProperty]
@@ -242,6 +243,23 @@ public sealed partial class TargetItemViewModel : ObservableObject
 
     /// <summary>平台名，未命名时列表里显示的就是它。</summary>
     public string PlatformText => Preset.DisplayName;
+
+    /// <summary>
+    /// 平台胶囊的配色，取该平台的标识色（B 站粉、YouTube 红、Twitch 紫……）。
+    /// 自定义平台没有品牌色可依，走中性灰；这里的 id 与 PresetCatalog.All 一一对应，加平台要两边一起改。
+    /// </summary>
+    public PillVariant PlatformVariant
+        => Platform switch
+        {
+            "bilibili" => PillVariant.Bilibili,
+            "douyin"   => PillVariant.Douyin,
+            "kuaishou" => PillVariant.Kuaishou,
+            "youtube"  => PillVariant.Youtube,
+            "twitch"   => PillVariant.Twitch,
+            "huya"     => PillVariant.Huya,
+            "douyu"    => PillVariant.Douyu,
+            _          => PillVariant.Plain,
+        };
 
     /// <summary>状态胶囊配色，与四档文案一一对应：启用中绿、已停止红、有错误黄、被禁用灰。</summary>
     public PillVariant StatusVariant

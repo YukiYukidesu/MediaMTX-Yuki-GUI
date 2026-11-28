@@ -30,14 +30,14 @@ public enum NodeState
 /// </remarks>
 public sealed partial class RelationNode : ObservableObject, IMapNode
 {
-    public RelationNode(string id, bool isSource)
+    public RelationNode(string key, bool isSource)
     {
-        Id = id;
+        Key = key;
         IsSource = isSource;
     }
 
-    /// <summary>对应的模型 Id：源是 InputSource.Id，目标是 ForwardTarget.Id。</summary>
-    public string Id { get; }
+    /// <summary>节点在图里的唯一键：源是 "s:{id}"，目标是 "t:{id}"，位移表拿它当索引。</summary>
+    public string Key { get; }
 
     /// <summary>是不是左侧那一列的源节点。</summary>
     public bool IsSource { get; }
