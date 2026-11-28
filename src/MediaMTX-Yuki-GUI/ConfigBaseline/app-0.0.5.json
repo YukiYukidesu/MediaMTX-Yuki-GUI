@@ -1,0 +1,683 @@
+{
+  "configVersion": 5,
+  "appVersion": "v0.0.5",
+  "engine": {
+    "rtmpPort": 1935,
+    "apiPort": 9997,
+    "metricsPort": 9998,
+    "ingest": "rtmp",
+    "autoStart": false,
+    "autoRestart": true
+  },
+  "protocols": {
+    "rtsp": false,
+    "rtspPort": 8554,
+    "hls": false,
+    "hlsPort": 8888,
+    "webrtc": false,
+    "webrtcPort": 8889,
+    "srt": false,
+    "srtPort": 8890,
+    "moq": false,
+    "moqPort": 8892
+  },
+  "advanced": {
+    "maxReaders": 0,
+    "alwaysAvailable": false,
+    "overridePublisher": true,
+    "readTimeoutSeconds": 10,
+    "writeTimeoutSeconds": 10,
+    "writeQueueSize": 512
+  },
+  "ops": {
+    "pprof": false,
+    "pprofPort": 9999,
+    "playback": false,
+    "playbackPort": 9996
+  },
+  "authEnabled": false,
+  "accountTable": [],
+  "ui": {
+    "language": "zh-CN",
+    "theme": "system",
+    "startWithWindows": false,
+    "closeToTray": true,
+    "memoryTrim": "default",
+    "mode": "advanced",
+    "inputSort": "manual",
+    "inputSortDescending": false,
+    "inputEnabledFirst": true,
+    "targetSort": "manual",
+    "targetSortDescending": false,
+    "targetEnabledFirst": true,
+    "hardwareAcceleration": true,
+    "windowBackdrop": "mica",
+    "logRetentionDays": 7
+  },
+  "pull": {
+    "sourceOnDemand": false,
+    "startTimeoutSeconds": 10,
+    "closeAfterSeconds": 10
+  },
+  "record": {
+    "enabled": false,
+    "pathTemplate": "./recordings/%path/%Y-%m-%d_%H-%M-%S-%f_%z",
+    "format": "fmp4",
+    "segmentDuration": "1h",
+    "maxPartSize": "50M",
+    "deleteAfter": "1d"
+  },
+  "paths": {
+    "allOthers": false,
+    "useAbsoluteTimestamp": false
+  },
+  "governance": {
+    "rtspTransports": "tcp,udp",
+    "webrtcHandshakeTimeoutSeconds": 10,
+    "webrtcTrackGatherTimeoutSeconds": 2
+  },
+  "update": {
+    "appRepo": "YukiYukidesu/MediaMTX-Yuki-GUI",
+    "appRepoOrDefault": "YukiYukidesu/MediaMTX-Yuki-GUI",
+    "engineRepo": "bluenviron/mediamtx",
+    "appChannel": "prerelease",
+    "engineChannel": "latest",
+    "checkAppOnStartup": true,
+    "checkEngineOnStartup": true,
+    "appSource": "github",
+    "engineSource": "github",
+    "proxy": {
+      "mode": "system",
+      "url": "",
+      "resolveDnsRemotely": true
+    },
+    "checkOnStartup": false
+  },
+  "proxy": {
+    "mode": "direct",
+    "url": "",
+    "resolveDnsRemotely": true
+  },
+  "inputs": [
+    {
+      "id": "0574b57171ca4563bcc8611553e4e690",
+      "name": "主测OBS",
+      "path": "live",
+      "protocol": "rtmp",
+      "port": 16850,
+      "enabled": true,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src02",
+      "name": "会议室 OBS",
+      "path": "live2",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src03",
+      "name": "导播台",
+      "path": "live3",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src06",
+      "name": "展厅大屏",
+      "path": "live6",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src08",
+      "name": "A",
+      "path": "live8",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src09",
+      "name": "外包直播组-华东区临时路演现场 3 号机位",
+      "path": "live9",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src11",
+      "name": "手机竖屏",
+      "path": "live11",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src12",
+      "name": "机房 NVR",
+      "path": "live12",
+      "protocol": "rtsp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "rtsp://192.168.5.10:554/cam/realmonitor?channel=1&subtype=0",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src07",
+      "name": "大厅摄像头",
+      "path": "live7",
+      "protocol": "rtsp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "rtsp://192.168.5.21:554/Streaming/Channels/101",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src05",
+      "name": "车间产线 A",
+      "path": "live5",
+      "protocol": "srt",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "srt://192.168.5.31:9000?mode=caller",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src01",
+      "name": "大厅摄像头",
+      "path": "live1",
+      "protocol": "rtsp",
+      "port": 0,
+      "enabled": true,
+      "sourceUrl": "rtsp://192.168.5.21:554/Streaming/Channels/101",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src10",
+      "name": "旧设备",
+      "path": "live10",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": false,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    },
+    {
+      "id": "src04",
+      "name": "备用编码器",
+      "path": "live4",
+      "protocol": "rtmp",
+      "port": 0,
+      "enabled": false,
+      "sourceUrl": "",
+      "record": false,
+      "publishAccountIds": []
+    }
+  ],
+  "targets": [
+    {
+      "id": "t0201",
+      "name": "B站-官方直播间",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k21",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0202",
+      "name": "B站-备用直播间",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k22",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "direct",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0203",
+      "name": "抖音-品牌主号",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k23",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0204",
+      "name": "抖音-小店直播",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k24",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "custom",
+      "proxyUrl": "socks5://127.0.0.1:10850"
+    },
+    {
+      "id": "t0205",
+      "name": "视频号-官方号",
+      "platform": "custom",
+      "server": "rtmp://channels-push.example.com/live",
+      "streamKey": "k25",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0206",
+      "name": "小红书-品牌号",
+      "platform": "custom",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k26",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0207",
+      "name": "淘宝直播",
+      "platform": "custom",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k27",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0208",
+      "name": "本地录制归档",
+      "platform": "custom",
+      "server": "rtmp://127.0.0.1:1935/record",
+      "streamKey": "k28",
+      "inputSourceId": "src02",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0301",
+      "name": "斗鱼-合作位",
+      "platform": "douyu",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k31",
+      "inputSourceId": "src03",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0401",
+      "name": "B站-官方直播间",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k41",
+      "inputSourceId": "src04",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0402",
+      "name": "抖音-备用号",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k42",
+      "inputSourceId": "src04",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0403",
+      "name": "Twitch-备用",
+      "platform": "twitch",
+      "server": "rtmp://live.twitch.tv/app",
+      "streamKey": "k43",
+      "inputSourceId": "src04",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0801",
+      "name": "B站-官方直播间",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k81",
+      "inputSourceId": "src08",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0901",
+      "name": "B站-官方直播间（华东区路演专用账号）",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k91",
+      "inputSourceId": "src09",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0902",
+      "name": "抖音-品牌主号",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k92",
+      "inputSourceId": "src09",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0903",
+      "name": "视频号-官方号",
+      "platform": "custom",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k93",
+      "inputSourceId": "src09",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0001",
+      "name": "还没绑定输入源的新目标",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k01",
+      "inputSourceId": "",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0003",
+      "name": "外包同事临时加的目标-待确认归属和推流码",
+      "platform": "custom",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k03",
+      "inputSourceId": "",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0004",
+      "name": "空地址的孤儿目标",
+      "platform": "custom",
+      "server": "",
+      "streamKey": "",
+      "inputSourceId": "",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1205",
+      "name": "Twitch-备用",
+      "platform": "twitch",
+      "server": "rtmp://live.twitch.tv/app",
+      "streamKey": "k125",
+      "inputSourceId": "src12",
+      "enabled": true,
+      "proxyMode": "direct",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1204",
+      "name": "未填地址的目标",
+      "platform": "custom",
+      "server": "",
+      "streamKey": "",
+      "inputSourceId": "src12",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1203",
+      "name": "YouTube-海外频道",
+      "platform": "youtube",
+      "server": "rtmps://a.rtmps.youtube.com/live2",
+      "streamKey": "k123",
+      "inputSourceId": "src12",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1202",
+      "name": "抖音-品牌主号",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k122",
+      "inputSourceId": "src12",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1201",
+      "name": "B站-官方直播间",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k121",
+      "inputSourceId": "src12",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0702",
+      "name": "快手-旗舰店",
+      "platform": "kuaishou",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k72",
+      "inputSourceId": "src07",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0701",
+      "name": "抖音-品牌主号",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k71",
+      "inputSourceId": "src07",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0502",
+      "name": "YouTube-海外频道",
+      "platform": "youtube",
+      "server": "rtmps://a.rtmps.youtube.com/live2",
+      "streamKey": "k52",
+      "inputSourceId": "src05",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0501",
+      "name": "B站-官方直播间",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k51",
+      "inputSourceId": "src05",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0104",
+      "name": "快手-旗舰店",
+      "platform": "kuaishou",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k14",
+      "inputSourceId": "src01",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0103",
+      "name": "YouTube-海外频道",
+      "platform": "youtube",
+      "server": "rtmps://a.rtmps.youtube.com/live2",
+      "streamKey": "k13",
+      "inputSourceId": "src01",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0101",
+      "name": "B站-官方直播间",
+      "platform": "bilibili",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k11",
+      "inputSourceId": "src01",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0102",
+      "name": "抖音-品牌主号",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k12",
+      "inputSourceId": "src01",
+      "enabled": true,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0105",
+      "name": "虎牙-合作位（已停播）",
+      "platform": "huya",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k15",
+      "inputSourceId": "src01",
+      "enabled": false,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1101",
+      "name": "抖音-小店直播",
+      "platform": "douyin",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k111",
+      "inputSourceId": "src11",
+      "enabled": false,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1102",
+      "name": "快手-旗舰店",
+      "platform": "kuaishou",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k112",
+      "inputSourceId": "src11",
+      "enabled": false,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1103",
+      "name": "淘宝直播",
+      "platform": "custom",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k113",
+      "inputSourceId": "src11",
+      "enabled": false,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1104",
+      "name": "本地录制归档",
+      "platform": "custom",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k114",
+      "inputSourceId": "src11",
+      "enabled": false,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t1206",
+      "name": "小红书-品牌号",
+      "platform": "custom",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k126",
+      "inputSourceId": "src12",
+      "enabled": false,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    },
+    {
+      "id": "t0002",
+      "name": "历史遗留目标（已停用）",
+      "platform": "douyu",
+      "server": "rtmp://live-push.example.com/live",
+      "streamKey": "k02",
+      "inputSourceId": "",
+      "enabled": false,
+      "proxyMode": "follow",
+      "proxyUrl": ""
+    }
+  ],
+  "debug": {
+    "engineExe": "",
+    "engineArgs": "",
+    "allowMultipleInstances": false,
+    "skipBundleCacheClean": false
+  }
+}
