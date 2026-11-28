@@ -1,4 +1,4 @@
-<#
+﻿<#
     MediaMTX-Yuki-GUI 打包脚本
 
     产出两个 zip，解压即用（软件名 / 版本号 / 架构 / 引擎标记之间一律用下划线分隔）：
@@ -296,16 +296,15 @@ else {
 
 $utf8Bom = [System.Text.UTF8Encoding]::new($true)
 
-# 写进发布包的说明文件一律 LF。
-# 这里必须显式规范化：用 Windows PowerShell 5.1 跑本脚本时，here-string 里的换行会被它换回 CRLF，
-# 于是生成的 README.txt 跟项目其余部分的行尾对不上。
+# 写进发布包的说明文件用 CRLF：README.txt 是给用户在 Windows 上双击、用记事本打开的，
+# 老版本记事本不认 LF、会把全文挤成一行；编码仍是 UTF-8 带 BOM，老记事本靠 BOM 才认得出 UTF-8。
+# 换行在这里不做任何改写 —— 上面 Write-Package 已经统一转成 CRLF，再规范化一次就会转回 LF。
 function Write-TextFile {
     param(
         [Parameter(Mandatory)][string]$Path,
         [Parameter(Mandatory)][string]$Text
     )
-    $normalized = $Text.Replace("`r`n", "`n")
-    [System.IO.File]::WriteAllText($Path, $normalized, $utf8Bom)
+    [System.IO.File]::WriteAllText($Path, $Text, $utf8Bom)
 }
 
 function Write-Package {

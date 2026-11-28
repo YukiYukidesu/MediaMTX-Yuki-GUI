@@ -1,573 +1,558 @@
 {
-  "_language_name": "English",
-  "_translated": "false",
+  "_language_name": "English (DeepSeek)", // not manually reviewed
+  "_translated": "true", // not manually reviewed
 
-  // ===== G01 通用：侧栏导航、共用按钮、提示卡、重启提示 =====
-  "c001-001": "", // not manually reviewed
-  "c001-002": "", // not manually reviewed
-  "c001-003": "", // not manually reviewed
-  "c001-004": "", // not manually reviewed
-  "c001-005": "", // not manually reviewed
-  "c001-006": "", // not manually reviewed
-  "c001-007": "", // not manually reviewed
-  "c001-008": "", // not manually reviewed
-  "c001-009": "", // not manually reviewed
-  "c001-010": "", // not manually reviewed
-  "c001-011": "", // not manually reviewed
-  "c001-012": "", // not manually reviewed
-  "b001-001": "", // not manually reviewed
-  "b001-002": "", // not manually reviewed
-  "b001-003": "", // not manually reviewed
-  "b001-004": "", // not manually reviewed
-  "b001-005": "", // not manually reviewed
-  "b001-006": "", // not manually reviewed
-  "b001-007": "", // not manually reviewed
-  "b001-008": "", // not manually reviewed
-  "b001-009": "", // not manually reviewed
-  "b001-010": "", // not manually reviewed
-  "b001-011": "", // not manually reviewed
-  "b001-012": "", // not manually reviewed
-  "b001-013": "", // not manually reviewed
-  "b001-014": "", // not manually reviewed
-  "b001-015": "", // not manually reviewed
-  "b001-016": "", // not manually reviewed
-  "b001-017": "", // not manually reviewed
-  "b001-018": "", // not manually reviewed
-  "l001-001": "", // not manually reviewed
-  "l001-002": "", // not manually reviewed
-  "l001-003": "", // not manually reviewed
-  "t001-001": "", // not manually reviewed
-  "t001-002": "", // not manually reviewed
-  "t001-003": "", // not manually reviewed
-  "t001-004": "", // not manually reviewed
-  "t001-005": "", // not manually reviewed
-  "t001-006": "", // not manually reviewed
-  "t001-007": "", // not manually reviewed
-  "t001-008": "", // not manually reviewed
-  "t001-009": "", // not manually reviewed
-  "t001-010": "", // not manually reviewed
-  "t001-011": "", // not manually reviewed
-  "t001-012": "", // not manually reviewed
-  "t001-013": "", // not manually reviewed
-  "t001-014": "", // not manually reviewed
-  "t001-015": "", // not manually reviewed
-  "t001-016": "", // not manually reviewed
-  "t001-017": "", // not manually reviewed
-  "t001-018": "", // not manually reviewed
+  // ===== G01 Common: sidebar navigation, shared buttons, hint cards, restart prompts =====
+  "c001-001": "Overview", // not manually reviewed
+  "c001-002": "Source", // not manually reviewed
+  "c001-003": "Target", // not manually reviewed
+  "c001-004": "Accounts", // not manually reviewed
+  "c001-005": "Statistics", // not manually reviewed
+  "c001-006": "Logs", // not manually reviewed
+  "c001-007": "Mode", // not manually reviewed
+  "c001-008": "Simple", // not manually reviewed
+  "c001-009": "Advanced", // not manually reviewed
+  "c001-010": "Settings", // not manually reviewed
+  "c001-011": "Actions", // not manually reviewed
+  "c001-012": "Confirm delete", // not manually reviewed
+  "b001-001": "OK", // not manually reviewed
+  "b001-002": "Cancel", // not manually reviewed
+  "b001-003": "Open", // not manually reviewed
+  "b001-004": "Close", // not manually reviewed
+  "b001-005": "Dismiss", // not manually reviewed
+  "b001-006": "Add", // not manually reviewed
+  "b001-007": "Edit", // not manually reviewed
+  "b001-008": "Delete", // not manually reviewed
+  "b001-009": "Save", // not manually reviewed
+  "b001-010": "Refresh", // not manually reviewed
+  "b001-011": "Select all", // not manually reviewed
+  "b001-012": "Clear selection", // not manually reviewed
+  "b001-013": "Start selected", // not manually reviewed
+  "b001-014": "Stop selected", // not manually reviewed
+  "b001-015": "Delete selected", // not manually reviewed
+  "b001-016": "Bind selected", // not manually reviewed
+  "b001-017": "Download", // not manually reviewed
+  "b001-018": "Update", // not manually reviewed
+  "l001-001": "Select all / clear selection", // not manually reviewed
+  "l001-002": "Nothing selected", // not manually reviewed
+  "l001-003": "{n} selected", // not manually reviewed
+  "t001-001": "Copied: {value}", // not manually reviewed
+  "t001-002": "Copy failed", // not manually reviewed
+  "t001-003": "No engine found", // not manually reviewed
+  "t001-004": "MediaMTX engine update available", // not manually reviewed
+  "t001-005": "App update available", // not manually reviewed
+  "t001-006": "This app relies on the MediaMTX engine for relaying, but the engine is not installed yet. Click Download to install it from the Settings page; a MediaMTX folder then appears in the app directory.", // not manually reviewed
+  "t001-007": "MediaMTX engine {latest} is available (current {current}). Click Update to install it from the Settings page. Relaying pauses during the update and resumes afterwards.", // not manually reviewed
+  "t001-008": "App version {latest} is available (current {current}). Click Update to install it from the Settings page.", // not manually reviewed
+  "t001-009": "The current MediaMTX engine {current} is newer than the verified version {latest}. This is usually harmless, but in rare cases may cause undefined behavior. If you are concerned, click Update to roll back from the Settings page.", // not manually reviewed
+  "t001-010": "Cannot open link: ", // not manually reviewed
+  "t001-011": "Failed to save configuration: ", // not manually reviewed
+  "t001-012": "Changes require an engine restart to take effect", // not manually reviewed
+  "t001-013": "Restart engine", // not manually reviewed
+  "t001-014": "Changes require an app restart to take effect", // not manually reviewed
+  "t001-015": "Restart app", // not manually reviewed
+  "t001-016": "Updating; the app restarts once installation finishes", // not manually reviewed
+  "t001-017": "Restart the app?", // not manually reviewed
+  "t001-018": "Restarting stops all relays. Make sure no critical streams are running.", // not manually reviewed
 
-  // ===== G02 概览页 =====
-  "c002-001": "", // not manually reviewed
-  "c002-002": "", // not manually reviewed
-  "b002-001": "", // not manually reviewed
-  "b002-002": "", // not manually reviewed
-  "l002-001": "", // not manually reviewed
-  "l002-002": "", // not manually reviewed
-  "l002-003": "", // not manually reviewed
-  "l002-004": "", // not manually reviewed
-  "l002-005": "", // not manually reviewed
-  "l002-006": "", // not manually reviewed
-  "l002-007": "", // not manually reviewed
-  "l002-008": "", // not manually reviewed
-  "l002-009": "", // not manually reviewed
-  "l002-010": "", // not manually reviewed
-  "l002-011": "", // not manually reviewed
-  "l002-012": "", // not manually reviewed
-  "l002-013": "", // not manually reviewed
-  "l002-014": "", // not manually reviewed
-  "l002-015": "", // not manually reviewed
-  "l002-016": "", // not manually reviewed
-  "l002-017": "", // not manually reviewed
-  "l002-018": "", // not manually reviewed
-  "l002-019": "", // not manually reviewed
-  "l002-020": "", // not manually reviewed
-  "l002-021": "", // not manually reviewed
-  "l002-022": "", // not manually reviewed
-  "l002-023": "", // not manually reviewed
-  "l002-024": "", // not manually reviewed
-  "l002-025": "", // not manually reviewed
-  "l002-026": "", // not manually reviewed
-  "l002-027": "", // not manually reviewed
-  "l002-028": "", // not manually reviewed
-  "l002-029": "", // not manually reviewed
-  "l002-030": "", // not manually reviewed
+  // ===== G02 Overview page =====
+  "c002-001": "Relays", // not manually reviewed
+  "c002-002": "No relays yet", // not manually reviewed
+  "b002-001": "Start engine", // not manually reviewed
+  "b002-002": "Stop engine", // not manually reviewed
+  "l002-001": "Not streaming", // not manually reviewed
+  "l002-002": "Overview of the MediaMTX engine and its relays between sources and targets", // not manually reviewed
+  "l002-003": "Relays between input sources and output targets", // not manually reviewed
+  "l002-004": "Configured input sources and output targets appear here", // not manually reviewed
+  "l002-005": "Some targets have no input source bound and will not stream. Bind them on the Output targets page.", // not manually reviewed
+  "l002-006": "MediaMTX engine: not found", // not manually reviewed
+  "l002-007": "MediaMTX engine {version}", // not manually reviewed
+  "l002-008": "MediaMTX engine: not started", // not manually reviewed
+  "l002-009": "Engine is not running", // not manually reviewed
+  "l002-010": "MediaMTX engine: starting…", // not manually reviewed
+  "l002-011": "MediaMTX engine: start failed", // not manually reviewed
+  "l002-012": "mediamtx.exe not found or not executable", // not manually reviewed
+  "l002-013": "MediaMTX engine: not responding", // not manually reviewed
+  "l002-014": "No Control API response within 15 seconds", // not manually reviewed
+  "l002-015": "MediaMTX engine: running", // not manually reviewed
+  "l002-016": "MediaMTX engine: stopping…", // not manually reviewed
+  "l002-017": "MediaMTX engine: stopped", // not manually reviewed
+  "l002-018": "The engine has exited", // not manually reviewed
+  "l002-019": "MediaMTX engine: restarting…", // not manually reviewed
+  "l002-020": "The engine exited unexpectedly; restarting…", // not manually reviewed
+  "l002-021": "MediaMTX engine: restart failed", // not manually reviewed
+  "l002-022": "The engine failed to start 5 times in a row and retries have stopped. Check for port conflicts or a damaged engine, then start it manually.", // not manually reviewed
+  "l002-023": "No output targets enabled", // not manually reviewed
+  "l002-024": "{n} output targets enabled", // not manually reviewed
+  "l002-025": "{n} viewers", // not manually reviewed
+  "l002-026": "MediaMTX engine: timeout", // not manually reviewed
+  "l002-027": "{n} output targets synced", // not manually reviewed
+  "l002-028": "Failed to sync output targets; the engine may have exited", // not manually reviewed
+  "l002-029": "SRT ingress is disabled; enable it on the Settings page first", // not manually reviewed
+  "l002-030": "RTSP ingress is disabled; enable it on the Settings page first", // not manually reviewed
 
-  // ===== G03 输入源：列表、编辑窗、toast =====
-  "c003-001": "", // not manually reviewed
-  "c003-002": "", // not manually reviewed
-  "c003-003": "", // not manually reviewed
-  "c003-004": "", // not manually reviewed
-  "c003-005": "", // not manually reviewed
-  "c003-006": "", // not manually reviewed
-  "c003-007": "", // not manually reviewed
-  "c003-008": "", // not manually reviewed
-  "c003-009": "", // not manually reviewed
-  "c003-010": "", // not manually reviewed
-  "c003-011": "", // not manually reviewed
-  "c003-012": "", // not manually reviewed
-  "c003-013": "", // not manually reviewed
-  "c003-014": "", // not manually reviewed
-  "c003-015": "", // not manually reviewed
-  "c003-016": "", // not manually reviewed
-  "c003-017": "", // not manually reviewed
-  "c003-018": "", // not manually reviewed
-  "c003-019": "", // not manually reviewed
-  "b003-001": "", // not manually reviewed
-  "l003-001": "", // not manually reviewed
-  "l003-002": "", // not manually reviewed
-  "l003-003": "", // not manually reviewed
-  "l003-004": "", // not manually reviewed
-  "l003-005": "", // not manually reviewed
-  "l003-006": "", // not manually reviewed
-  "l003-007": "", // not manually reviewed
-  "l003-008": "", // not manually reviewed
-  "l003-009": "", // not manually reviewed
-  "l003-010": "", // not manually reviewed
-  "l003-011": "", // not manually reviewed
-  "l003-012": "", // not manually reviewed
-  "l003-013": "", // not manually reviewed
-  "l003-014": "", // not manually reviewed
-  "l003-015": "", // not manually reviewed
-  "l003-016": "", // not manually reviewed
-  "l003-017": "", // not manually reviewed
-  "l003-018": "", // not manually reviewed
-  "l003-019": "", // not manually reviewed
-  "l003-020": "", // not manually reviewed
-  "l003-021": "", // not manually reviewed
-  "l003-022": "", // not manually reviewed
-  "l003-023": "", // not manually reviewed
-  "l003-024": "", // not manually reviewed
-  "l003-025": "", // not manually reviewed
-  "l003-026": "", // not manually reviewed
-  "l003-027": "", // not manually reviewed
-  "l003-028": "", // not manually reviewed
-  "l003-029": "", // not manually reviewed
-  "l003-030": "", // not manually reviewed
-  "l003-031": "", // not manually reviewed
-  "l003-032": "", // not manually reviewed
-  "l003-033": "", // not manually reviewed
-  "l003-034": "", // not manually reviewed
-  "l003-035": "", // not manually reviewed
-  "l003-036": "", // not manually reviewed
-  "l003-037": "", // not manually reviewed
-  "l003-038": "", // not manually reviewed
-  "l003-039": "", // not manually reviewed
-  "l003-040": "", // not manually reviewed
-  "l003-041": "", // not manually reviewed
-  "l003-042": "", // not manually reviewed
-  "l003-043": "", // not manually reviewed
-  "l003-044": "", // not manually reviewed
-  "l003-045": "", // not manually reviewed
-  "t003-001": "", // not manually reviewed
-  "t003-002": "", // not manually reviewed
-  "t003-003": "", // not manually reviewed
-  "t003-004": "", // not manually reviewed
-  "t003-005": "", // not manually reviewed
-  "t003-006": "", // not manually reviewed
-  "t003-007": "", // not manually reviewed
-  "t003-008": "", // not manually reviewed
-  "t003-009": "", // not manually reviewed
-  "t003-010": "", // not manually reviewed
-  "t003-011": "", // not manually reviewed
-  "t003-012": "", // not manually reviewed
+  // ===== G03 Input sources: list, editor, toasts =====
+  "c003-001": "Source", // not manually reviewed
+  "c003-002": "Note", // not manually reviewed
+  "c003-003": "ID", // not manually reviewed
+  "c003-004": "Protocol", // not manually reviewed
+  "c003-005": "Source URL", // not manually reviewed
+  "c003-006": "Type", // not manually reviewed
+  "c003-007": "Stream", // not manually reviewed
+  "c003-008": "No input sources yet", // not manually reviewed
+  "c003-009": "Rate", // not manually reviewed
+  "c003-010": "Recording", // not manually reviewed
+  "c003-011": "Recording size", // not manually reviewed
+  "c003-012": "Edit input source", // not manually reviewed
+  "c003-013": "Ingress type", // not manually reviewed
+  "c003-014": "Protocol", // not manually reviewed
+  "c003-015": "Port", // not manually reviewed
+  "c003-016": "Path", // not manually reviewed
+  "c003-017": "Pull URL", // not manually reviewed
+  "c003-018": "Allowed accounts", // not manually reviewed
+  "c003-019": "Delete \"{name}\"?", // not manually reviewed
+  "b003-001": "Add input source", // not manually reviewed
+  "l003-001": "Inbound push", // not manually reviewed
+  "l003-002": "Active pull", // not manually reviewed
+  "l003-003": "Not recording", // not manually reviewed
+  "l003-004": "Stopped", // not manually reviewed
+  "l003-005": "Recording", // not manually reviewed
+  "l003-006": "Disabled", // not manually reviewed
+  "l003-007": "Enabled", // not manually reviewed
+  "l003-008": "Not streaming", // not manually reviewed
+  "l003-009": "Streaming", // not manually reviewed
+  "l003-010": "Create push endpoints or pull remote sources; each can be started and stopped independently", // not manually reviewed
+  "l003-011": "Show enabled first", // not manually reviewed
+  "l003-012": "Click Add input source in the top right, then choose the protocol and port", // not manually reviewed
+  "l003-013": "Change sort order", // not manually reviewed
+  "l003-014": "When on, enabled entries come first and disabled ones last", // not manually reviewed
+  "l003-015": "Start / stop this source", // not manually reviewed
+  "l003-016": "Start / stop local recording for this source", // not manually reviewed
+  "l003-017": "View recordings", // not manually reviewed
+  "l003-018": "Drag to reorder", // not manually reviewed
+  "l003-019": "Create a push endpoint or pull a remote source; each can be started and stopped independently", // not manually reviewed
+  "l003-020": "Use streaming software to ingest. Push OBS and similar apps to the address generated here", // not manually reviewed
+  "l003-021": "OBS cannot push RTSP; use ffmpeg or VLC instead", // not manually reviewed
+  "l003-022": "In OBS select SRT as the protocol and enter the address generated here", // not manually reviewed
+  "l003-023": "In OBS enter the server as the port and the stream key as the path", // not manually reviewed
+  "l003-024": "Manual order", // not manually reviewed
+  "l003-025": "The engine pulls from the remote address. Use it for IP cameras, media servers and similar sources", // not manually reviewed
+  "l003-026": "Last segment of the push URL; lowercase letters, digits and underscores only", // not manually reviewed
+  "l003-027": "Enter a pull URL", // not manually reviewed
+  "l003-028": "The engine pulls from this address and the path no longer accepts pushes. RTMP, RTSP, SRT, HLS and other protocols are supported", // not manually reviewed
+  "l003-029": "Add account", // not manually reviewed
+  "l003-030": "All accounts have been added", // not manually reviewed
+  "l003-031": "An input source named \"{name}\" already exists, but the ID differs so it can still be saved", // not manually reviewed
+  "l003-032": "Enter a path", // not manually reviewed
+  "l003-033": "The path may only contain lowercase letters, digits and underscores", // not manually reviewed
+  "l003-034": "This path is already used by another input source", // not manually reviewed
+  "l003-035": "Delete {n} selected input sources? Every target pointing to them is unbound as well.", // not manually reviewed
+  "l003-036": "No accounts available. Create one on the Accounts page. With no account selected, any account may push", // not manually reviewed
+  "l003-037": "With no account selected, any account may push", // not manually reviewed
+  "l003-038": "When push authentication is on, append ?user=[username]&pass=[password] to the push URL", // not manually reviewed
+  "l003-039": "Start after adding", // not manually reviewed
+  "l003-040": "and start recording", // not manually reviewed
+  "l003-041": "New input source", // not manually reviewed
+  "l003-042": "Defaults to {port}", // not manually reviewed
+  "l003-043": "The port must be an integer between 1 and 65535", // not manually reviewed
+  "l003-044": "This port is already in use", // not manually reviewed
+  "l003-045": "Remove", // not manually reviewed
+  "t003-001": "Started {n} input sources", // not manually reviewed
+  "t003-002": "Stopped {n} input sources", // not manually reviewed
+  "t003-003": "Deleted input source \"{name}\"", // not manually reviewed
+  "t003-004": "Deleted {n} input sources", // not manually reviewed
+  "t003-005": "The selected input sources are already started", // not manually reviewed
+  "t003-006": "The selected input sources are already stopped", // not manually reviewed
+  "t003-007": "Added input source \"{name}\"", // not manually reviewed
+  "t003-008": "Saved input source \"{name}\"", // not manually reviewed
+  "t003-009": "Started input source \"{name}\"", // not manually reviewed
+  "t003-010": "Stopped input source \"{name}\"", // not manually reviewed
+  "t003-011": "Recording enabled for \"{name}\"; takes effect after an engine restart", // not manually reviewed
+  "t003-012": "Recording stopped for \"{name}\"; takes effect after an engine restart", // not manually reviewed
 
-  // ===== G04 输出目标：列表、编辑窗、toast =====
-  "c004-001": "", // not manually reviewed
-  "c004-002": "", // not manually reviewed
-  "c004-003": "", // not manually reviewed
-  "c004-004": "", // not manually reviewed
-  "c004-005": "", // not manually reviewed
-  "c004-006": "", // not manually reviewed
-  "c004-007": "", // not manually reviewed
-  "c004-008": "", // not manually reviewed
-  "c004-009": "", // not manually reviewed
-  "c004-010": "", // not manually reviewed
-  "c004-011": "", // not manually reviewed
-  "c004-012": "", // not manually reviewed
-  "c004-013": "", // not manually reviewed
-  "c004-014": "", // not manually reviewed
-  "c004-015": "", // not manually reviewed
-  "c004-016": "", // not manually reviewed
-  "c004-017": "", // not manually reviewed
-  "c004-018": "", // not manually reviewed
-  "c004-019": "", // not manually reviewed
-  "b004-001": "", // not manually reviewed
-  "b004-002": "", // not manually reviewed
-  "b004-003": "", // not manually reviewed
-  "b004-004": "", // not manually reviewed
-  "b004-005": "", // not manually reviewed
-  "l004-001": "", // not manually reviewed
-  "l004-002": "", // not manually reviewed
-  "l004-003": "", // not manually reviewed
-  "l004-004": "", // not manually reviewed
-  "l004-005": "", // not manually reviewed
-  "l004-006": "", // not manually reviewed
-  "l004-007": "", // not manually reviewed
-  "l004-008": "", // not manually reviewed
-  "l004-009": "", // not manually reviewed
-  "l004-010": "", // not manually reviewed
-  "l004-011": "", // not manually reviewed
-  "l004-012": "", // not manually reviewed
-  "l004-013": "", // not manually reviewed
-  "l004-014": "", // not manually reviewed
-  "l004-015": "", // not manually reviewed
-  "l004-016": "", // not manually reviewed
-  "l004-017": "", // not manually reviewed
-  "l004-018": "", // not manually reviewed
-  "l004-019": "", // not manually reviewed
-  "l004-020": "", // not manually reviewed
-  "l004-021": "", // not manually reviewed
-  "l004-022": "", // not manually reviewed
-  "l004-023": "", // not manually reviewed
-  "l004-024": "", // not manually reviewed
-  "l004-025": "", // not manually reviewed
-  "l004-026": "", // not manually reviewed
-  "l004-027": "", // not manually reviewed
-  "l004-028": "", // not manually reviewed
-  "l004-029": "", // not manually reviewed
-  "l004-030": "", // not manually reviewed
-  "l004-031": "", // not manually reviewed
-  "l004-032": "", // not manually reviewed
-  "l004-033": "", // not manually reviewed
-  "l004-034": "", // not manually reviewed
-  "l004-035": "", // not manually reviewed
-  "l004-036": "", // not manually reviewed
-  "l004-037": "", // not manually reviewed
-  "l004-038": "", // not manually reviewed
-  "l004-039": "", // not manually reviewed
-  "l004-040": "", // not manually reviewed
-  "l004-041": "", // not manually reviewed
-  "l004-042": "", // not manually reviewed
-  "l004-043": "", // not manually reviewed
-  "l004-044": "", // not manually reviewed
-  "l004-045": "", // not manually reviewed
-  "l004-046": "", // not manually reviewed
-  "l004-047": "", // not manually reviewed
-  "l004-048": "", // not manually reviewed
-  "l004-049": "", // not manually reviewed
-  "l004-050": "", // not manually reviewed
-  "l004-051": "", // not manually reviewed
-  "l004-052": "", // not manually reviewed
-  "l004-053": "", // not manually reviewed
-  "l004-054": "", // not manually reviewed
-  "l004-055": "", // not manually reviewed
-  "l004-056": "", // not manually reviewed
-  "l004-057": "", // not manually reviewed
-  "t004-001": "", // not manually reviewed
-  "t004-002": "", // not manually reviewed
-  "t004-003": "", // not manually reviewed
-  "t004-004": "", // not manually reviewed
-  "t004-005": "", // not manually reviewed
-  "t004-006": "", // not manually reviewed
-  "t004-007": "", // not manually reviewed
-  "t004-008": "", // not manually reviewed
-  "t004-009": "", // not manually reviewed
-  "t004-010": "", // not manually reviewed
-  "t004-011": "", // not manually reviewed
-  "t004-012": "", // not manually reviewed
+  // ===== G04 Output targets: list, editor, toasts =====
+  "c004-001": "Target", // not manually reviewed
+  "c004-002": "Note", // not manually reviewed
+  "c004-003": "ID", // not manually reviewed
+  "c004-004": "Target URL", // not manually reviewed
+  "c004-005": "Platform", // not manually reviewed
+  "c004-006": "Protocol", // not manually reviewed
+  "c004-007": "Proxy", // not manually reviewed
+  "c004-008": "Response", // not manually reviewed
+  "c004-009": "Sent", // not manually reviewed
+  "c004-010": "Speed", // not manually reviewed
+  "c004-011": "No output targets yet", // not manually reviewed
+  "c004-012": "Input source", // not manually reviewed
+  "c004-013": "Edit output target", // not manually reviewed
+  "c004-014": "Note", // not manually reviewed
+  "c004-015": "Server URL", // not manually reviewed
+  "c004-016": "Stream key", // not manually reviewed
+  "c004-017": "Bind to input source", // not manually reviewed
+  "c004-018": "Proxy address", // not manually reviewed
+  "c004-019": "Delete \"{name}\"?", // not manually reviewed
+  "b004-001": "Manual proxy", // not manually reviewed
+  "b004-002": "Add output target", // not manually reviewed
+  "b004-003": "Use default", // not manually reviewed
+  "b004-004": "Direct (no proxy)", // not manually reviewed
+  "b004-005": "System proxy (use Windows proxy settings)", // not manually reviewed
+  "l004-001": "Stopped", // not manually reviewed
+  "l004-002": "Not running", // not manually reviewed
+  "l004-003": "Streaming", // not manually reviewed
+  "l004-004": "Idle", // not manually reviewed
+  "l004-005": "Waiting", // not manually reviewed
+  "l004-006": "Reconnecting", // not manually reviewed
+  "l004-007": "Error", // not manually reviewed
+  "l004-008": "Disabled", // not manually reviewed
+  "l004-009": "Enabled", // not manually reviewed
+  "l004-010": "Create relay targets that forward a source to several platforms; each can be started and stopped independently", // not manually reviewed
+  "l004-011": "Show enabled first", // not manually reviewed
+  "l004-012": "Bind {n} selected output targets to an input source", // not manually reviewed
+  "l004-013": "Click Add output target in the top right, then enter the push URL from the platform", // not manually reviewed
+  "l004-014": "Change sort order", // not manually reviewed
+  "l004-015": "When on, enabled entries come first and disabled ones last", // not manually reviewed
+  "l004-016": "Only needed when the platform cannot be reached directly; for domestic platforms Direct is recommended", // not manually reviewed
+  "l004-017": "Time to establish a TCP connection with the target; refreshed every 10 seconds", // not manually reviewed
+  "l004-018": "Start / stop this target", // not manually reviewed
+  "l004-019": "Drag to reorder", // not manually reviewed
+  "l004-020": "No input sources available; create one on the Input sources page", // not manually reviewed
+  "l004-021": "Each output target is one stream for a platform, relayed from its bound input source", // not manually reviewed
+  "l004-022": "Bilibili", // not manually reviewed
+  "l004-023": "The stream key is the full ?streamname=…&key=… string, found under Stream information in the studio or web live console", // not manually reviewed
+  "l004-024": "Douyin", // not manually reviewed
+  "l004-025": "Douyin push URLs differ per account; paste the full push URL from the platform", // not manually reviewed
+  "l004-026": "Kuaishou", // not manually reviewed
+  "l004-027": "Kuaishou push URLs differ per account; paste the full push URL from the platform", // not manually reviewed
+  "l004-028": "YouTube", // not manually reviewed
+  "l004-029": "The stream key is under YouTube Studio → Live → Stream settings", // not manually reviewed
+  "l004-030": "Twitch", // not manually reviewed
+  "l004-031": "The stream key is under Creator Dashboard → Settings → Stream", // not manually reviewed
+  "l004-032": "Huya", // not manually reviewed
+  "l004-033": "Huya push URLs differ per account; paste the full push URL from the platform", // not manually reviewed
+  "l004-034": "Douyu", // not manually reviewed
+  "l004-035": "Douyu push URLs differ per account; paste the full push URL from the platform", // not manually reviewed
+  "l004-036": "Custom", // not manually reviewed
+  "l004-037": "Enter the server URL and stream key manually, or paste the full push URL from the platform", // not manually reviewed
+  "l004-038": "Not set", // not manually reviewed
+  "l004-039": "Enter a push URL", // not manually reviewed
+  "l004-040": "Push URLs look like rtmp://live-push.example.com/live/ ; a full push URL can be pasted directly", // not manually reviewed
+  "l004-041": "Manual order", // not manually reviewed
+  "l004-042": "The key provided by the platform; paste the part containing ? or # in full", // not manually reviewed
+  "l004-043": "No input sources available; create one on the Input sources page", // not manually reviewed
+  "l004-044": "Only needed when the platform cannot be reached directly. Following the default uses the setting from the Settings page", // not manually reviewed
+  "l004-045": "This protocol cannot be pushed through a proxy, so Direct was restored. Proxies only apply to RTMP / RTMPS; for other protocols use a TUN-mode proxy or a process-level forwarder", // not manually reviewed
+  "l004-046": "Enter a proxy address", // not manually reviewed
+  "l004-047": "For example socks5://127.0.0.1:8888 or http://127.0.0.1:8888; without a scheme http is assumed", // not manually reviewed
+  "l004-048": "An output target named \"{name}\" already exists, but the ID differs so it can still be saved", // not manually reviewed
+  "l004-049": "Start after adding", // not manually reviewed
+  "l004-050": "Has errors", // not manually reviewed
+  "l004-051": "Direct", // not manually reviewed
+  "l004-052": "System proxy", // not manually reviewed
+  "l004-053": "Default: {mode}", // not manually reviewed
+  "l004-054": "Manual", // not manually reviewed
+  "l004-055": "System", // not manually reviewed
+  "l004-056": "Delete {n} selected output targets?", // not manually reviewed
+  "l004-057": "New output target", // not manually reviewed
+  "t004-001": "Started {n} output targets", // not manually reviewed
+  "t004-002": "Stopped {n} output targets", // not manually reviewed
+  "t004-003": "Deleted output target \"{name}\"", // not manually reviewed
+  "t004-004": "The selected output targets are already started", // not manually reviewed
+  "t004-005": "The selected output targets are already stopped", // not manually reviewed
+  "t004-006": "Deleted {n} output targets", // not manually reviewed
+  "t004-007": "Bound {n} output targets to the selected input source", // not manually reviewed
+  "t004-008": "The selected output targets are already bound", // not manually reviewed
+  "t004-009": "Added output target \"{name}\"", // not manually reviewed
+  "t004-010": "Saved output target \"{name}\"", // not manually reviewed
+  "t004-011": "Started output target \"{name}\"", // not manually reviewed
+  "t004-012": "Stopped output target \"{name}\"", // not manually reviewed
 
-  // ===== G05 账号：列表、编辑窗、toast =====
-  "c005-001": "", // not manually reviewed
-  "c005-002": "", // not manually reviewed
-  "c005-003": "", // not manually reviewed
-  "c005-004": "", // not manually reviewed
-  "c005-005": "", // not manually reviewed
-  "l005-001": "", // not manually reviewed
-  "l005-002": "", // not manually reviewed
-  "l005-003": "", // not manually reviewed
-  "l005-004": "", // not manually reviewed
-  "l005-005": "", // not manually reviewed
-  "l005-006": "", // not manually reviewed
-  "l005-007": "", // not manually reviewed
-  "l005-008": "", // not manually reviewed
-  "l005-009": "", // not manually reviewed
-  "l005-010": "", // not manually reviewed
-  "l005-011": "", // not manually reviewed
-  "t005-001": "", // not manually reviewed
-  "t005-002": "", // not manually reviewed
-  "t005-003": "", // not manually reviewed
-  "t005-004": "", // not manually reviewed
+  // ===== G05 Accounts: list, editor, toasts =====
+  "c005-001": "Username", // not manually reviewed
+  "c005-002": "Password", // not manually reviewed
+  "c005-003": "Can view", // not manually reviewed
+  "c005-004": "No accounts yet", // not manually reviewed
+  "c005-005": "Edit account", // not manually reviewed
+  "l005-001": "Define push identities here; an input source can allow only specific accounts to push", // not manually reviewed
+  "l005-002": "Delete account \"{name}\"? Input sources bound to it lose this account", // not manually reviewed
+  "l005-003": "Add account", // not manually reviewed
+  "l005-004": "Click Add account in the top right, fill in the username and password, then select it in an input source", // not manually reviewed
+  "l005-005": "An account represents push permission and can be view-only; which accounts may push is decided per input source", // not manually reviewed
+  "l005-006": "{n} accounts", // not manually reviewed
+  "l005-007": "When Can view is on the account may pull and play; otherwise it may only push", // not manually reviewed
+  "l005-008": "Allowed", // not manually reviewed
+  "l005-009": "Not allowed", // not manually reviewed
+  "l005-010": "An account named \"{name}\" already exists, but the ID differs so it can still be saved", // not manually reviewed
+  "l005-011": "Delete {n} selected accounts? Input sources using them are unbound from these accounts as well", // not manually reviewed
+  "t005-001": "Added account \"{name}\"", // not manually reviewed
+  "t005-002": "Saved account \"{name}\"", // not manually reviewed
+  "t005-003": "Deleted account \"{name}\"", // not manually reviewed
+  "t005-004": "Deleted {n} accounts", // not manually reviewed
 
-  // ===== G06 统计页 =====
-  "c006-001": "", // not manually reviewed
-  "c006-002": "", // not manually reviewed
-  "c006-003": "", // not manually reviewed
-  "c006-004": "", // not manually reviewed
-  "c006-005": "", // not manually reviewed
-  "c006-006": "", // not manually reviewed
-  "c006-007": "", // not manually reviewed
-  "c006-008": "", // not manually reviewed
-  "l006-001": "", // not manually reviewed
-  "l006-002": "", // not manually reviewed
-  "l006-003": "", // not manually reviewed
-  "l006-004": "", // not manually reviewed
+  // ===== G06 Statistics page =====
+  "c006-001": "Total ingress", // not manually reviewed
+  "c006-002": "Total egress", // not manually reviewed
+  "c006-003": "Per-target details", // not manually reviewed
+  "c006-004": "Output target", // not manually reviewed
+  "c006-005": "Bitrate", // not manually reviewed
+  "c006-006": "Sent", // not manually reviewed
+  "c006-007": "No output targets yet", // not manually reviewed
+  "c006-008": "Live ingress and per-target egress rates; refreshed every 2 seconds", // not manually reviewed
+  "l006-001": "Shows bitrate and traffic for each output target", // not manually reviewed
+  "l006-002": "Add targets on the Output targets page; bitrate and sent data then appear here per target", // not manually reviewed
+  "l006-003": "{on} input sources enabled, {live} with live data", // not manually reviewed
+  "l006-004": "{on} output targets enabled, {live} with live data", // not manually reviewed
 
-  // ===== G07 日志页 =====
-  "c007-001": "", // not manually reviewed
-  "b007-001": "", // not manually reviewed
-  "b007-002": "", // not manually reviewed
-  "b007-003": "", // not manually reviewed
-  "l007-001": "", // not manually reviewed
-  "l007-002": "", // not manually reviewed
-  "l007-003": "", // not manually reviewed
-  "l007-004": "", // not manually reviewed
-  "l007-005": "", // not manually reviewed
-  "l007-006": "", // not manually reviewed
-  "l007-007": "", // not manually reviewed
-  "t007-001": "", // not manually reviewed
-  "t007-002": "", // not manually reviewed
-  "t007-003": "", // not manually reviewed
-  "t007-004": "", // not manually reviewed
+  // ===== G07 Logs page =====
+  "c007-001": "Show debug logs", // not manually reviewed
+  "b007-001": "Clear", // not manually reviewed
+  "b007-002": "Copy to clipboard", // not manually reviewed
+  "b007-003": "Export to file", // not manually reviewed
+  "l007-001": "Engine and GUI standard output and error logs; newest lines at the bottom", // not manually reviewed
+  "l007-002": "Copy the current logs to the clipboard", // not manually reviewed
+  "l007-003": "Save the current logs to a file", // not manually reviewed
+  "l007-004": "Purged {n} expired log lines", // not manually reviewed
+  "l007-005": "Exported at {time}", // not manually reviewed
+  "l007-006": "Shows the app's own diagnostics (UI stalls, engine log density, startup failures) for troubleshooting", // not manually reviewed
+  "l007-007": "DEBUG", // not manually reviewed
+  "t007-001": "Logs cleared", // not manually reviewed
+  "t007-002": "Copied {n} log lines", // not manually reviewed
+  "t007-003": "Exported {n} log lines", // not manually reviewed
+  "t007-004": "Failed to save the file", // not manually reviewed
 
-  // ===== G08 工作模式页 =====
-  "c008-001": "", // not manually reviewed
-  "c008-002": "", // not manually reviewed
-  "b008-001": "", // not manually reviewed
-  "b008-002": "", // not manually reviewed
-  "l008-001": "", // not manually reviewed
-  "l008-002": "", // not manually reviewed
-  "l008-003": "", // not manually reviewed
-  "l008-004": "", // not manually reviewed
-  "l008-005": "", // not manually reviewed
-  "l008-006": "", // not manually reviewed
-  "l008-007": "", // not manually reviewed
-  "l008-008": "", // not manually reviewed
-  "l008-009": "", // not manually reviewed
-  "l008-010": "", // not manually reviewed
-  "t008-001": "", // not manually reviewed
+  // ===== G08 Mode page =====
+  "c008-001": "Simple mode", // not manually reviewed
+  "c008-002": "Advanced mode", // not manually reviewed
+  "b008-001": "Current mode", // not manually reviewed
+  "b008-002": "Switch to this mode", // not manually reviewed
+  "l008-001": "Use simple mode for straightforward relaying, or advanced mode for more MediaMTX features\nSwitching restarts the engine and interrupts running relays for a few seconds", // not manually reviewed
+  "l008-002": "Keeps only basic relaying for a cleaner UI; suited to users who just want quick forwarding", // not manually reviewed
+  "l008-003": "• Shows only the settings relaying needs\n• Supports RTMP, RTSP and SRT push sources\n• Supports relaying to major streaming platforms and custom targets\n• Supports RTMP / RTMPS push proxies\n• Cannot use features exclusive to advanced mode, but never deletes existing configuration", // not manually reviewed
+  "l008-004": "Unlocks more MediaMTX features: pull sources, recording, multi-user authentication and connection tuning; suited to users who need advanced MediaMTX capabilities", // not manually reviewed
+  "l008-005": "• Every feature of simple mode\n• Local recording for each input source, saved to the recording directory\n• User accounts with per-source push permissions\n• Pull sources that fetch IP cameras, media servers and other remote streams\n• Connection tuning for RTSP transports and WebRTC handshake / track gathering timeouts, adapting to different networks", // not manually reviewed
+  "l008-006": "Switch to advanced mode?", // not manually reviewed
+  "l008-007": "Switch to simple mode?", // not manually reviewed
+  "l008-008": "After switching you can configure pull sources, recording, multi-user authentication and connection tuning, and the Input sources page shows recording buttons. The engine restarts once, interrupting running relays for a few seconds", // not manually reviewed
+  "l008-009": "After switching, recording, multi-user authentication and connection tuning stop applying, and pull-based input sources are disabled. Existing configuration is kept. The engine restarts once, interrupting running relays for a few seconds", // not manually reviewed
+  "l008-010": "Switch", // not manually reviewed
+  "t008-001": "Mode switched to \"{name}\"", // not manually reviewed
 
-  // ===== G09 录像窗 =====
-  "c009-001": "", // not manually reviewed
-  "c009-002": "", // not manually reviewed
-  "c009-003": "", // not manually reviewed
-  "c009-004": "", // not manually reviewed
-  "c009-005": "", // not manually reviewed
-  "c009-006": "", // not manually reviewed
-  "l009-066": "", // not manually reviewed
-  "l009-067": "", // not manually reviewed
-  "l009-068": "", // not manually reviewed
-  "l009-069": "", // not manually reviewed
-  "l009-070": "", // not manually reviewed
-  "l009-071": "", // not manually reviewed
-  "l009-072": "", // not manually reviewed
-  "l009-073": "", // not manually reviewed
+  // ===== G09 Recordings window =====
+  "c009-001": "Start time", // not manually reviewed
+  "c009-002": "Duration", // not manually reviewed
+  "c009-003": "Recording", // not manually reviewed
+  "c009-004": "Delete this recording?", // not manually reviewed
+  "c009-005": "No recordings yet", // not manually reviewed
+  "c009-006": "Failed to load recordings", // not manually reviewed
+  "l009-001": "Note: {name}\nID: {id}\nAddress: {address}", // not manually reviewed
+  "l009-002": "Segments appear here once recording is enabled for an input source", // not manually reviewed
+  "l009-003": "Loading…", // not manually reviewed
+  "l009-004": "The engine is not running", // not manually reviewed
+  "l009-005": "{n} segments", // not manually reviewed
+  "l009-006": "Deletion cannot be undone. Recordings still being written cannot be deleted", // not manually reviewed
+  "l009-007": "Recording deleted", // not manually reviewed
+  "l009-008": "Delete failed; check whether the recording is still being written", // not manually reviewed
 
   // ===== G10 =====
-  "t010-001": "", // not manually reviewed
-  "t010-002": "", // not manually reviewed
-  "t010-003": "", // not manually reviewed
-  "t010-004": "", // not manually reviewed
-  "t010-005": "", // not manually reviewed
+  "t010-001": "Engine started", // not manually reviewed
+  "t010-002": "Engine stopped", // not manually reviewed
+  "t010-003": "Engine failed to start; see Logs for details", // not manually reviewed
+  "t010-004": "The engine still failed to start after several retries", // not manually reviewed
+  "t010-005": "Engine restarted", // not manually reviewed
 
   // ===== G11 =====
-  "t011-001": "", // not manually reviewed
-  "t011-002": "", // not manually reviewed
-  "t011-003": "", // not manually reviewed
-  "t011-004": "", // not manually reviewed
-  "t011-005": "", // not manually reviewed
+  "t011-001": "New version found; see Network and updates in Settings", // not manually reviewed
+  "t011-002": "Already up to date", // not manually reviewed
+  "t011-003": "Engine updated to {tag}", // not manually reviewed
+  "t011-004": "Engine update failed; see Network and updates in Settings", // not manually reviewed
+  "t011-005": "App updated to {tag}; restarting…", // not manually reviewed
 
   // ===== S00 =====
-  "cs00-001": "", // not manually reviewed
-  "ls00-001": "", // not manually reviewed
-  "ls00-002": "", // not manually reviewed
-  "ls00-055": "", // not manually reviewed
+  "cs00-001": "No matching settings", // not manually reviewed
+  "ls00-001": "Adjust MediaMTX engine and GUI parameters and updates here; some settings are only available in advanced mode", // not manually reviewed
+  "ls00-002": "Search settings", // not manually reviewed
+  "ls00-003": "This item is saved to the configuration but not yet applied by the engine, so running relays are unaffected", // not manually reviewed
 
   // ===== S01 =====
-  "cs01-001": "", // not manually reviewed
-  "cs01-002": "", // not manually reviewed
-  "cs01-003": "", // not manually reviewed
-  "cs01-004": "", // not manually reviewed
-  "cs01-005": "", // not manually reviewed
-  "bs01-001": "", // not manually reviewed
-  "bs01-002": "", // not manually reviewed
-  "bs01-003": "", // not manually reviewed
-  "bs01-004": "", // not manually reviewed
-  "bs01-005": "", // not manually reviewed
-  "bs01-006": "", // not manually reviewed
-  "ls01-003": "", // not manually reviewed
-  "ls01-004": "", // not manually reviewed
-  "ls01-005": "", // not manually reviewed
-  "ls01-079": "", // not manually reviewed
-  "ls01-094": "", // not manually reviewed
+  "cs01-001": "Appearance", // not manually reviewed
+  "cs01-002": "Theme", // not manually reviewed
+  "cs01-003": "Window material", // not manually reviewed
+  "cs01-004": "Language", // not manually reviewed
+  "cs01-005": "Hardware acceleration", // not manually reviewed
+  "bs01-001": "Follow system", // not manually reviewed
+  "bs01-002": "Light", // not manually reviewed
+  "bs01-003": "Dark", // not manually reviewed
+  "bs01-004": "Mica", // not manually reviewed
+  "bs01-005": "AcrylicBlur", // not manually reviewed
+  "bs01-006": "Solid color", // not manually reviewed
+  "ls01-001": "Applies immediately; does not affect the engine", // not manually reviewed
+  "ls01-002": "Material behind the window; applies immediately and falls back to solid color when unsupported", // not manually reviewed
+  "ls01-003": "Enabled by default and rendered with the GPU; a few devices may not support it. Changing this restarts the app", // not manually reviewed
+  "ls01-004": "Incomplete", // not manually reviewed
+  "ls01-005": "{n} strings are not translated yet", // not manually reviewed
 
   // ===== S02 =====
-  "cs02-001": "", // not manually reviewed
-  "cs02-002": "", // not manually reviewed
-  "cs02-003": "", // not manually reviewed
-  "cs02-004": "", // not manually reviewed
-  "bs02-001": "", // not manually reviewed
-  "bs02-002": "", // not manually reviewed
-  "bs02-003": "", // not manually reviewed
-  "bs02-004": "", // not manually reviewed
-  "bs02-005": "", // not manually reviewed
-  "bs02-006": "", // not manually reviewed
-  "ls02-006": "", // not manually reviewed
-  "ls02-007": "", // not manually reviewed
-  "ls02-008": "", // not manually reviewed
-  "ls02-009": "", // not manually reviewed
+  "cs02-001": "Window and startup", // not manually reviewed
+  "cs02-002": "Start with Windows", // not manually reviewed
+  "cs02-003": "Minimize to tray on close", // not manually reviewed
+  "cs02-004": "Memory reclaim", // not manually reviewed
+  "bs02-001": "Realtime (1 s)", // not manually reviewed
+  "bs02-002": "Faster (10 s)", // not manually reviewed
+  "bs02-003": "Default (30 s)", // not manually reviewed
+  "bs02-004": "Never", // not manually reviewed
+  "bs02-005": "Show main window", // not manually reviewed
+  "bs02-006": "Exit", // not manually reviewed
+  "ls02-001": "Start the app automatically after signing in to Windows", // not manually reviewed
+  "ls02-002": "The top-right close button keeps the app running and relaying in the background", // not manually reviewed
+  "ls02-003": "Reclaims memory after the window has been hidden for a while. This lowers background memory usage but may cause a brief pause when the window is reopened; engine behavior is unaffected", // not manually reviewed
 
   // ===== S03 =====
-  "cs03-001": "", // not manually reviewed
-  "cs03-002": "", // not manually reviewed
-  "cs03-003": "", // not manually reviewed
-  "cs03-004": "", // not manually reviewed
-  "cs03-005": "", // not manually reviewed
-  "cs03-006": "", // not manually reviewed
-  "bs03-001": "", // not manually reviewed
-  "bs03-002": "", // not manually reviewed
-  "bs03-003": "", // not manually reviewed
-  "bs03-004": "", // not manually reviewed
-  "ls03-010": "", // not manually reviewed
-  "ls03-011": "", // not manually reviewed
-  "ls03-012": "", // not manually reviewed
-  "ls03-013": "", // not manually reviewed
-  "ls03-014": "", // not manually reviewed
-  "ls03-015": "", // not manually reviewed
+  "cs03-001": "Engine behavior", // not manually reviewed
+  "cs03-002": "Start with the app", // not manually reviewed
+  "cs03-003": "Restart after an unexpected exit", // not manually reviewed
+  "cs03-004": "Log retention", // not manually reviewed
+  "cs03-005": "Allow pushing to any path", // not manually reviewed
+  "cs03-006": "Use absolute timestamps", // not manually reviewed
+  "bs03-001": "Keep all", // not manually reviewed
+  "bs03-002": "Keep 7 days", // not manually reviewed
+  "bs03-003": "Keep 30 days", // not manually reviewed
+  "bs03-004": "Keep 90 days", // not manually reviewed
+  "ls03-001": "Start the MediaMTX engine together with the app", // not manually reviewed
+  "ls03-002": "Relaunch the MediaMTX engine when it exits unexpectedly", // not manually reviewed
+  "ls03-003": "Logs older than the retention period are cleaned at the next engine start. Files still being written while the engine runs are kept", // not manually reviewed
+  "ls03-004": "When on, a push client may use any path name (handled as inbound). When off, only paths in the input source list are accepted", // not manually reviewed
+  "ls03-005": "When on, frames carry real capture time; when off, relative time is used. An uncommon feature for multi-camera alignment", // not manually reviewed
 
   // ===== S04 =====
-  "cs04-001": "", // not manually reviewed
-  "cs04-002": "", // not manually reviewed
-  "cs04-003": "", // not manually reviewed
-  "cs04-004": "", // not manually reviewed
-  "cs04-005": "", // not manually reviewed
-  "cs04-006": "", // not manually reviewed
-  "cs04-007": "", // not manually reviewed
-  "bs04-001": "", // not manually reviewed
-  "bs04-002": "", // not manually reviewed
-  "bs04-003": "", // not manually reviewed
-  "bs04-004": "", // not manually reviewed
-  "bs04-005": "", // not manually reviewed
-  "bs04-006": "", // not manually reviewed
-  "bs04-007": "", // not manually reviewed
-  "bs04-008": "", // not manually reviewed
-  "bs04-009": "", // not manually reviewed
-  "ls04-016": "", // not manually reviewed
-  "ls04-017": "", // not manually reviewed
-  "ls04-018": "", // not manually reviewed
-  "ls04-019": "", // not manually reviewed
-  "ls04-020": "", // not manually reviewed
-  "ls04-021": "", // not manually reviewed
-  "ls04-022": "", // not manually reviewed
-  "ls04-023": "", // not manually reviewed
-  "ls04-024": "", // not manually reviewed
-  "ls04-025": "", // not manually reviewed
-  "ls04-026": "", // not manually reviewed
-  "ls04-027": "", // not manually reviewed
-  "ls04-074": "", // not manually reviewed
-  "ls04-075": "", // not manually reviewed
-  "ls04-076": "", // not manually reviewed
-  "ls04-077": "", // not manually reviewed
-  "ls04-078": "", // not manually reviewed
-  "ls04-080": "", // not manually reviewed
-  "ls04-081": "", // not manually reviewed
-  "ls04-082": "", // not manually reviewed
-  "ls04-083": "", // not manually reviewed
-  "ls04-084": "", // not manually reviewed
-  "ls04-085": "", // not manually reviewed
-  "ls04-086": "", // not manually reviewed
-  "ls04-087": "", // not manually reviewed
-  "ls04-088": "", // not manually reviewed
-  "ls04-089": "", // not manually reviewed
-  "ls04-090": "", // not manually reviewed
-  "ls04-091": "", // not manually reviewed
-  "ls04-092": "", // not manually reviewed
-  "ls04-093": "", // not manually reviewed
-  "ls04-095": "", // not manually reviewed
+  "cs04-001": "Network and updates", // not manually reviewed
+  "cs04-002": "Check for app updates at startup", // not manually reviewed
+  "cs04-003": "Check for MediaMTX engine updates at startup", // not manually reviewed
+  "cs04-004": "Default push proxy", // not manually reviewed
+  "cs04-005": "Update download proxy", // not manually reviewed
+  "cs04-006": "Check for app updates", // not manually reviewed
+  "cs04-007": "Check for MediaMTX engine updates", // not manually reviewed
+  "bs04-001": "None (direct)", // not manually reviewed
+  "bs04-002": "System proxy", // not manually reviewed
+  "bs04-003": "Manual proxy", // not manually reviewed
+  "bs04-004": "Check", // not manually reviewed
+  "bs04-005": "Install", // not manually reviewed
+  "bs04-006": "Stable", // not manually reviewed
+  "bs04-007": "Pre-release", // not manually reviewed
+  "bs04-008": "Latest version", // not manually reviewed
+  "bs04-009": "Recommended version", // not manually reviewed
+  "ls04-001": "Check for app updates automatically when the app starts", // not manually reviewed
+  "ls04-002": "Check for MediaMTX engine updates automatically when the app starts", // not manually reviewed
+  "ls04-003": "The proxy used when an output target follows the default setting\nFor example socks5://127.0.0.1:8888 or http://127.0.0.1:8888; without a scheme http is assumed", // not manually reviewed
+  "ls04-004": "Applies to RTMP / RTMPS targets only\nSRT, RTSP and WebRTC carry media over UDP, which a process-level proxy cannot handle, so those stay direct even if configured\nTo proxy them, use a TUN-mode proxy or a process-level forwarder", // not manually reviewed
+  "ls04-005": "The proxy used for version checks and installer downloads\nFor example socks5://127.0.0.1:8888 or http://127.0.0.1:8888; without a scheme http is assumed", // not manually reviewed
+  "ls04-006": "Combining an update proxy with a mirror source is not recommended", // not manually reviewed
+  "ls04-007": "Check for and install a new app version; the app restarts afterwards. This does not download the MediaMTX engine", // not manually reviewed
+  "ls04-008": "Check for and install a new MediaMTX version; the engine restarts afterwards. Pre-releases are not checked", // not manually reviewed
+  "ls04-009": "GitHub official", // not manually reviewed
+  "ls04-010": "Mirror ghproxy.net", // not manually reviewed
+  "ls04-011": "Mirror ghfast.top", // not manually reviewed
+  "ls04-012": "Mirror gh-proxy.com", // not manually reviewed
+  "ls04-013": "Mirror kkgithub", // not manually reviewed
+  "ls04-014": "Engine versions newer than {version} run ahead of this app. This is usually harmless, but in rare cases may cause undefined behavior\nIf you are concerned, choose Recommended version, which also supports rollback", // not manually reviewed
+  "ls04-015": "When empty, the system proxy is used", // not manually reviewed
+  "ls04-016": "App version {latest} available (current {current})", // not manually reviewed
+  "ls04-017": "Could not fetch the version; check the network connection", // not manually reviewed
+  "ls04-018": "Already up to date", // not manually reviewed
+  "ls04-019": "No engine found; click Install on the right to get it", // not manually reviewed
+  "ls04-020": "Using the recommended engine version {latest}", // not manually reviewed
+  "ls04-021": "Engine {current} differs from the recommended {latest}; you can roll back to the recommended version", // not manually reviewed
+  "ls04-022": "Engine version {latest} available (current {current})", // not manually reviewed
+  "ls04-023": "Checking…", // not manually reviewed
+  "ls04-024": "Preparing the update…", // not manually reviewed
+  "ls04-025": "Update failed: ", // not manually reviewed
+  "ls04-026": "Engine updated to {latest}", // not manually reviewed
+  "ls04-027": "These targets were configured to push through a proxy, but their protocol is not supported, so they were switched to Direct: {names}", // not manually reviewed
 
   // ===== S05 =====
-  "cs05-001": "", // not manually reviewed
-  "cs05-002": "", // not manually reviewed
-  "cs05-003": "", // not manually reviewed
-  "cs05-004": "", // not manually reviewed
-  "cs05-005": "", // not manually reviewed
-  "cs05-006": "", // not manually reviewed
-  "cs05-007": "", // not manually reviewed
-  "ls05-028": "", // not manually reviewed
-  "ls05-029": "", // not manually reviewed
-  "ls05-030": "", // not manually reviewed
-  "ls05-031": "", // not manually reviewed
-  "ls05-032": "", // not manually reviewed
-  "ls05-033": "", // not manually reviewed
-  "ls05-034": "", // not manually reviewed
+  "cs05-001": "Resilience and tuning", // not manually reviewed
+  "cs05-002": "Max viewers", // not manually reviewed
+  "cs05-003": "Stay available after a stream stops", // not manually reviewed
+  "cs05-004": "New pushes replace old ones", // not manually reviewed
+  "cs05-005": "Read timeout (s)", // not manually reviewed
+  "cs05-006": "Write timeout (s)", // not manually reviewed
+  "cs05-007": "Write queue length", // not manually reviewed
+  "ls05-001": "0 means unlimited viewers", // not manually reviewed
+  "ls05-002": "Viewers keep the picture when the push is interrupted", // not manually reviewed
+  "ls05-003": "Reconnecting software such as OBS does not need the old connection dropped manually", // not manually reviewed
+  "ls05-004": "No data for longer than this counts as a stream interruption", // not manually reviewed
+  "ls05-005": "Give up after this long when pushing to a platform is blocked", // not manually reviewed
+  "ls05-006": "Packets buffered during network jitter", // not manually reviewed
 
   // ===== S06 =====
-  "cs06-001": "", // not manually reviewed
-  "cs06-002": "", // not manually reviewed
-  "cs06-003": "", // not manually reviewed
-  "ls06-035": "", // not manually reviewed
-  "ls06-036": "", // not manually reviewed
-  "ls06-037": "", // not manually reviewed
-  "ls06-038": "", // not manually reviewed
-  "ls06-039": "", // not manually reviewed
+  "cs06-001": "Engine API", // not manually reviewed
+  "cs06-002": "pprof profiling", // not manually reviewed
+  "cs06-003": "Playback service", // not manually reviewed
+  "ls06-001": "Hot-plugging relay targets depends on this", // not manually reviewed
+  "ls06-002": "Data source for the status lights and speed column", // not manually reviewed
+  "ls06-003": "Enable when investigating performance stalls", // not manually reviewed
+  "ls06-004": "Allows playing back recorded segments", // not manually reviewed
 
   // ===== S07 =====
-  "cs07-001": "", // not manually reviewed
-  "cs07-002": "", // not manually reviewed
-  "ls07-040": "", // not manually reviewed
-  "ls07-041": "", // not manually reviewed
+  "cs07-001": "Push authentication   [ Advanced mode ]", // not manually reviewed
+  "cs07-002": "Require accounts and passwords from push clients", // not manually reviewed
+  "ls07-001": "When on, streaming software must provide the matching username and password", // not manually reviewed
 
   // ===== S08 =====
-  "cs08-001": "", // not manually reviewed
-  "cs08-002": "", // not manually reviewed
-  "cs08-003": "", // not manually reviewed
-  "cs08-004": "", // not manually reviewed
-  "ls08-042": "", // not manually reviewed
-  "ls08-043": "", // not manually reviewed
-  "ls08-044": "", // not manually reviewed
-  "ls08-045": "", // not manually reviewed
+  "cs08-001": "Pull sources   [ Advanced mode ]", // not manually reviewed
+  "cs08-002": "Pull on demand", // not manually reviewed
+  "cs08-003": "Pull start timeout (s)", // not manually reviewed
+  "cs08-004": "Close without viewers (s)", // not manually reviewed
+  "ls08-001": "No upstream connection without viewers, saving upstream bandwidth, but the first start is slower", // not manually reviewed
+  "ls08-002": "Give up when the upstream does not connect in time, avoiding a hung connection", // not manually reviewed
+  "ls08-003": "Wait this long without viewers before disconnecting upstream; too short a value causes repeated reconnects when switching pages", // not manually reviewed
 
   // ===== S09 =====
-  "cs09-001": "", // not manually reviewed
-  "cs09-002": "", // not manually reviewed
-  "cs09-003": "", // not manually reviewed
-  "cs09-004": "", // not manually reviewed
-  "cs09-005": "", // not manually reviewed
-  "cs09-006": "", // not manually reviewed
-  "ls09-046": "", // not manually reviewed
-  "ls09-047": "", // not manually reviewed
-  "ls09-048": "", // not manually reviewed
-  "ls09-049": "", // not manually reviewed
-  "ls09-050": "", // not manually reviewed
-  "ls09-051": "", // not manually reviewed
+  "cs09-001": "Playback protocols   [ Advanced mode ]", // not manually reviewed
+  "cs09-002": "HLS", // not manually reviewed
+  "cs09-003": "WebRTC", // not manually reviewed
+  "cs09-004": "RTSP", // not manually reviewed
+  "cs09-005": "SRT", // not manually reviewed
+  "cs09-006": "MoQ", // not manually reviewed
+  "ls09-001": "Split into small segments sent over HTTP; plays on phones and browsers with a latency of seconds to tens of seconds", // not manually reviewed
+  "ls09-002": "Low latency in browsers; needs extra UDP ports and NAT traversal may fail", // not manually reviewed
+  "ls09-003": "Traditional surveillance protocol supported by most cameras and players", // not manually reviewed
+  "ls09-004": "Strong against packet loss and more stable than RTMP over long public-internet links; the peer must support SRT", // not manually reviewed
+  "ls09-005": "A newer QUIC-based delivery protocol; the ecosystem is young and most players do not support it", // not manually reviewed
 
   // ===== S10 =====
-  "cs10-001": "", // not manually reviewed
-  "cs10-002": "", // not manually reviewed
-  "cs10-003": "", // not manually reviewed
-  "cs10-004": "", // not manually reviewed
-  "ls10-052": "", // not manually reviewed
-  "ls10-053": "", // not manually reviewed
-  "ls10-054": "", // not manually reviewed
-  "ls10-056": "", // not manually reviewed
+  "cs10-001": "Connection tuning   [ Advanced mode ]", // not manually reviewed
+  "cs10-002": "RTSP transports", // not manually reviewed
+  "cs10-003": "WebRTC handshake timeout (s)", // not manually reviewed
+  "cs10-004": "WebRTC track gathering timeout (s)", // not manually reviewed
+  "ls10-001": "Comma-separated: tcp, udp, multicast. TCP is the most stable; UDP has lower latency but drops packets easily", // not manually reviewed
+  "ls10-002": "Longest wait for a WebRTC connection before giving up. Increase it on slow networks", // not manually reviewed
+  "ls10-003": "Longest wait for the peer to report audio and video tracks. Increase it when a camera starts slowly", // not manually reviewed
 
   // ===== S11 =====
-  "cs11-001": "", // not manually reviewed
-  "cs11-002": "", // not manually reviewed
-  "cs11-003": "", // not manually reviewed
-  "cs11-004": "", // not manually reviewed
-  "cs11-005": "", // not manually reviewed
-  "cs11-006": "", // not manually reviewed
-  "ls11-057": "", // not manually reviewed
-  "ls11-058": "", // not manually reviewed
-  "ls11-059": "", // not manually reviewed
-  "ls11-060": "", // not manually reviewed
-  "ls11-061": "", // not manually reviewed
-  "ls11-062": "", // not manually reviewed
+  "cs11-001": "Recording   [ Advanced mode ]", // not manually reviewed
+  "cs11-002": "Recording path template", // not manually reviewed
+  "cs11-003": "Recording format", // not manually reviewed
+  "cs11-004": "Max segment duration", // not manually reviewed
+  "cs11-005": "Max segment size", // not manually reviewed
+  "cs11-006": "Retention", // not manually reviewed
+  "ls11-001": "Supports %path, %Y, %m, %d, %H, %M, %S, %f, %z and similar variables, expanded at recording start. Relative paths are relative to the engine directory", // not manually reviewed
+  "ls11-002": "fmp4 is widely compatible and can be played while recording. mpegts works with older players but tolerates timestamp errors less well", // not manually reviewed
+  "ls11-003": "Longest duration per file before switching to the next. Shorter values make segments easier to locate; longer values produce fewer files", // not manually reviewed
+  "ls11-004": "Largest segment size before splitting early, preventing oversized chunks when keyframes are sparse", // not manually reviewed
+  "ls11-005": "Recordings older than this are deleted automatically. 0s keeps them until removed manually", // not manually reviewed
 
   // ===== S12 =====
-  "cs12-001": "", // not manually reviewed
-  "cs12-002": "", // not manually reviewed
-  "cs12-003": "", // not manually reviewed
-  "cs12-004": "", // not manually reviewed
-  "ts12-001": "", // not manually reviewed
+  "cs12-001": "Directories", // not manually reviewed
+  "cs12-002": "Engine directory", // not manually reviewed
+  "cs12-003": "Config directory", // not manually reviewed
+  "cs12-004": "Log directory", // not manually reviewed
+  "cs12-005": "Recording directory", // not manually reviewed
+  "ts12-001": "Cannot open this directory: ", // not manually reviewed
 
   // ===== S13 =====
-  "cs13-001": "", // not manually reviewed
-  "cs13-002": "", // not manually reviewed
-  "cs13-003": "", // not manually reviewed
-  "cs13-004": "", // not manually reviewed
-  "cs13-005": "", // not manually reviewed
-  "bs13-001": "", // not manually reviewed
-  "ls13-063": "", // not manually reviewed
-  "ls13-064": "", // not manually reviewed
-  "ls13-065": "", // not manually reviewed
+  "cs13-001": "About", // not manually reviewed
+  "cs13-002": "App version", // not manually reviewed
+  "cs13-003": "MediaMTX engine version", // not manually reviewed
+  "cs13-004": "Recommended engine version", // not manually reviewed
+  "bs13-001": "Project page", // not manually reviewed
+  "ls13-001": "(the engine version this app is verified against)", // not manually reviewed
+  "ls13-002": "Built by YukiYukidesu with DeepSeek assistance, using .NET 10 and the Avalonia UI framework\nPowered by YukiYukidesu, DeepSeek, dotNET 10, and Avalonia UI.", // not manually reviewed
 }

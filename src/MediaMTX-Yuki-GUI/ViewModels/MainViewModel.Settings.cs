@@ -623,7 +623,7 @@ public sealed partial class MainViewModel
     /// 不写出来用户没法判断该不该升。
     /// </summary>
     public string EngineUpdateCaution
-        => L.T("ls04-080").Replace("{version}", Services.ProgramVersion.RecommendedEngineVersion);
+        => L.T("ls04-014").Replace("{version}", Services.ProgramVersion.RecommendedEngineVersion);
 
     /// <summary>关于页里那行「推荐引擎版本」。</summary>
     public string RecommendedEngineVersionText => Services.ProgramVersion.RecommendedEngineVersion;
@@ -721,7 +721,7 @@ public sealed partial class MainViewModel
     /// 「留空会怎样」，而不是像编辑窗那样只说「不能为空」。
     /// </summary>
     public string StreamProxyWarning
-        => IsStreamProxyManual && string.IsNullOrWhiteSpace(_cfg.Proxy.Url) ? L.T("ls04-081") : string.Empty;
+        => IsStreamProxyManual && string.IsNullOrWhiteSpace(_cfg.Proxy.Url) ? L.T("ls04-015") : string.Empty;
 
     /// <summary>手动档这个档位下，地址框要标红星并可能亮红框。</summary>
     public bool StreamProxyRequired => IsStreamProxyManual;
@@ -770,7 +770,7 @@ public sealed partial class MainViewModel
 
     /// <summary>更新下载代理那一行的红字：手动档却没填地址时才出现，说法同推流代理。</summary>
     public string UpdateProxyWarning
-        => IsUpdateProxyManual && string.IsNullOrWhiteSpace(_cfg.Update.Proxy.Url) ? L.T("ls04-081") : string.Empty;
+        => IsUpdateProxyManual && string.IsNullOrWhiteSpace(_cfg.Update.Proxy.Url) ? L.T("ls04-015") : string.Empty;
 
     /// <summary>手动档这个档位下，地址框要标红星并可能亮红框。</summary>
     public bool UpdateProxyRequired => IsUpdateProxyManual;
@@ -1042,7 +1042,7 @@ public sealed partial class MainViewModel
     public string MissingText
         => Services.Localization.Instance.MissingCount == 0
             ? string.Empty
-            : L.T("ls01-094").Replace("{n}", Services.Localization.Instance.MissingCount.ToString());
+            : L.T("ls01-005").Replace("{n}", Services.Localization.Instance.MissingCount.ToString());
 
     public bool HasMissing
         => Services.Localization.Instance.MissingCount > 0;

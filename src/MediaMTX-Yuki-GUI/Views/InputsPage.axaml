@@ -57,7 +57,7 @@
         <!-- 一条源都没有时，列头与横向拖动条都没有可表的对象，一起收起来；
              底框本身留着（占住那块高度），空状态才有可能落在正中 -->
         <!-- 右段宽度跟着模式走（简洁模式少两颗按钮），见 ColumnScroll.TailWidth -->
-        <Grid Grid.Row="0" ColumnDefinitions="104,*,192" Margin="16,0,16,6"
+        <Grid Grid.Row="0" ColumnDefinitions="104,*,192" Margin="16,0,12,6"
               c:ColumnScroll.TailWidth="{Binding $parent[Window].DataContext.InputActionColumnWidth}"
               IsVisible="{Binding IsInputsVisible}">
           <!-- 左对齐、跟行里那颗勾选框的左缘齐：居中会让四个字落在胶囊右边一截，
@@ -109,10 +109,10 @@
             </Grid>
           </Border>
 
-          <!-- 操作列的文字与行内按钮都靠左：按钮数量会随模式变（简洁模式少两颗），
-               靠右对齐的话第一个按钮的位置会跟着跳，跟分界线的间距就不固定了 -->
-          <TextBlock Grid.Column="2" Classes="column-header" Margin="4,0,0,0"
-                     Text="{loc:Loc c001-011}" HorizontalAlignment="Left" />
+          <!-- 操作列的文字与行内按钮都靠右：按钮数量会随模式与行变（简洁模式少两颗、被锁住的行只剩两颗），
+               靠右对齐时右边缘始终贴住卡片内边距，空出来的部分落在左边而不是把右侧顶出参差 -->
+          <TextBlock Grid.Column="2" Classes="column-header" Margin="0"
+                     Text="{loc:Loc c001-011}" HorizontalAlignment="Right" />
         </Grid>
 
         <!-- 行数超出底框就在框内纵向滚动：底框高度固定，行多也不会把整页撑长 -->
@@ -125,7 +125,7 @@
                         c:ReorderHandle.Boundary="{Binding InputEnabledBoundary}">
             <ItemsControl.ItemTemplate>
               <DataTemplate>
-                <Border Classes="card row" Padding="16,10" Margin="0,0,0,8">
+                <Border Classes="card row" Padding="16,10,12,10" Margin="0,0,0,8">
                   <!-- 这一层不写 VerticalAlignment：要让它吃满卡片的 Padding 区，
                        分界线和阴影才能靠上下各探 10（即 Padding 的上下值）盖住整张卡的高度。
                        内容各自居中，不受影响。 -->
@@ -133,7 +133,7 @@
                         c:ColumnScroll.TailWidth="{Binding $parent[Window].DataContext.InputActionColumnWidth}">
 
                     <!-- 左段：勾选与启停状态，固定不动。
-                         被程序锁住的行（简洁模式下的拉流源）连勾选框都不给：那一行只剩删除这一个动作，
+                         被程序锁住的行（简洁模式下的拉流源）连勾选框都不给：那一行只剩删除与拖拽排序两个动作，
                          留着勾选框会让人以为还能批量启用。状态胶囊照旧显示，说明它为什么动不了。 -->
                     <!-- 勾选框贴左、状态胶囊在余下那截里居中。
                          勾选框要显式写 Padding="0" MinWidth="0"：Fluent 模板自带左边 8 的内边距，
@@ -239,10 +239,10 @@
                             IsHitTestVisible="False" />
 
                     <!-- 右段：操作与拖拽，固定不动，停用时也不压灰 -->
-                    <!-- 靠左而不是靠右：按钮数量随模式变（简洁模式没有录制与录像两颗），
-                         靠右会让第一个按钮随数量左右横跳，跟分界线之间就时宽时窄 -->
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" Margin="4,0,0,0"
-                                HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <!-- 靠右：列宽是按最多几颗算死的，右对齐让每行的最后一颗（拖拽手柄）都落在同一根线上；
+                         被程序锁住的行只剩删除与拖拽，也不会缩在列的最左边 -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" Margin="0"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
 
                       <Button Classes="icon-square toggle" Classes.on="{Binding Enabled}"
                               IsVisible="{Binding !RuntimeDisabled}"
@@ -300,7 +300,6 @@
                               Background="Transparent" Cursor="SizeAll"
                               HorizontalAlignment="Center" VerticalAlignment="Center"
                               Margin="4,0,0,0"
-                              IsVisible="{Binding !RuntimeDisabled}"
                               ToolTip.Tip="{loc:Loc l003-018}">
                         <TextBlock Text="&#xE700;" FontSize="11"
                                    FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"

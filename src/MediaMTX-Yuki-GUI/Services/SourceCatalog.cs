@@ -23,11 +23,11 @@ public static class SourceCatalog
     /// </summary>
     public static readonly IReadOnlyList<UpdateSource> All =
     [
-        new(GitHubId,           "ls04-074", "https://api.github.com", "https://github.com"),
-        new("ghproxy",          "ls04-075", "https://api.github.com", "https://ghproxy.net/https://github.com"),
-        new("ghfast",           "ls04-076", "https://api.github.com", "https://ghfast.top/https://github.com"),
-        new("gh-proxy",         "ls04-077", "https://api.github.com", "https://gh-proxy.com/https://github.com"),
-        new("kkgithub",         "ls04-078", "https://api.github.com", "https://github.kkgithub.com"),
+        new(GitHubId,           "ls04-009", "https://api.github.com", "https://github.com"),
+        new("ghproxy",          "ls04-010", "https://api.github.com", "https://ghproxy.net/https://github.com"),
+        new("ghfast",           "ls04-011", "https://api.github.com", "https://ghfast.top/https://github.com"),
+        new("gh-proxy",         "ls04-012", "https://api.github.com", "https://gh-proxy.com/https://github.com"),
+        new("kkgithub",         "ls04-013", "https://api.github.com", "https://github.kkgithub.com"),
     ];
 
     /// <summary>按 Id 找源，找不到一律回落官方。</summary>

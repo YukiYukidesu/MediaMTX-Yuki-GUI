@@ -343,10 +343,14 @@ public partial class MainWindow : FAAppWindow, IAppHost
         PageHost.Children.Clear();
         PageHost.Children.Add(page);
 
-        // 页面是缓存的，重新挂上来时 Avalonia 未必再发一次 DataContext 变化通知（继承值没变），
-        // 靠这条通知订阅的页面（设置页）就再也收不到消息。清一下再赋回，强制走一遍变化流程
-        page.DataContext = null;
-        page.DataContext = _viewModel;
+        // 页面是缓存的，重新挂上来时 DataContext 的继承值没变，Avalonia 不会再发一次变化通知，
+        // 靠这条通知订阅的页面（设置页）改成自己在 OnAttachedToVisualTree 里补订阅。
+        // 这里不再用「先置空再赋回」去硬造通知：那一下会把页面上的绑定全冲成默认值，
+        // 折叠组的展开状态、列表的滚动位置都被一并重置
+        if (!ReferenceEquals(page.DataContext, _viewModel))
+        {
+            page.DataContext = _viewModel;
+        }
     }
 
     /// <summary>当前该显示哪一页：键用来查缓存，工厂只在第一次用到时执行。</summary>

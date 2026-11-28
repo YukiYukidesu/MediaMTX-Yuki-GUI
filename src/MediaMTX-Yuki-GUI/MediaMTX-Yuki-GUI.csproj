@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>0.0.3</Version>
+    <Version>0.0.5</Version>
 
     <!--
       GUI 已验证过的 MediaMTX 引擎版本（带引擎那个包预装的就是这一版）。
@@ -65,31 +65,16 @@
     <AvaloniaResource Include="Assets\app-icon.svg" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Languages\**\*.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
   <!--
-    语言包的主目录在工程根（....Languages），src 下这份只是编译输入。
-    编译前把根目录的两份 json 覆盖过来，省掉手工复制这一步：
-    改完根目录那份直接编译，产物里就是最新的。
+    语言包只有工程根那一份（....Languages），项目里不再留副本。
+    下面 CopyLanguagesToOutput / CopyLanguagesToPublish 两个 Target
+    直接从根目录拷进 OutDir 与 PublishDir，改完根目录编译一次就生效。
     README.md 是译者说明，不复制、也不进产物。
   -->
-  <Target Name="SyncLanguagesFromRoot" BeforeTargets="BeforeBuild">
-    <ItemGroup>
-      <LanguagesFromRoot Include="$(MSBuildThisFileDirectory)..\..\Languages\*.json" />
-    </ItemGroup>
-    <!-- 先把根目录的两份 json 覆盖到 src 下的副本，让常规的复制项有源可拿 -->
-    <Copy SourceFiles="@(LanguagesFromRoot)"
-          DestinationFolder="$(MSBuildThisFileDirectory)Languages"
-          SkipUnchangedFiles="true" />
-  </Target>
 
   <!--
-    再补一遍输出目录：Target 里补进来的文件赶不上 SDK 在评估阶段算好的复制清单，
-    而 Build 中段的增量清理还会把它们当「多余输出」删掉，所以放在 Build 之后。
+    拷进输出目录：语言包不在项目目录里，SDK 的常规复制项覆盖不到，
+    所以 Build 之后自己拷一遍；放在 Build 之后才不会被打扫多余输出的增量清理删掉。
   -->
   <Target Name="CopyLanguagesToOutput" AfterTargets="Build">
     <ItemGroup>

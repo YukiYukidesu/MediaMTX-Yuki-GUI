@@ -84,6 +84,23 @@ public class SmoothExpander : ContentControl
         PseudoClasses.Set(":expanded", IsExpanded);
     }
 
+    /// <summary>
+    /// 页面被缓存、切走再切回时，高度会停在上一轮动画的终值；
+    /// 挂回那一刻按当前展开状态对一次，免得「状态是展开、高度还是 0」。
+    /// </summary>
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+
+        if (host is null)
+        {
+            return;
+        }
+
+        PseudoClasses.Set(":expanded", IsExpanded);
+        host.Height = IsExpanded ? double.NaN : 0d;
+    }
+
     private void Toggle()
     {
         IsExpanded = !IsExpanded;
@@ -100,14 +117,25 @@ public class SmoothExpander : ContentControl
             return;
         }
 
-        if (expanded)
-        {
-            Animate(0d, MeasureContentHeight());
-        }
-        else
+        if (!expanded)
         {
             Animate(CurrentHeight(), 0d);
+
+            return;
         }
+
+        double target = MeasureContentHeight();
+
+        // 页面刚挂回来时还没布局，量出来的自然高度会是 0。这时直接交给自动高度，
+        // 别把高度动画到 0 —— 那会变成「状态是展开、箭头朝上，内容却整块不见了」
+        if (target <= 0.5d)
+        {
+            host.Height = double.NaN;
+
+            return;
+        }
+
+        Animate(0d, target);
     }
 
     /// <summary>

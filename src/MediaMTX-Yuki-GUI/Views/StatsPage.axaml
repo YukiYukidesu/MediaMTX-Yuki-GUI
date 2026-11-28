@@ -42,11 +42,14 @@
         <TextBlock Text="{loc:Loc l006-001}" Classes="hint" TextWrapping="Wrap" />
       </StackPanel>
 
-      <Border Grid.Row="1" Classes="well" Padding="16">
+      <!-- 右侧不留内边距：滚动条要贴着卡片右边框。留白交给表头与行各自的 Margin -->
+      <Border Grid.Row="1" Classes="well" Padding="16,16,0,16">
         <Grid RowDefinitions="Auto,*">
 
           <!-- 一个目标都没有时列头一起收起来，只留中间那坨空状态 -->
-          <Grid Grid.Row="0" ColumnDefinitions="*,110,110,Auto" ColumnSpacing="8"
+          <!-- 左边缩 8；第 4 列原本宽 0，给它 28 当右侧留白，码率与已发送两列就不会顶着滚动条。表头不在 ScrollViewer 里、那一小段滚动条宽度靠文字右侧的字形留白抵消，两边给同样的值就对齐 -->
+          <Grid Grid.Row="0" ColumnDefinitions="*,110,110,28" ColumnSpacing="8"
+                Margin="8,0,0,0"
                 IsVisible="{Binding IsTargetsVisible}">
             <TextBlock Grid.Column="0" Text="{loc:Loc c006-004}" Classes="hint" />
             <TextBlock Grid.Column="1" Text="{loc:Loc c006-005}" Classes="hint" HorizontalAlignment="Right" />
@@ -58,9 +61,9 @@
             <ItemsControl ItemsSource="{Binding Targets}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                  <Grid ColumnDefinitions="*,110,110,Auto"
+                  <Grid ColumnDefinitions="*,110,110,28"
                         ColumnSpacing="8"
-                        Margin="0,3">
+                        Margin="8,3,0,3">
                     <TextBlock Grid.Column="0"
                                Text="{Binding Name}"
                                VerticalAlignment="Center"

@@ -83,7 +83,7 @@
       </StackPanel>
 
       <TextBlock Grid.Row="1" IsVisible="{Binding IsLoading}" Classes="hint"
-                 Text="{loc:Loc l009-068}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Text="{loc:Loc l009-003}" HorizontalAlignment="Center" VerticalAlignment="Center"
                  IsHitTestVisible="False" />
 
     </Grid>

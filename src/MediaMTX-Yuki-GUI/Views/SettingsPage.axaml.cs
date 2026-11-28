@@ -37,37 +37,55 @@ public partial class SettingsPage : UserControl
     }
 
     /// <summary>
-    /// 订阅挂在 DataContext 变化上，不挂 OnAttachedToVisualTree：
-    /// 页面是先挂进可视树、后由主窗把 DataContext 传下来的，挂在挂载事件里会拿到空值直接返回。
+    /// 订阅挂在 DataContext 变化上：页面可能是先挂进可视树、后由主窗把 DataContext 传下来的，
+    /// 挂在挂载事件里那一次会拿到空值。
     /// </summary>
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
 
+        BindViewModel(DataContext as MainViewModel);
+    }
+
+    /// <summary>
+    /// 再挂回来时补一次：页面卸下会退订，而缓存复用的页面 DataContext 是继承值、不会变，
+    /// 只靠 OnDataContextChanged 就再也接不回来了。
+    /// </summary>
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+
+        BindViewModel(DataContext as MainViewModel);
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        BindViewModel(null);
+
+        StopScroll();
+
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    /// <summary>换订阅对象；同一个实例重复调用什么都不做，反复挂载不会叠加订阅。</summary>
+    private void BindViewModel(MainViewModel? viewModel)
+    {
+        if (ReferenceEquals(_viewModel, viewModel))
+        {
+            return;
+        }
+
         if (_viewModel is not null)
         {
             _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
         }
 
-        _viewModel = DataContext as MainViewModel;
+        _viewModel = viewModel;
 
         if (_viewModel is not null)
         {
             _viewModel.PropertyChanged += OnViewModelPropertyChanged;
         }
-    }
-
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        if (_viewModel is not null)
-        {
-            _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-            _viewModel = null;
-        }
-
-        StopScroll();
-
-        base.OnDetachedFromVisualTree(e);
     }
 
     /// <summary>

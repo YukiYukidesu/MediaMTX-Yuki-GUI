@@ -99,10 +99,11 @@
     <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
   </Style>
 
-  <!-- 卡片标题 -->
+  <!-- 卡片标题。用 Bold 而不是 SemiBold：中文字体（微软雅黑等）只有 Regular / Bold 两档，
+       SemiBold 找不到对应字重会被渲染成常规粗细，看上去跟正文一样 -->
   <Style Selector="TextBlock.card-title">
     <Setter Property="FontSize" Value="{StaticResource DsFontCardTitle}" />
-    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontWeight" Value="Bold" />
     <Setter Property="Margin" Value="0,0,0,2" />
   </Style>
 

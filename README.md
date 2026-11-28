@@ -6,7 +6,7 @@ MediaMTX 的 Windows 桌面外壳：把多路推流转发、录制、鉴权与�
 
 MediaMTX 本身是命令行程序，配置是一份 YAML。日常操作只有几件事——新增一路推流入口、把它转发到几个平台、确认当前状态、查看谁在推流——但每一步都要改配置、重启、翻日志。本程序把这些操作封装为界面：修改后保存即可，引擎由程序自己重启。
 
-> 版本 v0.0.3，早期版本。功能完整，界面与交互仍在按实际使用调整。
+> 版本 v0.0.5，早期版本。功能完整，界面与交互仍在按实际使用调整。
 
 ## 界面
 
@@ -72,14 +72,13 @@ src/MediaMTX-Yuki-GUI/
   ViewModels/   各页面按部分类拆分，外壳状态在 MainViewModel.cs
   Views/        八个页面与若干模态编辑窗口
   Resources/    设计系统：颜色、字号、圆角、控件主题
-  Languages/    界面文案，新增语言无需改代码
 ```
 
 配置位于 `config\app.json`，可手工编辑；引擎运行配置为 `config\runtime.yml`，每次启动重写，勿手工修改。
 
 ## 新增语言
 
-在 `src\MediaMTX-Yuki-GUI\Languages\` 中放入一个 `xx-YY.json`（BCP 47 标签），程序启动时自动扫描。格式与约定见该目录下的 [README](src/MediaMTX-Yuki-GUI/Languages/README.md)。
+在项目根的 `Languages\` 中放入一个 `xx-YY.json`（BCP 47 标签），程序启动时自动扫描。格式与约定见 [Languages\README.md](Languages/README.md)。
 
 ## 技术栈
 
